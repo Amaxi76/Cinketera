@@ -79,7 +79,6 @@ public class Plateau
 			while(!line.equals(""));
 
 			//Créer les regions
-			sc.nextLine();
 			line = sc.nextLine();
 			do
 			{

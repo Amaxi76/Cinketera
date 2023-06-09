@@ -65,12 +65,20 @@ public class Joueur
 
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
-		if ( !this.tabManche[this.nbManches-1].getFinManche() )
-			return this.tabManche[this.nbManches-1].jouer ( voieMaritime );
-
-		System.out.println("fin de la manche");
-		System.out.println(this.couleurs);
-		this.lancerManche();
+		if (!this.tabManche[this.nbManches - 1].getFinManche())
+		{
+			System.out.println(this.nbManches);
+			return this.tabManche[this.nbManches - 1].jouer(voieMaritime);
+			
+		}
+		else
+		{		
+			if (this.nbManches < this.tabManche.length)
+			{
+				lancerManche();
+				return false;
+			}
+		}
 		return false;
 	}
 
