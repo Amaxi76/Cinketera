@@ -126,7 +126,7 @@ public class Plateau
 				}
 					
 
-				this.lstVoiesMaritimes.add(new VoieMaritime(nomIle1 + "-" + nomIle2,ile1,ile2));
+				this.lstVoiesMaritimes.add(VoieMaritime.creerVoieMaritime(nomIle1 + "-" + nomIle2,ile1,ile2));
 			}
 
 		}

@@ -2,6 +2,7 @@ package metier;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import java.awt.Color;
 import java.awt.geom.Line2D;
 
@@ -44,6 +45,8 @@ public class Manche
 		this.lstVoieMaritimes = lstVoieMaritimes;
 
 		this.carteEnCours = this.paquet.piocher();
+
+		System.out.println(this.coulLigne);
 	}
 	
 	/* -------------------------------------- */
@@ -57,6 +60,7 @@ public class Manche
 	public int       getScore        ( ) { return this.score;        }
 	public boolean   getDebutManche  ( ) { return this.numTour == 0; }
 	public Carte     getCarteEnCours ( ) { return this.carteEnCours; }
+	public boolean   getFinManche    ( ) { return this.finManche;    }
  
  	/* -------------------------------------- */
 	/*                 Méthode                */
@@ -72,14 +76,12 @@ public class Manche
 		else
 			ileArrive = voie.getIleA ( );
 
+		System.out.println("Affichage des iles : ");
 		System.out.println(ileDepart);
 		System.out.println(ileArrive);
 
-		System.out.println(this.coulLigne);
-		
-		Carte c = this.paquet.piocher ( );
-
-		System.out.println(this.carteEnCours);
+		System.out.println("Affichage de la couleur de la carte : ");
+		System.out.println(this.carteEnCours.getCouleurCarte());
 		
 		// Une ligne ne peut pas passer plusieurs fois par la même ile.
 		if ( !this.getDebutManche ( ) )
@@ -88,61 +90,63 @@ public class Manche
 			if ( this.ligne.contains ( voie.getIleD ( ) ) ) return false;
 		}
 
-		System.out.println("Pas passer par la même ligne");
+		System.out.println("Est ce que l'ile est de la même couleur que la carte ?");
+		System.out.println(ileArrive.getCouleur ( ).equals ( this.carteEnCours.getCouleurCarte ( ) ) || this.carteEnCours.getCouleurCarte ( ).equals ( "Multicolore" ));
+		System.out.println(ileArrive.getCouleur ( ).equals ( this.carteEnCours.getCouleurCarte ( ) ));
+		System.out.println(this.carteEnCours.getCouleurCarte ( ).equals ( "Multicolore" ));
 
 		// Regarde si l'ile que l'on veut relié est bien de la même couleur que la carte
-		if ( ileArrive.getCouleur ( ).equals ( c.getCouleurCarte ( ) ) || c.getCouleurCarte ( ).equals ( "Multicolore" ) )
-		{
-			System.out.println("oui");
-		}
-		System.out.println("Même couleur que la carte");
+		// if ( ileArrive.getCouleur ( ).equals ( c.getCouleurCarte ( ) ) || c.getCouleurCarte ( ).equals ( "Multicolore" ) )
+		// {
+		// 	System.out.println("oui");
+		// }
 
 		// Regarde si la voie n'est pas déjà colorié
-		if ( voie.getEstColorie ( ) ) 
-			return false;
+		System.out.println("est ce que la voie est déja colorier ?");
+		System.out.println(voie.getEstColorie ( ));
+		// if ( voie.getEstColorie ( ) ) 
+		// 	return false;
 
-		System.out.println("déja colorier");
 
 		// Si c'est le premier tour, qu'on est avec la couleur rouge et qu'on part de l'ile Ticó
-		
-		if ( this.getDebutManche ( ) && ( voie.getIleA ( ).getNom ( ).equals ( "Ticó" )
-									 ||   voie.getIleD ( ).getNom ( ).equals ( "Ticó" ) )
-									 && coulLigne.equals ( Color.RED )                  )
-			return true;
+	
+		System.out.println("est ce que l'arc est tico et la couleur est rouge et que c'est le début de la manche?");
+		System.out.println( this.getDebutManche ( ) && ileDepart.getNom ( ).equals ( "Ticó" )
+		&& coulLigne.equals ( Color.RED )        );
+		// if ( this.getDebutManche ( ) && ileDepart.getNom ( ).equals ( "Ticó" )
+		// 							 && coulLigne.equals ( Color.RED )        )
+		// {
+		// 	System.out.println("oui");
+		// }
 
-		System.out.println("Premier tour, rouge rico");
-
+		System.out.println("est ce que l'arc est Mutaa et la couleur est bleu et que c'est le début de la manche?");
+		System.out.println( this.getDebutManche ( ) && voie.getIleA ( ).getNom ( ).equals ( "Mutaa" )
+		&& coulLigne.equals ( Color.BLUE )               );
 		// Si c'est le premier tour, qu'on est avec la couleur bleu et qu'on part de l'ile Mutaa
-		if ( this.getDebutManche ( ) && ( voie.getIleA ( ).getNom ( ).equals ( "Mutaa" )
-									 ||   voie.getIleD ( ).getNom ( ).equals ( "Mutaa" ) )
-									 && coulLigne.equals ( Color.BLUE )                  )
-			return true;
+		// if ( this.getDebutManche ( ) && voie.getIleA ( ).getNom ( ).equals ( "Mutaa" )
+		// 							 && coulLigne.equals ( Color.BLUE )               )
+		// {
+		// 	System.out.println("oui");
+		// }
 
-		System.out.println("Premier tour, bleu mutaa");
+
+		System.out.println("est ce que l'arc est relié et que c'est pas le début de la manche?");
+		System.out.println(  !this.estRelie ( voie ) && !this.getDebutManche ( ));
 
 		//On ne peut pas tromper mille fois une personne... Non attends.. On ne peut pas..
-		if ( !this.estRelie ( voie ) && !this.getDebutManche ( ) ) return false;
+		// if ( !this.estRelie ( voie ) && !this.getDebutManche ( ) ) return false;
 
-		System.out.println("pas relier");
 		
+		System.out.println("est ce que l'on croise un arc qui est colorié ?");
 		// Une ligne ne peut pas croiser d'autre ligne coloriée
-		
 		for ( VoieMaritime v : this.lstVoieMaritimes ) 
-			if ( intersection ( voie, v ) && ( v.getColorArc ( ) != null ) ) return false;
-
-		System.out.println("intersection");
-		
+			if ( intersection ( voie, v ) && ( v.getColorArc ( ) != null ) ) System.out.println(intersection ( voie, v ) && ( v.getColorArc ( ) != null));
 		
 		voie.setCouleur( this.coulLigne );
 		// Tour suivant
 		this.tourSuivant();
 
 		return true;
-
-
-		// Vous ne pouvez pas prendre une voie si elle croise une autre voie déjà prise par une des deux lignes.
-
-
 
 		// return false;
 	}

@@ -49,6 +49,8 @@ public class Joueur
 
 	public void lancerManche ( )
 	{
+		System.out.println("manche num" + this.nbManches);
+		System.out.println("couleur : " + this.couleurs);
 		Color couleur   = this.couleurs.remove(0);
 		List<Ile> ligne = new ArrayList<>();
 
@@ -56,13 +58,20 @@ public class Joueur
 			if ( ( i.getNom().equals("Ticó") && couleur.equals ( Color.RED )) || ( i.getNom().equals("Mutaa") && couleur.equals(Color.BLUE) ) )
 				ligne.add ( i );
 		
+		System.out.println("couleur : " + this.couleurs);
 		this.tabManche[this.nbManches ++] = new Manche ( this.nbManches, ligne, couleur, this.plateau.getVoiesMaritimes() );
 	}
 
 
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
-		return this.tabManche[this.nbManches-1].jouer ( voieMaritime );
+		if ( !this.tabManche[this.nbManches-1].getFinManche() )
+			return this.tabManche[this.nbManches-1].jouer ( voieMaritime );
+
+		System.out.println("fin de la manche");
+		System.out.println(this.couleurs);
+		this.lancerManche();
+		return false;
 	}
 
 }

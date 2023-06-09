@@ -45,6 +45,13 @@ public class VoieMaritime
 		return new VoieMaritime (nom, depart, arriver);
 	}
 
+	public static VoieMaritime creerVoieMaritime ( VoieMaritime voie )
+	{
+		if ( voie == null ) return null;
+
+		return new VoieMaritime (voie.nom, voie.depart, voie.arriver);
+	}
+
 	/* -------------------------------------- */
 	/*                Accesseur               */
 	/* -------------------------------------- */
