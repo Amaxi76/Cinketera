@@ -65,6 +65,7 @@ public class Joueur
 
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
+		//tentative de gestion de la fin de la manche
 		if (!this.tabManche[this.nbManches - 1].getFinManche())
 		{
 			System.out.println(this.nbManches);

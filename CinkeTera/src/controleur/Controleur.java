@@ -106,7 +106,6 @@ public class Controleur
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
 		return this.J1.jouer ( voieMaritime );
-		//this.ihm.majIhm();
 	}
 
 	public void lancerFrame()

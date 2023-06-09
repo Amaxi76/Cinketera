@@ -196,6 +196,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 
 	public void mouseClicked(MouseEvent e) 
 	{
+		
 		for (VoieMaritime voieMaritime : this.lstVoiesMaritimes) 
 		{
 			Ile ileD = voieMaritime.getIleD();
@@ -204,9 +205,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 			Line2D line = new Line2D.Double(ileD.getPosX(),ileD.getPosY(),ileA.getPosX(),ileA.getPosY());	
 
 			if (line.intersects(e.getX(),e.getY(),10,10)) //Si on clique bien sur un arc
-			
-				System.out.println("on est dedannss");
-
+			{
 				VoieMaritime voieMaritimeATester = VoieMaritime.creerVoieMaritime(voieMaritime);
 				voieMaritime.setCouleur(Color.YELLOW);
 				
@@ -217,7 +216,11 @@ public class PanelPlateau extends JPanel implements MouseListener
 					JOptionPane.showMessageDialog ( this.frame,"Erreur de sélection", "Erreur", JOptionPane.ERROR_MESSAGE ); //Affiche que la sélection est mauvaise
 					voieMaritime.setCouleur(null);
 					this.voieMaritimeAColorier = null;
+					
 				}
+				return;
+			}
+				
 			
 		}
 		this.repaint();
