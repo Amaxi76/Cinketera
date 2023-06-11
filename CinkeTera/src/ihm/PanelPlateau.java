@@ -90,15 +90,23 @@ public class PanelPlateau extends JPanel implements MouseListener
 	{
 		for ( VoieMaritime voieMaritime : lstVoiesMaritimes)
 		{
-			Color arcColor = voieMaritime.getColorArc ( ) == null ? Color.BLACK : voieMaritime.getColorArc ( );
-			g2.setColor  ( arcColor );
-			g2.setStroke ( new BasicStroke ( voieMaritime.getColorArc ( ) == null ? 5 : 7 ) );	//Dessine les arcs coloriés avec un stroke plus épais
-
 			Ile depart  = voieMaritime.getIleD ( );
 			Ile arrivee = voieMaritime.getIleA ( );
+
+			if (voieMaritime == this.voieMaritimeAColorier )
+			{
+				g2.setColor(Color.YELLOW);
+				g2.setStroke(new BasicStroke(7));
+			}
+			else
+			{
+				Color arcColor = voieMaritime.getColorArc ( ) == null ? Color.BLACK : voieMaritime.getColorArc ( );
+				g2.setColor  ( arcColor );
+				g2.setStroke ( new BasicStroke ( voieMaritime.getColorArc ( ) == null ? 5 : 7 ) );	//Dessine les arcs coloriés avec un stroke plus épais
+			}
 			
 			g2.drawLine ( depart.getPosX ( ), depart.getPosY ( ), arrivee.getPosX ( ), arrivee.getPosY ( ));
-				
+			
 		}
 	}
 
@@ -199,25 +207,22 @@ public class PanelPlateau extends JPanel implements MouseListener
 		
 		for (VoieMaritime voieMaritime : this.lstVoiesMaritimes) 
 		{
-			Ile ileD = voieMaritime.getIleD();
-			Ile ileA = voieMaritime.getIleA();
+			Ile ileD = voieMaritime.getIleD ( );
+			Ile ileA = voieMaritime.getIleA ( );
 
-			Line2D line = new Line2D.Double(ileD.getPosX(),ileD.getPosY(),ileA.getPosX(),ileA.getPosY());	
+			Line2D line = new Line2D.Double ( ileD.getPosX ( ),ileD.getPosY ( ),ileA.getPosX ( ),ileA.getPosY ( ) );	
 
-			if (line.intersects(e.getX(),e.getY(),10,10)) //Si on clique bien sur un arc
+			if (line.intersects ( e.getX ( ),e.getY ( ),10,10 ) ) //Si on clique bien sur un arc
 			{
-				VoieMaritime voieMaritimeATester = VoieMaritime.creerVoieMaritime(voieMaritime);
-				voieMaritime.setCouleur(Color.YELLOW);
-				
-				boolean peutJouer = this.ctrl.jouer(voieMaritimeATester);
-				System.out.println("peut jouer : " + peutJouer);
-				if (!peutJouer) 
+				this.voieMaritimeAColorier = voieMaritime;
+				if (!this.ctrl.jouer(voieMaritime)) 
 				{
+					System.out.println("peut jouer : false");
 					JOptionPane.showMessageDialog ( this.frame,"Erreur de sélection", "Erreur", JOptionPane.ERROR_MESSAGE ); //Affiche que la sélection est mauvaise
-					voieMaritime.setCouleur(null);
-					this.voieMaritimeAColorier = null;
-					
 				}
+				this.repaint();
+				this.voieMaritimeAColorier = null;
+
 				return;
 			}
 				
