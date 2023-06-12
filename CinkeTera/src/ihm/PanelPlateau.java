@@ -6,22 +6,13 @@ import javax.swing.JPanel;
 
 import java.util.List;
 import java.awt.geom.*;
-import java.nio.file.*;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import controleur.*;
 import metier.*;
 
-public class PanelPlateau extends JPanel implements MouseListener 
+public class PanelPlateau extends JPanel implements MouseListener
 {
-
-	/** Un tableau de Couleurs pour colorier les regions
-	 *
-	 */
-	private Color[] couleurs = {Color.BLACK,Color.BLUE,Color.GRAY,Color.GREEN,Color.MAGENTA,Color.ORANGE,Color.YELLOW,Color.RED,Color.PINK}; 
 
 	/** Un Controleur pour pouvoir accéder au controleur
 	 * 
@@ -43,6 +34,12 @@ public class PanelPlateau extends JPanel implements MouseListener
 	 */
 	private boolean selectionne;
 
+	private Color clrJ1;
+
+
+	private double rX;
+	private double rY;
+
 	/**
 	 * L'arc a colorier
 	 */
@@ -58,13 +55,15 @@ public class PanelPlateau extends JPanel implements MouseListener
 	{
 		this.ctrl 						= ctrl;
 		this.frame                      = frame;
-		this.lstVoiesMaritimes 			= this.ctrl.getVoiesMaritimes( );
-		this.lstIles					= this.ctrl.getIle			 ( );
+
+		this.clrJ1 = this.ctrl.getCouleurJ1();
+
+		this.rX = this.rY = 1;
 
 		this.setBackground(new Color(172,209,232)) ;
-		
 
-		//this.actif1       				= this.actif2 = null;
+		this.lstVoiesMaritimes 			= this.ctrl.getVoiesMaritimes( );
+		this.lstIles					= this.ctrl.getIle			 ( );	
 
 		this.selectionne  				= false;
 		this.voieMaritimeAColorier 		= null;
@@ -77,28 +76,34 @@ public class PanelPlateau extends JPanel implements MouseListener
 		Graphics2D g2 = ( Graphics2D ) g;
 
 		//Dessiner le graph
-		this.dessinerArcs           ( g2 );
-		this.dessinerIles           ( g2 );
-		//this.dessinerNoeudsActifs   ( g2 );
-		//this.dessinerArcSelectionne ( g2 );
+		this.dessinerArcs  ( g2,this.rX,this.rY );
+		this.dessinerIles  ( g2,this.rX,this.rY );
 	}
 
 	/** Méthode qui dessine les arcs de la liste
 	 * @param g2 de type Graphics2D
 	 */
-	private void dessinerArcs ( Graphics2D g2 )
+	private void dessinerArcs ( Graphics2D g2,double rX,double rY )
 	{
 		for ( VoieMaritime voieMaritime : lstVoiesMaritimes)
 		{
-			Color arcColor = voieMaritime.getColorArc ( ) == null ? Color.BLACK : voieMaritime.getColorArc ( );
-			g2.setColor  ( arcColor );
-			g2.setStroke ( new BasicStroke ( voieMaritime.getColorArc ( ) == null ? 5 : 7 ) );	//Dessine les arcs coloriés avec un stroke plus épais
-
 			Ile depart  = voieMaritime.getIleD ( );
 			Ile arrivee = voieMaritime.getIleA ( );
+
+			if (voieMaritime == this.voieMaritimeAColorier )
+			{
+				g2.setColor(Color.YELLOW);
+				g2.setStroke(new BasicStroke(7));
+			}
+			else
+			{
+				Color arcColor = voieMaritime.getColorArc ( ) == null ? Color.BLACK : voieMaritime.getColorArc ( );
+				g2.setColor  ( arcColor );
+				g2.setStroke ( new BasicStroke ( voieMaritime.getColorArc ( ) == null ? 5 : 7 ) );	//Dessine les arcs coloriés avec un stroke plus épais
+			}
 			
-			g2.drawLine ( depart.getPosX ( ), depart.getPosY ( ), arrivee.getPosX ( ), arrivee.getPosY ( ));
-				
+			g2.drawLine ( (int)(depart.getPosX ( )*rX), (int)(depart.getPosY ( )*rY), (int)(arrivee.getPosX ( )*rX), (int)(arrivee.getPosY ( )*rY));
+			
 		}
 	}
 
@@ -106,75 +111,36 @@ public class PanelPlateau extends JPanel implements MouseListener
 	 * @param g2 de type Graphics2D
 	 * 
 	 */
-	private void dessinerIles ( Graphics2D g2 )
+	private void dessinerIles ( Graphics2D g2,double rX,double rY )
 	{
+		
 		for ( Ile ile : this.lstIles )
 		{
 			Image imageIle = this.getToolkit().getImage ("donnees/images/" + ile.getNom() +".png");
-			g2.drawImage(imageIle,ile.getPosXImage(),ile.getPosYImage(), null);
+			g2.drawImage(imageIle,(int)(ile.getPosXImage()*rX),(int)(ile.getPosYImage()*rY),(int)(imageIle.getWidth(null)*rX),(int)(imageIle.getHeight(null)*rY), null);
+
 		}
+
+
+		/*Rouge = tico et Bleu  = Mutaa*/
+		g2.setColor(Color.WHITE);
+		for ( Ile ile : this.lstIles )
+		{	
+			if( (this.clrJ1 == Color.RED  && ile.getNom().equals("Ticó")) ||
+				(this.clrJ1 == Color.BLUE && ile.getNom().equals("Mutaa")))
+			{
+				g2.setColor(clrJ1);
+			}
+
+			g2.drawString(ile.getNom(),(int)((ile.getPosX()-20)*rX),(int)(ile.getPosY()*rY));
+			g2.setColor(Color.WHITE);
+		}
+			
+
+		g2.setColor(Color.BLACK);
+
 		this.repaint();
 	}
-
-	/** Méthode qui dessine l'arc sélectionné en rouge
-	 * @param g2 de type Graphics2D
-	 * 
-	 *//*
-	private void dessinerArcSelectionne(Graphics2D g2) 
-	{
-		if (actif1 != null && actif2 != null) 
-		{
-			VoieMaritime a = ctrl.arcEntre(actif1, actif2);
-
-			if (a != null) {
-				Ile depart	= a.getIleD();
-				Ile arrivee = a.getIleA();
-				g2.drawLine(depart.getPosX(), depart.getPosY() - 100, arrivee.getPosX(), arrivee.getPosY() - 100);
-
-				dessinerNoeud(g2, actif1, Color.RED);
-				dessinerNoeud(g2, actif2, Color.RED);
-
-				selectionne = true;
-				voieMaritimeAColorier = a;
-			} 
-			else
-			{
-				reset(g2); 
-			}
-			   
-			
-		}
-	}*/
-
-	/** Méthode qui reset les noeuds sélectionnés (sélection)
-	 * @param g2 de type Graphics2D
-	 *//*
-	public void reset(Graphics2D g2) 
-	{
-		dessinerNoeud(g2, actif1, Color.BLACK);
-		dessinerNoeud(g2, actif2, Color.BLACK);
-		this.selectionne = false;
-		this.voieMaritimeAColorier = null;
-		actif1 = null;
-		actif2 = null;
-		repaint();
-
-		//Pour afficher message d'erreur quand on sélectionne deux noeuds non adjacents
-		SwingUtilities.invokeLater(() -> 
-		{
-			JOptionPane.showMessageDialog(this,"Transgression de contrainte, essaie autre chose bg", "Erreur", JOptionPane.ERROR_MESSAGE);
-		});
-	}*/
-
-	/** Reset les noeuds sélectionnés
-	 * 
-	 *//*
-	public void resetSelect() 
-	{
-		actif1 = null;
-		actif2 = null;
-		repaint();
-	}*/
 
 	/** Métode qui permet de savoir si un arc est sélectionné
 	 * @return return vrai si il y aun arc selectionné
@@ -194,30 +160,34 @@ public class PanelPlateau extends JPanel implements MouseListener
 		return this.voieMaritimeAColorier;
 	}
 
+	public void setRatios(double rX, double rY)
+	{
+		this.rX = rX;
+		this.rY = rY;
+		this.repaint();
+	}
+
 	public void mouseClicked(MouseEvent e) 
 	{
 		
 		for (VoieMaritime voieMaritime : this.lstVoiesMaritimes) 
 		{
-			Ile ileD = voieMaritime.getIleD();
-			Ile ileA = voieMaritime.getIleA();
+			Ile ileD = voieMaritime.getIleD ( );
+			Ile ileA = voieMaritime.getIleA ( );
 
-			Line2D line = new Line2D.Double(ileD.getPosX(),ileD.getPosY(),ileA.getPosX(),ileA.getPosY());	
+			Line2D line = new Line2D.Double ( ileD.getPosX ( )*rX,ileD.getPosY ( )*rY,ileA.getPosX ( )*rX,ileA.getPosY ( )*rY );	
 
-			if (line.intersects(e.getX(),e.getY(),10,10)) //Si on clique bien sur un arc
+			if (line.intersects ( e.getX ( ),e.getY ( ),10,10 ) ) //Si on clique bien sur un arc
 			{
-				VoieMaritime voieMaritimeATester = VoieMaritime.creerVoieMaritime(voieMaritime);
-				voieMaritime.setCouleur(Color.YELLOW);
-				
-				boolean peutJouer = this.ctrl.jouer(voieMaritimeATester);
-				System.out.println("peut jouer : " + peutJouer);
-				if (!peutJouer) 
+				this.voieMaritimeAColorier = voieMaritime;
+				if (!this.ctrl.jouer(voieMaritime)) 
 				{
+					System.out.println("peut jouer : false");
 					JOptionPane.showMessageDialog ( this.frame,"Erreur de sélection", "Erreur", JOptionPane.ERROR_MESSAGE ); //Affiche que la sélection est mauvaise
-					voieMaritime.setCouleur(null);
-					this.voieMaritimeAColorier = null;
-					
 				}
+				this.repaint();
+				this.voieMaritimeAColorier = null;
+
 				return;
 			}
 				

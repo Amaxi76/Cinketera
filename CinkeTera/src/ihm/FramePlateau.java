@@ -1,12 +1,13 @@
 package ihm;
 
-import javax.swing.JFrame;
+import java.awt.event.*;
+import javax.swing.*;
 import java.awt.*;
 
 import controleur.*;
 import metier.*;
 
-public class FramePlateau extends JFrame
+public class FramePlateau extends JFrame implements ComponentListener
 {
 	/*-------------*/
 	/*--Attributs--*/
@@ -18,46 +19,58 @@ public class FramePlateau extends JFrame
 	private Controleur    ctrl;
 
 	/**
-	 * Une frame pour la frame
-	 */
-	//private FrameCarte    frameCarte;
-
-	/**
-	 * PanelGraph pour la frame
+	 * PanelPlateau pour la frame
 	 */
 	private PanelPlateau  panelPlateau;
+	private PanelPlateau  panelPlateau2;
 
 	/**
-	 * PanelAction pour la frame
+	 * FrameCarte pour la frame
 	 */
-	private PanelAction   panelAction;
+	private FrameCarte   frameCarte;
 
 	/*----------------*/
 	/*--Constructeur--*/
 	/*----------------*/
 
-	/** Constructuer de FrameGraphe qui crée un panelGraphe et panelAction
+	/** Constructuer de FramePlateau qui crée un panelPlateau et frameCarte
 	 * @param ctrl le controleur
 	 * 
 	 */
-	public FramePlateau ( Controleur ctrl )
+	public FramePlateau ( Controleur ctrl,boolean deuxJ )
 	{
+		this.ctrl = ctrl;
+
 		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( );
 
-		this.setSize(tailleEcran);
-		this.setLocation(50,50);
+		this.setSize((int)tailleEcran.getWidth(),900);
+		this.setLocation(0,0);
+		this.setUndecorated(false);
 		this.setTitle    ( "CinkeTera" );
 
-		this.ctrl = ctrl;
-		//this.frameCarte = new FrameCarte(this.ctrl);
+		//Mettre un icone peu utile en image de logiciel
+		Image icon = Toolkit.getDefaultToolkit().getImage("donnees/images/boat.png");  
+    	this.setIconImage(icon); 
+
+		this.frameCarte = new FrameCarte(ctrl);
 
 		/*Création des composants*/
 
 		this.panelPlateau  = new PanelPlateau  ( this.ctrl, this );
 
 		/*Placement des composants*/
-		this.add ( this.panelPlateau                     );
+		this.add ( this.panelPlateau );
 
+		if (deuxJ) 
+		{
+			this.setLayout(new GridLayout(1,2));
+			this.panelPlateau2  = new PanelPlateau  ( this.ctrl, this );
+
+			/*Placement des composants*/
+			this.add ( this.panelPlateau2 );
+		}
+
+		this.addComponentListener(this);
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
 		this.setVisible ( true );
 	}
@@ -73,9 +86,20 @@ public class FramePlateau extends JFrame
 	public boolean estSelectionne  ( ) { return this.panelPlateau.estSelectionne  ( ); }
 
 	public void majIHM() {this.panelPlateau.repaint();}
-	
-	/** Appel la méthode resetSelect de PanelGraph
-	 * 
-	 */
-	//public void    resetSelect     ( ) {        this.panelPlateau.resetSelect     ( ); }
+
+	public void componentHidden (ComponentEvent e) {}
+	public void componentResized(ComponentEvent e)
+	{
+		double ratioX = this.getWidth()/java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		double ratioY = this.getHeight()/java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		this.panelPlateau.setRatios( ratioX , ratioY);
+	}
+	public void componentShown  (ComponentEvent e) {}
+
+	public void componentMoved  (ComponentEvent e)
+	{
+		double ratioX = this.getWidth()/java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		double ratioY = this.getHeight()/java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		this.panelPlateau.setRatios( ratioX , ratioY);
+	}
 }

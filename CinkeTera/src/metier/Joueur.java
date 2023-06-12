@@ -14,9 +14,7 @@ public class Joueur
 
 	private Plateau     plateau;
 	private List<Color> couleurs;
-	private Manche[]    tabManche;
-
-	private int         nbManches;
+	private Partie      partie;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
@@ -24,15 +22,13 @@ public class Joueur
 	
 	public Joueur ( Plateau plateau )
 	{
-		this.tabManche = new Manche[2];
-		this.nbManches = 0;
 		this.plateau   = plateau;
 
 		this.couleurs = new ArrayList<> ( Arrays.asList ( Color.BLUE, Color.RED ) );
 		Collections.shuffle ( this.couleurs );
 
-		this.lancerManche();
-		// Attribution des couleurs de la manche
+		this.lancerPartie ( );
+		// Attribution des couleurs de la partie
 		
 	}
 
@@ -40,47 +36,29 @@ public class Joueur
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public int    getNbManches    ( ) { return this.nbManches;            }
-	public Manche getMancheActuel ( ) { return this.tabManche[nbManches]; }
+	public Partie getPartie    ( ) { return this.partie;          }
+	public Color  getCouleur   ( ) { return this.couleurs.get(0); }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	public void lancerManche ( )
+	public void lancerPartie ( )
 	{
-		System.out.println("manche num" + this.nbManches);
-		System.out.println("couleur : " + this.couleurs);
 		Color couleur   = this.couleurs.remove(0);
 		List<Ile> ligne = new ArrayList<>();
 
 		for ( Ile i : this.plateau.getIles ( ) )	
-			if ( ( i.getNom().equals("Ticó") && couleur.equals ( Color.RED )) || ( i.getNom().equals("Mutaa") && couleur.equals(Color.BLUE) ) )
+			if ( ( i.getNom ( ).equals ( "Ticó" ) && couleur.equals ( Color.RED ) ) || ( i.getNom ( ).equals ( "Mutaa" ) && couleur.equals ( Color.BLUE ) ) )
 				ligne.add ( i );
 		
-		System.out.println("couleur : " + this.couleurs);
-		this.tabManche[this.nbManches ++] = new Manche ( this.nbManches, ligne, couleur, this.plateau.getVoiesMaritimes() );
+		this.partie = new Partie ( this, ligne, couleur, this.plateau.getVoiesMaritimes ( ) );
 	}
 
 
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
-		//tentative de gestion de la fin de la manche
-		if (!this.tabManche[this.nbManches - 1].getFinManche())
-		{
-			System.out.println(this.nbManches);
-			return this.tabManche[this.nbManches - 1].jouer(voieMaritime);
-			
-		}
-		else
-		{		
-			if (this.nbManches < this.tabManche.length)
-			{
-				lancerManche();
-				return false;
-			}
-		}
-		return false;
+		return this.partie.jouer ( voieMaritime );
 	}
 
 }

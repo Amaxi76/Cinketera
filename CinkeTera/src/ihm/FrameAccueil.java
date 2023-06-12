@@ -2,6 +2,8 @@ package ihm;
 
 import javax.swing.JFrame;
 import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 
 import controleur.*;
 
@@ -35,14 +37,19 @@ public class FrameAccueil extends JFrame
 
 		this.ctrl = ctrl;
 
+
 		/*Placement des composants*/
 
 		this.panelAccueil = new PanelAccueil(ctrl,this);
 		this.add(this.panelAccueil);
 
-		this.pack();
+		//Mettre un icone peu utile en image de logiciel
+		Image icon = Toolkit.getDefaultToolkit().getImage("donnees/images/boat.png");  
+    	this.setIconImage(icon);
 
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
+		this.pack();
+
 		this.setVisible ( true );
 	}
 

@@ -106,7 +106,7 @@ public class Plateau
 			}
 			while(!line.equals(""));
 
-			//Créer les voies maritimes			
+			//Créer les voies maritimes
 			while (sc.hasNextLine()) 
 			{
 				Decomposeur dec = new Decomposeur ( sc.nextLine() );
@@ -124,8 +124,12 @@ public class Plateau
 					if (ile.getNom().equals(nomIle2)) ile2 = ile;
 				}
 					
+				VoieMaritime v = VoieMaritime.creerVoieMaritime(nomIle1 + "-" + nomIle2,ile1,ile2);
 
-				this.lstVoiesMaritimes.add(VoieMaritime.creerVoieMaritime(nomIle1 + "-" + nomIle2,ile1,ile2));
+				this.lstVoiesMaritimes.add(v);
+				ile1.ajouterArc(v);
+				ile2.ajouterArc(v);
+
 			}
 
 		}

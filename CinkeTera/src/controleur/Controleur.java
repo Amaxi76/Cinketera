@@ -8,12 +8,13 @@ import iut.algo.Clavier;
 import metier.*;
 import ihm.*;
 import java.util.List;
-import java.awt.Color;
+import java.awt.*;
 
 public class Controleur
 {
 	private Plateau      metier;
 	private	FramePlateau ihm;
+
 
 	private Joueur J1;
 	//private Joueur J2;
@@ -48,13 +49,15 @@ public class Controleur
 	/** Getteur qui retourne la couleur du joueur en cours
 	 * @return couleur du joueur en cours
 	 */
-	public Color     getCouleurJ1 ( ) { return this.J1.getMancheActuel().getCoulLigne ( ) ; }
+	public Color     getCouleurJ1 ( ) { return this.J1.getPartie().getCoulLigne ( ) ; }
 	//public Color     getCouleurJ2 ( ) { return this.J2.getCouleur ( ); }
 
 	/** Getteur qui retourne la partie métier
 	 * @return partie métier
 	 */
 	public Plateau     getMetier  ( ) { return this.metier;                }
+
+	public Joueur		getJoueur1()  { return this.J1; }
 
 
 	/** Getteur qui retourne le nombre de régions visitées
@@ -110,12 +113,20 @@ public class Controleur
 
 	public void lancerFrame()
 	{
-		this.ihm    = new FramePlateau ( this );
+		this.ihm    = new FramePlateau ( this , false );
+	}
+
+	public void modeDeuxJouers()
+	{
+		this.ihm    = new FramePlateau ( this , true );
+
+
+
 	}
 
 	public Carte getCarteEnCours()
 	{
-		return this.J1.getMancheActuel().getCarteEnCours();
+		return this.J1.getPartie().getCarteEnCours();
 	}
 
 	

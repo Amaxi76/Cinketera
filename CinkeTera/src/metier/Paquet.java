@@ -29,15 +29,16 @@ public class Paquet
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public Carte        piocher   ( ) { return this.pioche.remove ( 0 ); }
-
+	public Carte piocher      ( int cpt ) { return this.pioche.remove ( cpt ); }
+	public int   taillePaquet (         ) { return this.pioche.size   (     ); }
+	public Carte getCarte     ( int cpt ) { return this.pioche.get    ( cpt ); }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	/** Initialise un paquet de 10 cartes
-	 * 
+	/**
+	 * Initialise un paquet de 10 cartes
 	 */
 	private void initialiserPaquet ( )
 	{
@@ -50,7 +51,10 @@ public class Paquet
 		Collections.shuffle ( this.pioche );
 	}
 
-	/**Afin de savoir s'il reste des cartes primaires
+
+	/**
+	 * Afin de savoir s'il reste des cartes primaires
+	 * 
 	 * @return
 	 */
 	public boolean aEncorePrimaire ( )
