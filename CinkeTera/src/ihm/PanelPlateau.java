@@ -89,21 +89,9 @@ public class PanelPlateau extends JPanel implements MouseListener
 		{
 			Ile depart  = voieMaritime.getIleD ( );
 			Ile arrivee = voieMaritime.getIleA ( );
-
-			if (voieMaritime == this.voieMaritimeAColorier )
-			{
-				g2.setColor(Color.YELLOW);
-				g2.setStroke(new BasicStroke(7));
-			}
-			else
-			{
-				Color arcColor = voieMaritime.getColorArc ( ) == null ? Color.BLACK : voieMaritime.getColorArc ( );
-				g2.setColor  ( arcColor );
-				g2.setStroke ( new BasicStroke ( voieMaritime.getColorArc ( ) == null ? 5 : 7 ) );	//Dessine les arcs coloriés avec un stroke plus épais
-			}
 			
-			g2.drawLine ( (int)(depart.getPosX ( )*rX), (int)(depart.getPosY ( )*rY), (int)(arrivee.getPosX ( )*rX), (int)(arrivee.getPosY ( )*rY));
-			
+			g2.drawLine ( depart.getPosX ( ), depart.getPosY ( ), arrivee.getPosX ( ), arrivee.getPosY ( ));
+				
 		}
 	}
 
@@ -175,7 +163,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 			Ile ileD = voieMaritime.getIleD ( );
 			Ile ileA = voieMaritime.getIleA ( );
 
-			Line2D line = new Line2D.Double ( ileD.getPosX ( )*rX,ileD.getPosY ( )*rY,ileA.getPosX ( )*rX,ileA.getPosY ( )*rY );	
+			Line2D line = new Line2D.Double(ileD.getPosX(),ileD.getPosY(),ileA.getPosX(),ileA.getPosY());	
 
 			if (line.intersects ( e.getX ( ),e.getY ( ),10,10 ) ) //Si on clique bien sur un arc
 			{
