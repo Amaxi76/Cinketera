@@ -82,6 +82,22 @@ public class Ile
 	 */
 	public int                getPosYImage () { return this.posYImage; }
 
+	public List<Ile>          getVoisins   ()
+	{
+		List<Ile> voisins = new ArrayList<>();
+
+		for (VoieMaritime voieMaritime : this.ensVoie) 
+		{
+			Ile depart  = voieMaritime.getIleD();
+			Ile arrivee = voieMaritime.getIleA();
+
+			if (depart  != this) voisins.add( depart  );
+			else                 voisins.add( arrivee );
+		}
+
+		return voisins;
+	}
+
 	/* -------------------------------------- */
 	/*              Modificateur              */
 	/* -------------------------------------- */

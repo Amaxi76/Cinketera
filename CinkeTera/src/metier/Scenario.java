@@ -1,33 +1,30 @@
 package metier;
 
-import metier.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.FileInputStream;
 import iut.algo.*;
 import java.awt.Color;
 
-public class Scenario /*extends Partie*/
+public class Scenario extends Partie
 {
 	/* -------------------------------------- */
 	/*               Attributs                */
 	/* -------------------------------------- */
 
-	private 	int 				numScenario;
-	private 	List<Ile>          	lstIles;
-	private 	List<VoieMaritime> 	lstVoiesMaritimes;
-	private 	List<Region>       	lstRegions;
+	private int                numScenario;
+	private List<Ile>          lstIles;
+	private List<VoieMaritime> lstVoiesMaritimes;
+	private List<Region>       lstRegions;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
 
-	public Scenario(int num)
+	private Scenario (Joueur j, List<Ile> ensIles, Color couleur, int num)
 	{
+		super ( j, ensIles, couleur );
 		this.numScenario = num;
-
-
 	}
 
 	/* -------------------------------------- */
@@ -39,6 +36,16 @@ public class Scenario /*extends Partie*/
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
+
+	public boolean creerScenario ( int num )
+	{
+		switch ( num )
+		{
+			case 1 : num = 1;
+		}
+
+		return true;
+	}
 
 	public void initialiserScenario ( )
 	{
@@ -141,6 +148,10 @@ public class Scenario /*extends Partie*/
 				this.lstVoiesMaritimes.add(v);
 				ile1.ajouterArc(v);
 				ile2.ajouterArc(v);
+
+				// Ajouter les arcs aux lignes ?
+
+				
 
 			}
 

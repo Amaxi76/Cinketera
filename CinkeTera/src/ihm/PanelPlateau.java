@@ -1,13 +1,15 @@
 package ihm;
 
 import java.awt.*;
+import java.awt.image.*;
+import java.io.File;
 import java.awt.event.*;
-import javax.swing.JPanel;
-
 import java.util.Arrays;
 import java.util.List;
 import java.awt.geom.*;
-import javax.swing.JOptionPane;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 import controleur.*;
 import metier.*;
@@ -35,11 +37,6 @@ public class PanelPlateau extends JPanel implements MouseListener
 	 */
 	private List<Region> lstRegions;
 
-	/**Un boolean pour dire si il y avait un arc seléctionné ou pas 
-	 * 
-	 */
-	private boolean selectionne;
-
 	private Color clrJ1;
 
 
@@ -53,7 +50,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 
 	private FramePlateau frame;
 
-	/** Constructeur de PanelGraph
+	/** Constructeur de PanelPlateau
 	 * @param ctrl de type Controleur
 	 * 
 	 */
@@ -62,18 +59,16 @@ public class PanelPlateau extends JPanel implements MouseListener
 		this.ctrl 						= ctrl;
 		this.frame                      = frame;
 
-		this.clrJ1 = this.ctrl.getCouleurJ1();
+		this.clrJ1 = this.ctrl.getCouleurj1();
 
 		this.rX = this.rY = 1;
 
 		this.setBackground(new Color(172,209,232)) ;
 
-		this.lstVoiesMaritimes 			= this.ctrl.getVoiesMaritimes( );
-		this.lstIles					= this.ctrl.getIle			 ( );
-		this.lstRegions                 = this.ctrl.getRegions       ( );
-
-		this.selectionne  				= false;
-		this.voieMaritimeAColorier 		= null;
+		this.lstVoiesMaritimes     = this.ctrl.getJoueur1().getPlateau().getVoiesMaritimes( );
+		this.lstIles               = this.ctrl.getJoueur1().getPlateau().getIles          ( );
+		this.lstRegions            = this.ctrl.getJoueur1().getPlateau().getRegions       ( );
+		this.voieMaritimeAColorier = null;
 		this.addMouseListener ( this );
 	}
 
@@ -109,13 +104,26 @@ public class PanelPlateau extends JPanel implements MouseListener
 			}
 			else
 			{
-				Color arcColor = voieMaritime.getColorArc ( ) == null ? Color.BLACK : voieMaritime.getColorArc ( );
+				Color arcColor = voieMaritime.getColorArc ( ) == null ? Color.DARK_GRAY : voieMaritime.getColorArc ( );
 				g2.setColor  ( arcColor );
 				g2.setStroke ( new BasicStroke ( voieMaritime.getColorArc ( ) == null ? 5 : 7 ) );	//Dessine les arcs coloriés avec un stroke plus épais
 			}
 			
 			g2.drawLine ( (int)(depart.getPosX ( )*rX), (int)(depart.getPosY ( )*rY), (int)(arrivee.getPosX ( )*rX), (int)(arrivee.getPosY ( )*rY));
 			
+
+			if ( voieMaritime.getValeur ( ) != 1 )
+			{
+				int pointStringY = ( depart.getPosY ( ) - 100 + arrivee.getPosY ( ) - 100 ) / 2 - 5 ;
+				int pointStringX = 0;
+
+				if (depart.getPosX() == arrivee.getPosX())
+					pointStringX = ( depart.getPosX ( ) + arrivee.getPosX ( ) ) / 2 + 5;
+				else					
+					pointStringX = ( depart.getPosX ( ) + arrivee.getPosX ( ) ) / 2;
+
+				g2.drawString ( "" + voieMaritime.getValeur ( ), pointStringX, pointStringY);
+			}
 		}
 	}
 
@@ -125,19 +133,53 @@ public class PanelPlateau extends JPanel implements MouseListener
 	 */
 	private void dessinerIles ( Graphics2D g2,double rX,double rY )
 	{
-		
+		//Avoir les Iles jouables
+		List<Ile> lstExtremite = this.ctrl.getJoueur1().getPartie().getEnsExtremites();
+
 		for ( Ile ile : this.lstIles )
 		{
-			Image imageIle = this.getToolkit().getImage ("donnees/images/" + ile.getNom() +".png");
-			g2.drawImage(imageIle,(int)(ile.getPosXImage()*rX),(int)(ile.getPosYImage()*rY),(int)(imageIle.getWidth(null)*rX),(int)(imageIle.getHeight(null)*rY), null);
+			BufferedImage imgIle = null;
+			try 
+			{
+                imgIle = ImageIO.read(new File("donnees/images/" + ile.getNom() +".png"));
+            } catch (Exception e) {e.printStackTrace();}
+			
+			int width    = imgIle.getWidth();
+			int height   = imgIle.getHeight();
+			int[] pixels = imgIle.getRGB(0, 0, width, height, null, 0, width);
 
+			// Parcourir les pixels et les assombrire
+			for (int i = 0; i < pixels.length; i++)
+			{
+				int rgb   = pixels[i];
+				int alpha = (rgb >> 24) & 0xFF;
+				int r     = (rgb >> 16) & 0xFF;
+				int g     = (rgb >> 8) & 0xFF;
+				int b     = rgb & 0xFF;
+
+				r *= 0.50;
+				b *= 0.50;
+				g *= 0.50;
+
+				pixels[i] = (alpha << 24) | (r << 16) | (g << 8) | b;
+			}
+
+			// Créer une nouvelle image avec les pixels modifiés
+			BufferedImage modifiedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			modifiedImage.setRGB(0, 0, width, height, pixels, 0, width);
+
+			if (lstExtremite.contains(ile) || this.ctrl.estJouable(ile,lstExtremite))
+				modifiedImage = imgIle;
+			
+			g2.drawImage(modifiedImage, (int) (ile.getPosXImage() 		 * this.rX),
+										(int) (ile.getPosYImage() 		 * this.rY),
+										(int) (modifiedImage.getWidth()  * this.rX),
+										(int) (modifiedImage.getHeight() * this.rY), this);
 		}
 
-
-		/*Rouge = tico et Bleu  = Mutaa*/
-		g2.setColor(Color.WHITE);
 		for ( Ile ile : this.lstIles )
 		{	
+			g2.setColor(Color.WHITE);
 			if( (this.clrJ1 == Color.RED  && ile.getNom().equals("Ticó")) ||
 				(this.clrJ1 == Color.BLUE && ile.getNom().equals("Mutaa")))
 			{
@@ -145,66 +187,23 @@ public class PanelPlateau extends JPanel implements MouseListener
 			}
 
 			g2.drawString(ile.getNom(),(int)((ile.getPosX()-20)*rX),(int)(ile.getPosY()*rY));
-			g2.setColor(Color.WHITE);
 		}
-			
 
 		g2.setColor(Color.BLACK);
 
-		this.repaint();
 	}
+
+
 
 	public void dessinerRegions(Graphics2D g2)
 	{
+		g2.setStroke( new BasicStroke(1));
+		g2.setColor(new Color(86,39,138));
+		g2.drawLine(0,357,785,357);
+		g2.drawLine(785,357,1237,0);
+		g2.drawLine(785,357,1350,900);
+		g2.drawLine(450,0,450,900);
 		
-		g2.setColor(Color.BLACK);
-		for (Region region : this.lstRegions) 
-		{
-			int nbIles = region.getNbIle();
-
-			int minX = region.getEnsIles().get(0).getPosXImage();
-			int minY = region.getEnsIles().get(0).getPosYImage();
-			int maxX = region.getEnsIles().get(0).getPosXImage();
-			int maxY = region.getEnsIles().get(0).getPosYImage();
-
-			for (int cpt = 1; cpt < nbIles; cpt++) 
-			{
-				Ile ile = region.getEnsIles().get(cpt);
-
-				minX = Math.min(minX,ile.getPosXImage())-40;
-				minY = Math.min(minY,ile.getPosYImage())-40;
-
-				maxX = Math.max(maxX,ile.getPosXImage())+50;
-				maxY = Math.max(maxY,ile.getPosYImage())+50;
-			}
-			
-			g2.drawOval( minX, minY, maxX-minX, maxY-minY);
-
-			List<Ile> boundary = region.getEnsIles(); 
-			int[] xPoints = boundary.stream().mapToInt(Point::getX).toArray();
-			int[] yPoints = boundary.stream().mapToInt(Point::getY).toArray();
-			int numPoints = boundary.size();
-			g2.drawPolygon(xPoints, yPoints, numPoints);
-
-			// Dessine la bordure de la région
-			g.setColor(Color.BLACK);
-			List<Point> boundary = region.getBoundaryPoints();
-			int[] xPoints = boundary.stream().mapToInt(Point::getX).toArray();
-			int[] yPoints = boundary.stream().mapToInt(Point::getY).toArray();
-			int numPoints = boundary.size();
-			g.drawPolygon(xPoints, yPoints, numPoints);
-		};
-
-		
-	}
-
-	/** Métode qui permet de savoir si un arc est sélectionné
-	 * @return return vrai si il y aun arc selectionné
-	 * 
-	 */
-	public boolean estSelectionne() 
-	{
-		return selectionne;
 	}
 
 	/** Méthode qui permet de récupérer l'arc sélectionné
@@ -225,8 +224,6 @@ public class PanelPlateau extends JPanel implements MouseListener
 
 	public void mouseClicked(MouseEvent e) 
 	{
-		System.out.println("x : " + e.getX());
-		System.out.println("y : " + e.getY());
 		
 		for (VoieMaritime voieMaritime : this.lstVoiesMaritimes) 
 		{
@@ -238,22 +235,41 @@ public class PanelPlateau extends JPanel implements MouseListener
 			if (line.intersects ( e.getX ( ),e.getY ( ),10,10 ) ) //Si on clique bien sur un arc
 			{
 				this.voieMaritimeAColorier = voieMaritime;
-				if (!this.ctrl.jouer(voieMaritime)) 
+				if (!this.ctrl.jouer(voieMaritime))
 				{
-					System.out.println("peut jouer : false");
 					JOptionPane.showMessageDialog ( this.frame,"Erreur de sélection", "Erreur", JOptionPane.ERROR_MESSAGE ); //Affiche que la sélection est mauvaise
 				}
-				this.repaint();
+
 				this.voieMaritimeAColorier = null;
 				this.frame.majFrameCarte();
+				this.repaint();
 
+				if ( this.ctrl.getJoueur1().getPartie().estBiffurcation())
+					JOptionPane.showMessageDialog ( this.frame,"La biffurcation a été mise en place", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche que la sélection est mauvaise
+
+				if(this.ctrl.estFinDePartie())
+				{
+					String sRet = "";
+
+					sRet += String.format("%-30s","Nb regions visitées : " )+ this.ctrl.getNbRegionsVisite 	   	   ( )  + "\n";
+					sRet += String.format("%-30s","Nb arcs colorées    : " )+ this.ctrl.getJoueur1().getPlateau().getNbVoiesMaritimesColorie  ( )  + "\n";
+					sRet += String.format("%-30s","Nb Points Total     : " )+ this.ctrl.calculerScore      		   ( ) ;
+
+					//Création d'une "Pop-up" pour demander si le joueur veux rejouer ou quitter
+					Object[] choix= { "Rejouer","Quitter" };
+					int rep = JOptionPane.showOptionDialog ( this.frame,sRet, "Game End", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choix, choix[0] );
+
+					if ( rep == 0 ) //Si Rejouer est sélectionné
+					{
+						this.frame.init( );		//On ferme le fenêtre
+						new Controleur ( );		//On relance une partie
+					}
+					else
+						System.exit ( 1 );			//On ferme le scripte
+				}
 				return;
 			}
-				
-			
 		}
-		this.repaint();
-		
 	}
 
 	public void mousePressed(MouseEvent e) {}

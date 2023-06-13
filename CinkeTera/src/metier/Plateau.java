@@ -23,11 +23,10 @@ public class Plateau
 	
 	public Plateau ( )
 	{
-		this.lstIles           = new ArrayList<>( );
-		this.lstVoiesMaritimes = new ArrayList<>( );
-		this.lstRegions         = new ArrayList<>( );
+		this.lstIles           = new ArrayList<> ( );
+		this.lstVoiesMaritimes = new ArrayList<> ( );
+		this.lstRegions        = new ArrayList<> ( );
 
-		
 		this.initialiserPlateau ( );
 	}
 
@@ -35,9 +34,9 @@ public class Plateau
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public List<VoieMaritime> getVoiesMaritimes( ){return this.lstVoiesMaritimes;}
-	public List<Ile>          getIles          ( ){return this.lstIles;          }
-	public List<Region>       getRegions       ( ){return this.lstRegions;       }
+	public List<VoieMaritime> getVoiesMaritimes ( ) { return this.lstVoiesMaritimes; }
+	public List<Ile>          getIles           ( ) { return this.lstIles;           }
+	public List<Region>       getRegions        ( ) { return this.lstRegions;        }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
@@ -169,5 +168,6 @@ public class Plateau
 		}
 		return null;
 	}
+
 
 }

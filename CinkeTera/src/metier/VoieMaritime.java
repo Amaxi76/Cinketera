@@ -108,21 +108,9 @@ public class VoieMaritime
 	/*                Setteur                 */
 	/* -------------------------------------- */
 
-	/** Setteur qui permet de changer le Ile de départ de la voie maritime
-	 * @param n Ile de départ de la voie maritime */
-	public void   setIleD    ( Ile n      ) { this.depart  = n;       }
-
-	/** Setteur qui permet de changer le Ile d'arriver de la voie maritime
-	 * @param n Ile d'arriver de la voie maritime */
-	public void   setIleA    ( Ile n      ) { this.arriver = n;       }
-
 	/** Setteur qui permet de colorier la voie maritime
 	 * @param coul couleur de la voie maritime */
 	public void   setCouleur ( Color coul ) { this.couleur = coul;    }
-
-	/** Setteur qui permet de valuer la voie maritime
-	 * @param coul valeur de la voie maritime */
-	public void   setValeur ( int valeur ) { this.valeur = valeur;    }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */

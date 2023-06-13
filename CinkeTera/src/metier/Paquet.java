@@ -29,7 +29,7 @@ public class Paquet
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public Carte piocher      ( int cpt ) { return this.pioche.remove ( cpt ); }
+	public Carte piocher      ( )         { return this.pioche.remove ( 0 ); }
 	public int   taillePaquet (         ) { return this.pioche.size   (     ); }
 	public Carte getCarte     ( int cpt ) { return this.pioche.get    ( cpt ); }
 

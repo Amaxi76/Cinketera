@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Region
 {
-
 	/* -------------------------------------- */
 	/*               Attributs                */
 	/* -------------------------------------- */
@@ -26,7 +25,7 @@ public class Region
 
 	public Region ( String nomRegion )
 	{
-		this.ensIle    = new ArrayList<>();
+		this.ensIle    = new ArrayList<> ( );
 		this.nomRegion = nomRegion;
 	}
 
@@ -34,50 +33,26 @@ public class Region
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-
-	/**
-	 * Accesseur qui renvoie le nombre d'iles dans la région
-	 * 
+	/** Accesseur qui renvoie le nombre d'iles dans la région
 	 * @return le nombre d'iles
 	 */
-	public int getNbIle        () { return this.ensIle.size(); }
+	public int       getNbIle     ( ) { return this.ensIle.size ( ); }
 
-
-	/**
-	 * Accesseur qui renvoie la liste des régions
-	 * 
+	/** Accesseur qui renvoie la liste des régions
 	 * @return ArrayList des iles
 	 */
-	public List<Ile> getEnsIles () { return this.ensIle; }
+	public List<Ile> getEnsIles   ( ) { return this.ensIle;          }
 
-
-	/** 
-	 * Accesseur qui renvoie le nom de la region
-	 * 
+	/** Accesseur qui renvoie le nom de la region
 	 * @return le nom de la région
 	 */
-	public String getNomRegion () { return this.nomRegion;     }
-
-
-	/* -------------------------------------- */
-	/*              Modificateur              */
-	/* -------------------------------------- */
-
-	/**
-	 * Setteur du nom
-	 * 
-	 * @param nom nom de la region
-	 */
-
-	public void setNomRegion ( String nomRegion )  { this.nomRegion = nomRegion; }
+	public String    getNomRegion ( ) { return this.nomRegion;       }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	/**
-	 * Méthode qui ajoute une ile
-	 * 
+	/** Méthode qui ajoute une ile
 	 * @param ile ile a ajoute
 	 * @return true si l'ile est ajoutee
 	 */
@@ -86,15 +61,12 @@ public class Region
 		if ( this.ensIle.contains ( ile ) ) return false;
 		if ( ile == null                  ) return false;
 
-		this.ensIle.add(ile);
-
+		this.ensIle.add ( ile );
 		return true;
 	}
 
 
-	/**
-	 * Méthode qui supprime une île
-	 * 
+	/** Méthode qui supprime une île
 	 * @param ile ile a supprime
 	 * @return true si l'ile est supprimée
 	 */
@@ -103,35 +75,31 @@ public class Region
 		if ( this.ensIle.contains ( ile ) ) return false;
 		if ( ile == null                  ) return false;
 
-		this.ensIle.remove(this.ensIle.lastIndexOf(ile));
-
+		this.ensIle.remove ( this.ensIle.lastIndexOf ( ile ) );
 		return true;
 	}
 
-	/**
-	 * toString
-	 * 
+	/** toString
 	 * @return le nom de la région et ses îles
 	 */
-	public String toString ()
+	public String toString ( )
 	{
 		String sRet = "";
 		String sIle = "";
 
 		sRet += "La région " + this.nomRegion;
 
-		switch ( this.ensIle.size() )
+		switch ( this.ensIle.size ( ) )
 		{
 			case 0  -> sRet += "ne contient aucune île.";
 			case 1  -> sRet += "contient l'île ";
 			default -> sRet += "contient les îles ";
 		}
-		
+
 		for ( Ile i : this.ensIle )
-			sIle += i.getNom() + " ";
+			sIle += i.getNom ( ) + " ";
 
 		sRet += sIle;
-
 		return sRet;
 	}
 

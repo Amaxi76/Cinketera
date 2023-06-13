@@ -11,141 +11,53 @@ import java.awt.*;
 
 public class Controleur
 {
-	private Plateau      metier;
 	private	FramePlateau ihm;
-
-
-	private Joueur J1;
-	//private Joueur J2;
+	private Joueur       j1;
 
 	/** Contructeur qui initialise le jeu
 	 */
 	public Controleur ( )
 	{
-		
-		//this.J2     = new Joueur       (      );
-		this.metier = new Plateau (             );
-		this.J1     = new Joueur  ( this.metier );
+		this.j1     = new Joueur  ( );
 		
 		new FrameAccueil(this);
-
 	}
 
-
-
-
-	/** Getteur qui retourne la liste des arcsde la partie métier
-	 * @return la liste des arcs de la partie métier
-	 */
-	public List<VoieMaritime>   getVoiesMaritimes    ( ) { return this.metier.getVoiesMaritimes    ( ); }
-
-	/** Getteur qui retourne la liste des regions de la partie métier
-	 * @return la liste des regions de la partie métier
-	 */
-	public List<Region>         getRegions           ( )  { return this.metier.getRegions();             }
-
-	/** Getteur qui retourne la liste des noeuds de la partie métier
-	 * @return la liste des noeuds de la partie métier
-	 */
-	public List<Ile> getIle( ) { return this.metier.getIles  ( ); }
-
-	/** Getteur qui retourne la couleur du joueur en cours
+	/** Accesseur qui retourne la couleur du joueur en cours
 	 * @return couleur du joueur en cours
 	 */
-	public Color     getCouleurJ1 ( ) { return this.J1.getPartie().getCoulLigne ( ) ; }
-	//public Color     getCouleurJ2 ( ) { return this.J2.getCouleur ( ); }
+	public Color              getCouleurj1               ( ) { return this.j1.getPartie ( ).getCoulLigne ( ) ;    }
 
-	/** Getteur qui retourne la partie métier
-	 * @return partie métier
-	 */
-	public Plateau     getMetier  ( ) { return this.metier;                }
+	public Joueur             getJoueur1                 ( ) { return this.j1;                                    }
 
-	public Joueur		getJoueur1()  { return this.J1; }
-
-
-	/** Getteur qui retourne le nombre de régions visitées
+	/** Accesseur qui retourne le nombre de régions visitées
 	 * @return nombre de régions visitées
 	 */
-	public int   getNbRegionsVisite ( ) { return 2; }
+	public int                getNbRegionsVisite         ( ) { return 2;                                          }
 
-	
-	/** Getteur qui retourne le nombre d'arcs coloriés
-	 * @return nombre d'arcs coloriés
-	 */
-	public int   getNbVoiesMaritimesColorie   ( ) { return this.metier.getNbVoiesMaritimesColorie ( );         }
 
-	/** Méthode qui retour l'arc entre deux noeuds
-	 * @param n1 Ile 1
-	 * @param n2 Ile 2
-	 * @return l'arc entre les deux noeuds
-	 */
-	public VoieMaritime     arcEntre ( Ile n1, Ile n2 )         { return this.metier.arcEntre ( n1,n2 ); }
-
-	/** Méthode qui permet de colorier un arc en faisant le lien entre l'IHM et le métier
-	 * @param arc est l'arc sélectionner dans la partie graphique et l'envoie à la partie métier pour le colorier ou non
-	 * @param couleur est la couleur que l'on veut attribuer à l'arc (couleur du joueur )
-	 * @return retourne un boolean qui permet de savoir si l'arc a été colorié ou non
-	 */
-	//public boolean colorier ( VoieMaritime arc, Color couleur ) { return this.metier.colorier ( arc , couleur ); }
-
-	/** Méthode qui nous indique si on peut changer de tour ou non et le fait si on peut
-	 * @return le score du joueur
-	 *//*
-	public boolean augmenterTours ( )
-	{
-		this.joueurEnCours.augmenterTour( );
-
-		try
-		{
-			if ( this.manche.getNumTour ( ) >= Manche.getNbTour ( ) )
-				this.manche.changerTour ( );
-
-		}catch ( Exception e )
-		{
-			this.ihm.resetSelect( );
-			return false;
-		}
-
-		return true;
-	}*/
+	public boolean            estFinDePartie ( )             { return this.j1.getPartie ( ).getFinPartie ( );     }
 
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
-		if ( this.estFinDePartie() )
+		if ( this.estFinDePartie ( ) )
 			//IHM message de fin
 			return false;
 		
-		return this.J1.jouer ( voieMaritime );
+		return this.j1.jouer ( voieMaritime );
 	}
 
-	public void lancerFrame()
-	{
-		this.ihm    = new FramePlateau ( this , false );
-	}
+	public void  lancerFrame      ( ) { this.ihm    = new FramePlateau ( this ); }
 
-	public void modeDeuxJouers()
-	{
-		this.ihm    = new FramePlateau ( this , true );
+	public void  modeDeuxJouers   ( ) { this.ihm    = new FramePlateau ( this ); }
 
+	public Carte getCarteEnCours  ( ) { return this.j1.getPartie ( ).getCarteEnCours ( ); }
 
+	public int   calculerScore    ( ) { return this.j1.getPartie ( ).calculerScore   ( ); }
 
-	}
+	public boolean estJouable(Ile ile, List<Ile> lstExtremite) { return this.j1.estJouable(ile,lstExtremite); }
 
-	public Carte getCarteEnCours()
-	{
-		return this.J1.getPartie().getCarteEnCours();
-	}
+	public void majIHM() {this.ihm.majIHM();}
 
-	public int calculerScore ( ) { return this.J1.getPartie().calculerScore(); }
-
-	// Acceseur de fin de partie
-	public boolean estFinDePartie ( ) { return this.J1.getPartie().getFinPartie(); }
-
-
-	public static void main ( String[] arg )
-	{
-		new Controleur ( );
-	}
-
-	
+	public static void main ( String[] arg ) { new Controleur ( ); }
 }

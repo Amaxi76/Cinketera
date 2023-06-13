@@ -45,17 +45,14 @@ public class FrameCarte extends JFrame
 		Image icon = Toolkit.getDefaultToolkit().getImage("donnees/imagesCartes/dos_carte.png");  
     	this.setIconImage(icon); 
 		
-		
-		/*Placement des composants*/
-
+		/*Création des composants*/
 		this.panelCarte = new PanelCarte(this.ctrl,this);
 
+		/*Placement des composants*/
 		this.add(this.panelCarte);
 
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
 		this.setVisible ( true );
-
-		SwingUtilities.updateComponentTreeUI(this);
 	}
 
 	public void majCartes()

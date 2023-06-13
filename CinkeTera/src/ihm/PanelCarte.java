@@ -76,6 +76,7 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 		g2.setColor(Color.BLACK);
 		g2.drawString("Score : "+this.score,740,75);
 		
+		//Desinner les cartes
 		this.dessinerCartes(g2);
 
 		Carte c = this.ctrl.getJoueur1().getPartie().getCarteEnCours();
@@ -101,13 +102,13 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 	public void dessinerCartes(Graphics2D g2)
 	{
 		Paquet paquetDeCartes = this.ctrl.getJoueur1().getPartie().getPaquet();
-		int y = 20;
+		
 		for (int cpt = 0; cpt < paquetDeCartes.taillePaquet(); cpt++)
 		{
+			int y = 20;
+
 			if (cpt == this.bHover) 
 				y = 30;
-			else
-				y = 20;
 			
 			String typeC = "" + paquetDeCartes.getCarte(cpt).getTypeCarte   ();
 			String coulC = "" + paquetDeCartes.getCarte(cpt).getCouleurCarte();
@@ -118,24 +119,24 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 
 	public void mouseClicked(MouseEvent e)
 	{
-
-		System.out.println("x : " + e.getX());
-		System.out.println("y : " + e.getY());
-		
 		for (int cpt = 0; cpt < this.ctrl.getJoueur1().getPartie().getPaquet().taillePaquet(); cpt++)
 		{
 			Rectangle2D zoneCarte = new Rectangle2D.Double(50+20*cpt,20,20,this.imgDosDeCarte.getHeight(null)/3);
 			if (zoneCarte.contains(e.getPoint()))
 			{
-				this.ctrl.getJoueur1().getPartie().setCarteEnCours(this.ctrl.getJoueur1().getPartie().getPaquet().piocher(cpt));
+				this.ctrl.getJoueur1().getPartie().tourSuivant();
+
+				if ( this.ctrl.getJoueur1().getPartie().estBiffurcation())
+					JOptionPane.showMessageDialog ( this.frame,"La biffurcation a été mise en place", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche que la sélection est mauvaise
 			}
 		}
 		this.repaint();
+		this.ctrl.majIHM();
 	}
 
 	public void mouseMoved(MouseEvent e)
 	{
-
+		//Hover cartes
 		for (int cpt = 0; cpt < this.ctrl.getJoueur1().getPartie().getPaquet().taillePaquet(); cpt++)
 		{
 			Rectangle2D zoneCarte = new Rectangle2D.Double(50+20*cpt,20,20,this.imgDosDeCarte.getHeight(null)/3);
@@ -156,7 +157,7 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 		if (e.getSource() == this.btnPasserTour)
 		{
 			this.ctrl.getJoueur1().getPartie().tourSuivant();
-			this.repaint();
+			this.ctrl.majIHM();
 		}
 		if (e.getSource() == this.btnQuitter)
 			System.exit(1);
@@ -164,18 +165,10 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 		this.repaint();
 	}
 
-	public void mousePressed(MouseEvent e) {}
+	public void mousePressed(MouseEvent e)  {}
 	public void mouseReleased(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e)
-	{
-
-	}
-
-	public void mouseExited(MouseEvent e)
-	{}
-
-	
-
-	public void mouseDragged(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e)  {}
+	public void mouseExited(MouseEvent e)   {}
+	public void mouseDragged(MouseEvent e)  {}
 
 }

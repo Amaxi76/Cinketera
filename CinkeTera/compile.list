@@ -2,7 +2,6 @@
 ./src/ihm/FrameAccueil.java
 ./src/ihm/FrameCarte.java
 ./src/ihm/FramePlateau.java
-./src/ihm/PanelAccueil.java
 ./src/ihm/PanelCarte.java
 ./src/ihm/PanelPlateau.java
 ./src/metier/Carte.java

@@ -22,3 +22,10 @@ A contrario, le scénario deux vous présentera un début de partie :
 
 1. La contrainte de pouvoir joueur uniquement sur l'île de départ.
 2. Passer de tour si l'on ne peut pas jouer.
+
+## Scénario 3
+
+Le scénario trois vous présentera quant à lui une fin de partie :
+
+1. Affichage des résultats
+2. Fin de la partie

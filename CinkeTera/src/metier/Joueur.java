@@ -23,38 +23,36 @@ public class Joueur
 	/** Unique constructeur de joueur
 	 * @param plateau
 	 */
-	public Joueur ( Plateau plateau )
+	public Joueur ( )
 	{
-		this.plateau   = plateau;
-
+		this.plateau   = new Plateau();
 		this.couleurs = new ArrayList<> ( Arrays.asList ( Color.BLUE, Color.RED ) );
+		
 		Collections.shuffle ( this.couleurs );
 
 		this.lancerPartie ( );
-		// Attribution des couleurs de la partie
-		
 	}
 
 	/* -------------------------------------- */
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	/**	
-	 * @return
+	public Plateau            getPlateau       ( ) {return this.plateau;}
+	/** Acceseur qui retourne la partie du joueur
+	 * @return la partie du joueur
 	 */
 	public Partie             getPartie        ( ) { return this.partie;                           }
-	/**
-	 * @return
+	
+	/** Accesseur qui permet d'obtenir une couleur du tableau du joueur et de la supprimer en même temps
+	 * @return une couleur du tableau
 	 */
 	public Color              getCouleur       ( ) { return this.couleurs.get               ( 0 ); }
-	public List<VoieMaritime> getVoieMaritimes ( ) { return this.plateau .getVoiesMaritimes (   ); }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	/**
-	 * 
+	/** Méthode qui permet de lancer une partie selon la couleur du joueur avec la bonne île de départ
 	 */
 	public void lancerPartie ( )
 	{
@@ -68,18 +66,28 @@ public class Joueur
 		this.partie = new Partie ( this, ligne, couleurDebut );
 	}
 
-	public void lancerScenario ( )
-	{
-
-	}
-
-	/**
-	 * @param voieMaritime
-	 * @return
+	/** Méthode passerelle entre la partie et le joueur
+	 * @param voieMaritime voieMaritime selectionnée par le joueur
+	 * @return un boolean qui nous indique si le joueur a pu jouer
 	 */
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
 		return this.partie.jouer ( voieMaritime );
+	}
+
+	public boolean estJouable(Ile ile, List<Ile> lstExtremite)
+	{
+		for (Ile extremite : lstExtremite)
+		{
+			for (Ile ileArrivee : extremite.getVoisins())
+			{
+				
+				if (this.getPartie().getCarteEnCours() != null && ile == ileArrivee)
+					if (ileArrivee.getCouleur().equals(this.getPartie().getCarteEnCours().getCouleurCarte() ) || this.getPartie().getCarteEnCours().getCouleurCarte().equals("Multicolore")) 
+						return true;
+			}
+		}
+		return false;
 	}
 
 }
