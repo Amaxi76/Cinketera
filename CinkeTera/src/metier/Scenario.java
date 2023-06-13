@@ -1,55 +1,52 @@
 package metier;
 
-import iut.algo.*;
+import metier.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.FileInputStream;
+import iut.algo.*;
+import java.awt.Color;
 
-public class Plateau
+public class Scenario /*extends Partie*/
 {
 	/* -------------------------------------- */
 	/*               Attributs                */
 	/* -------------------------------------- */
-	
-	private List<Ile>          lstIles;
-	private List<VoieMaritime> lstVoiesMaritimes;
-	private List<Region>       lstRegions;
 
+	private 	int 				numScenario;
+	private 	List<Ile>          	lstIles;
+	private 	List<VoieMaritime> 	lstVoiesMaritimes;
+	private 	List<Region>       	lstRegions;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
-	
-	public Plateau ( )
-	{
-		this.lstIles           = new ArrayList<>( );
-		this.lstVoiesMaritimes = new ArrayList<>( );
-		this.lstRegions         = new ArrayList<>( );
 
-		
-		this.initialiserPlateau ( );
+	public Scenario(int num)
+	{
+		this.numScenario = num;
+
+
 	}
 
 	/* -------------------------------------- */
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public List<VoieMaritime> getVoiesMaritimes( ){return this.lstVoiesMaritimes;}
-	public List<Ile>          getIles          ( ){return this.lstIles;          }
-	public List<Region>       getRegions       ( ){return this.lstRegions;       }
+	public int getNumScenario ( ) { return this.numScenario; }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	public void initialiserPlateau ( )
+	public void initialiserScenario ( )
 	{
 
 		try
 		{
 			// Prend la première ligne de notre ficher contenant les noeuds du graph
-			Scanner sc = new Scanner ( new FileInputStream ( "donnees/Donnees.data" ) );
+			Scanner sc = new Scanner ( new FileInputStream ( "donnees/scenario" + this.numScenario + ".data" ) );
 
 			//Pour sauter les deux premières lignes
 			sc.nextLine ( );
@@ -118,20 +115,28 @@ public class Plateau
 			{
 				Decomposeur dec = new Decomposeur ( sc.nextLine() );
 
-				String nomIle1,nomIle2;
+				String nomIle1,nomIle2, couleurString;
+				Color couleur;
 				Ile ile1,ile2;
+
 				ile1 = ile2 = null;
+				couleur = null;
 
 				nomIle1 = dec.getString(0);
 				nomIle2 = dec.getString(1);
+				
+				couleurString = dec.getString(2);
 
 				for (Ile ile : this.lstIles)
 				{
 					if (ile.getNom().equals(nomIle1)) ile1 = ile;
 					if (ile.getNom().equals(nomIle2)) ile2 = ile;
 				}
+
+				if   (couleurString.equals("BLEU" )) { couleur = Color.BLUE; }
+				if   (couleurString.equals("ROUGE")) { couleur = Color.RED;  }
 					
-				VoieMaritime v = VoieMaritime.creerVoieMaritime(nomIle1 + "-" + nomIle2,ile1,ile2,1);
+				VoieMaritime v = VoieMaritime.creerVoieMaritime(nomIle1 + "-" + nomIle2,ile1,ile2,1, couleur);
 
 				this.lstVoiesMaritimes.add(v);
 				ile1.ajouterArc(v);
@@ -142,32 +147,5 @@ public class Plateau
 		}
 		catch(Exception e){e.printStackTrace();}
 	}	
-	
-	/** Méthode qui retourne le nombre d'arc colorié.
-	 * @return int (le nombre d'arcs qui sont coloriés)
-	 */
-	public int getNbVoiesMaritimesColorie ( )
-	{
-		int nbVoiesMaritimesColorie = 0;
-		for(VoieMaritime voieMaritime : this.lstVoiesMaritimes)
-			if(voieMaritime.getEstColorie())
-				nbVoiesMaritimesColorie++;
-		
-		return nbVoiesMaritimesColorie;
-	}
 
-	/**Méthode qui prend en paramètre deux iles et détermine s'ils croisent une autre voie maritime.
-	 * @param noeudDep le noeud de départ
-	 * @param noeudArr le noeud d'arrivée
-	 * @return un arc
-	 */
-	public VoieMaritime arcEntre ( Ile noeudDep, Ile noeudArr )
-	{
-		for ( VoieMaritime voieMaritime : this.lstVoiesMaritimes ) {
-			if ( noeudDep == voieMaritime.getIleA()  && noeudArr == voieMaritime.getIleD ( ) ||
-				 noeudDep == voieMaritime.getIleD()  && noeudArr == voieMaritime.getIleA ( ) ) return voieMaritime;
-		}
-		return null;
-	}
-
-}
+} 

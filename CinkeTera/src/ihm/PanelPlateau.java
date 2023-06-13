@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.JPanel;
 
+import java.util.Arrays;
 import java.util.List;
 import java.awt.geom.*;
 import javax.swing.JOptionPane;
@@ -28,6 +29,11 @@ public class PanelPlateau extends JPanel implements MouseListener
 	 * 
 	 */
 	private List<Ile> lstIles;
+
+	/** Notre liste de régions présents dans notre graph 
+	 * 
+	 */
+	private List<Region> lstRegions;
 
 	/**Un boolean pour dire si il y avait un arc seléctionné ou pas 
 	 * 
@@ -63,7 +69,8 @@ public class PanelPlateau extends JPanel implements MouseListener
 		this.setBackground(new Color(172,209,232)) ;
 
 		this.lstVoiesMaritimes 			= this.ctrl.getVoiesMaritimes( );
-		this.lstIles					= this.ctrl.getIle			 ( );	
+		this.lstIles					= this.ctrl.getIle			 ( );
+		this.lstRegions                 = this.ctrl.getRegions       ( );
 
 		this.selectionne  				= false;
 		this.voieMaritimeAColorier 		= null;
@@ -78,6 +85,11 @@ public class PanelPlateau extends JPanel implements MouseListener
 		//Dessiner le graph
 		this.dessinerArcs  ( g2,this.rX,this.rY );
 		this.dessinerIles  ( g2,this.rX,this.rY );
+
+
+		//Présenter les régions
+		this.dessinerRegions(g2);
+		
 	}
 
 	/** Méthode qui dessine les arcs de la liste
@@ -142,6 +154,50 @@ public class PanelPlateau extends JPanel implements MouseListener
 		this.repaint();
 	}
 
+	public void dessinerRegions(Graphics2D g2)
+	{
+		
+		g2.setColor(Color.BLACK);
+		for (Region region : this.lstRegions) 
+		{
+			int nbIles = region.getNbIle();
+
+			int minX = region.getEnsIles().get(0).getPosXImage();
+			int minY = region.getEnsIles().get(0).getPosYImage();
+			int maxX = region.getEnsIles().get(0).getPosXImage();
+			int maxY = region.getEnsIles().get(0).getPosYImage();
+
+			for (int cpt = 1; cpt < nbIles; cpt++) 
+			{
+				Ile ile = region.getEnsIles().get(cpt);
+
+				minX = Math.min(minX,ile.getPosXImage())-40;
+				minY = Math.min(minY,ile.getPosYImage())-40;
+
+				maxX = Math.max(maxX,ile.getPosXImage())+50;
+				maxY = Math.max(maxY,ile.getPosYImage())+50;
+			}
+			
+			g2.drawOval( minX, minY, maxX-minX, maxY-minY);
+
+			List<Ile> boundary = region.getEnsIles(); 
+			int[] xPoints = boundary.stream().mapToInt(Point::getX).toArray();
+			int[] yPoints = boundary.stream().mapToInt(Point::getY).toArray();
+			int numPoints = boundary.size();
+			g2.drawPolygon(xPoints, yPoints, numPoints);
+
+			// Dessine la bordure de la région
+			g.setColor(Color.BLACK);
+			List<Point> boundary = region.getBoundaryPoints();
+			int[] xPoints = boundary.stream().mapToInt(Point::getX).toArray();
+			int[] yPoints = boundary.stream().mapToInt(Point::getY).toArray();
+			int numPoints = boundary.size();
+			g.drawPolygon(xPoints, yPoints, numPoints);
+		};
+
+		
+	}
+
 	/** Métode qui permet de savoir si un arc est sélectionné
 	 * @return return vrai si il y aun arc selectionné
 	 * 
@@ -169,6 +225,8 @@ public class PanelPlateau extends JPanel implements MouseListener
 
 	public void mouseClicked(MouseEvent e) 
 	{
+		System.out.println("x : " + e.getX());
+		System.out.println("y : " + e.getY());
 		
 		for (VoieMaritime voieMaritime : this.lstVoiesMaritimes) 
 		{
@@ -187,6 +245,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 				}
 				this.repaint();
 				this.voieMaritimeAColorier = null;
+				this.frame.majFrameCarte();
 
 				return;
 			}

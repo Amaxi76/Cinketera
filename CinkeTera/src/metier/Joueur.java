@@ -20,6 +20,9 @@ public class Joueur
 	/*              Constructeur              */
 	/* -------------------------------------- */
 	
+	/** Unique constructeur de joueur
+	 * @param plateau
+	 */
 	public Joueur ( Plateau plateau )
 	{
 		this.plateau   = plateau;
@@ -36,26 +39,44 @@ public class Joueur
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public Partie getPartie    ( ) { return this.partie;          }
-	public Color  getCouleur   ( ) { return this.couleurs.get(0); }
+	/**	
+	 * @return
+	 */
+	public Partie             getPartie        ( ) { return this.partie;                           }
+	/**
+	 * @return
+	 */
+	public Color              getCouleur       ( ) { return this.couleurs.get               ( 0 ); }
+	public List<VoieMaritime> getVoieMaritimes ( ) { return this.plateau .getVoiesMaritimes (   ); }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
+	/**
+	 * 
+	 */
 	public void lancerPartie ( )
 	{
-		Color couleur   = this.couleurs.remove(0);
-		List<Ile> ligne = new ArrayList<>();
+		Color     couleurDebut = this.couleurs.remove ( 0 );
+		List<Ile> ligne        = new ArrayList<> ( );
 
-		for ( Ile i : this.plateau.getIles ( ) )	
-			if ( ( i.getNom ( ).equals ( "Ticó" ) && couleur.equals ( Color.RED ) ) || ( i.getNom ( ).equals ( "Mutaa" ) && couleur.equals ( Color.BLUE ) ) )
+		for ( Ile i : this.plateau.getIles ( ) )
+			if ( ( i.getNom ( ).equals ( "Ticó" ) && couleurDebut.equals ( Color.RED ) ) || ( i.getNom ( ).equals ( "Mutaa" ) && couleurDebut.equals ( Color.BLUE ) ) )
 				ligne.add ( i );
 		
-		this.partie = new Partie ( this, ligne, couleur, this.plateau.getVoiesMaritimes ( ) );
+		this.partie = new Partie ( this, ligne, couleurDebut );
 	}
 
+	public void lancerScenario ( )
+	{
 
+	}
+
+	/**
+	 * @param voieMaritime
+	 * @return
+	 */
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
 		return this.partie.jouer ( voieMaritime );

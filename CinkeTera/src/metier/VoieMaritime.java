@@ -13,6 +13,7 @@ public class VoieMaritime
 	private Ile    arriver;
 	private String nom;
 	private Color  couleur;
+	private int    valeur;
 	
 	/* -------------------------------------- */
 	/*              Constructeur              */
@@ -24,12 +25,28 @@ public class VoieMaritime
 	 * @param arriver Ile par lequel la voie maritime repart
 	 */
 
-	public VoieMaritime ( String nom, Ile depart, Ile arriver )
+	public VoieMaritime ( String nom, Ile depart, Ile arriver, int valeur )
 	{
 		this.nom        = nom;
 		this.depart     = depart;
 		this.arriver    = arriver;
 		this.couleur    = null;
+		this.valeur     = valeur;
+	}
+
+	/** Constructeur voie maritime
+	 * @param nom     nom de l'voie maritime
+	 * @param depart  Ile par lequel la voie maritime part
+	 * @param arriver Ile par lequel la voie maritime repart
+	 */
+
+	public VoieMaritime ( String nom, Ile depart, Ile arriver, int valeur, Color couleur)
+	{
+		this.nom        = nom;
+		this.depart     = depart;
+		this.arriver    = arriver;
+		this.couleur    = couleur;
+		this.valeur     = valeur;
 	}
 
 	/**Méthode qui crée une voie maritime
@@ -38,18 +55,25 @@ public class VoieMaritime
 	 * @param arriver Ile d'arriver de la voie maritime
 	 * @return la voie maritime que l'on a créé
 	 */
-	public static VoieMaritime creerVoieMaritime ( String nom, Ile depart, Ile arriver )
+	public static VoieMaritime creerVoieMaritime ( String nom, Ile depart, Ile arriver, int valeur )
 	{
 		if ( depart == null || arriver == null ) return null;
 
-		return new VoieMaritime (nom, depart, arriver);
+		return new VoieMaritime ( nom, depart, arriver, valeur );
 	}
 
 	public static VoieMaritime creerVoieMaritime ( VoieMaritime voie )
 	{
 		if ( voie == null ) return null;
 
-		return new VoieMaritime (voie.nom, voie.depart, voie.arriver);
+		return new VoieMaritime ( voie.nom, voie.depart, voie.arriver, voie.valeur );
+	}
+
+	public static VoieMaritime creerVoieMaritime ( String nom, Ile depart, Ile arriver, int valeur, Color couleur )
+	{
+		if ( depart == null || arriver == null ) return null;
+
+		return new VoieMaritime ( nom, depart, arriver, valeur, couleur);
 	}
 
 	/* -------------------------------------- */
@@ -62,7 +86,7 @@ public class VoieMaritime
 
 	/** Getteur qui permet de récupérer le Ile d'arrivée de la voie maritime
 	 * @return Ile d'arrivée */
-	public Ile     getIleA     ( ) { return this.arriver;         }
+	public Ile     getIleA     ( ) { return this.arriver;           }
 
 	/** Getteur qui permet de savoir si la voie maritime est colorié
 	 * @return true si la voie maritime est colorie */
@@ -75,6 +99,10 @@ public class VoieMaritime
 	/** Getteur qui permet de récupérer le nom de la voie maritime
 	 * @return nom de la voie maritime */
 	public String  getNom        ( ) { return this.nom;             }
+
+	/** Getteur qui permet de récupérer la valeur de la voie maritime
+	 * @return valeur de la voie maritime */
+	public int     getValeur     ( ) { return this.valeur;          }
 
 	/* -------------------------------------- */
 	/*                Setteur                 */
@@ -91,6 +119,10 @@ public class VoieMaritime
 	/** Setteur qui permet de colorier la voie maritime
 	 * @param coul couleur de la voie maritime */
 	public void   setCouleur ( Color coul ) { this.couleur = coul;    }
+
+	/** Setteur qui permet de valuer la voie maritime
+	 * @param coul valeur de la voie maritime */
+	public void   setValeur ( int valeur ) { this.valeur = valeur;    }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */

@@ -45,7 +45,7 @@ public class FramePlateau extends JFrame implements ComponentListener
 
 		this.setSize((int)tailleEcran.getWidth(),900);
 		this.setLocation(0,0);
-		this.setUndecorated(false);
+		this.setUndecorated(true);
 		this.setTitle    ( "CinkeTera" );
 
 		//Mettre un icone peu utile en image de logiciel
@@ -75,6 +75,14 @@ public class FramePlateau extends JFrame implements ComponentListener
 		this.setVisible ( true );
 	}
 
+	/**
+	 * Mise a jour de la frame de cartes 
+	 */
+	public void majFrameCarte()
+	{
+		this.frameCarte.majCartes();
+	}
+	
 	/** Getteur qui retourne l'VoieMaritime à colorier
 	 * @return l'VoieMaritime à colorier
 	 */

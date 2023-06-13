@@ -25,8 +25,9 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 	private int          inutile;
 
 	private int      bHover;
+	private int      score;
 
-	/** Constructeur de PanelGraph
+	/** Constructeur de PanelCarte
 	 * @param ctrl de type Controleur
 	 * 
 	 */
@@ -65,6 +66,15 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 
 		super.paintComponent ( g );
 		Graphics2D g2 = ( Graphics2D ) g;
+
+		//Présenter le score
+		g2.setStroke(new BasicStroke(4));
+		this.score = this.ctrl.calculerScore();
+		g2.drawRect(720,42,100,60);
+		g2.setColor(new Color(246,247,64));
+		g2.fillRect(720,42,100,60);
+		g2.setColor(Color.BLACK);
+		g2.drawString("Score : "+this.score,740,75);
 		
 		this.dessinerCartes(g2);
 
@@ -84,6 +94,8 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 			this.setSize(this.frame.getSize());
 			this.inutile++;	
 		}
+
+		
 	}
 
 	public void dessinerCartes(Graphics2D g2)
@@ -106,6 +118,10 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 
 	public void mouseClicked(MouseEvent e)
 	{
+
+		System.out.println("x : " + e.getX());
+		System.out.println("y : " + e.getY());
+		
 		for (int cpt = 0; cpt < this.ctrl.getJoueur1().getPartie().getPaquet().taillePaquet(); cpt++)
 		{
 			Rectangle2D zoneCarte = new Rectangle2D.Double(50+20*cpt,20,20,this.imgDosDeCarte.getHeight(null)/3);
@@ -144,6 +160,8 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 		}
 		if (e.getSource() == this.btnQuitter)
 			System.exit(1);
+
+		this.repaint();
 	}
 
 	public void mousePressed(MouseEvent e) {}

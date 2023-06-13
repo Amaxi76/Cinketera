@@ -24,14 +24,14 @@ public class Ile
 	/*              Constructeur              */
 	/* -------------------------------------- */
 
-	/**
-	 * Constructeur
-	 * 
-	 * @param nom nom du noeud
-	 * @param x   position x
-	 * @param y   position y
+	/** Constructeur unique d'une île
+	 * @param nom
+	 * @param couleur
+	 * @param posX
+	 * @param posY
+	 * @param xImage Pour la partie IHM
+	 * @param yImage Pour la partie IHM
 	 */
-
 	public Ile ( String nom, String couleur, int posX, int posY, int xImage, int yImage)
 	{
 		this.nom       = nom;
@@ -49,33 +49,59 @@ public class Ile
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
+	/** Acceseur qui retourne le nom de l'île
+	 * @return le nom de l'île
+	 */
 	public String             getNom       () { return this.nom;       }
+	/** Acceseur qui retourne la positionX de l'île
+	 * @return la positionX de l'île
+	 */
 	public int                getPosX      () { return this.posX;      }
+	/** Acceseur qui retourne la positionY de l'île
+	 * @return la positionY de l'île
+	 */
 	public int                getPosY      () { return this.posY;      }
+	/** Acceseur qui retourne la region de l'île
+	 * @return la region de l'île
+	 */
 	public Region             getRegion    () { return this.region;    }
+	/** Acceseur qui retourne l'ensemble des voies liées à une île
+	 * @return ensemble de voies d'un île
+	 */
 	public List<VoieMaritime> getEnsVoie   () { return this.ensVoie;   }
+	/** Acceseur qui retourne la couleur de l'île
+	 * @return la couleur de l'île
+	 */
 	public String             getCouleur   () { return this.couleur;   }
+	/** Acceseur qui retourne la positionX de l'image de l'île
+	 * @return la positionX de l'image de l'île
+	 */
 	public int                getPosXImage () { return this.posXImage; }
+	/** Acceseur qui retourne la positionY de l'image de l'île
+	 * @return la positionY de l'image de l'île
+	 */
 	public int                getPosYImage () { return this.posYImage; }
 
 	/* -------------------------------------- */
 	/*              Modificateur              */
 	/* -------------------------------------- */
 
-	public void setPosX    ( int posX         ) { this.posX = posX;                                 }
-	public void setPosY    ( int posY         ) { this.posY = posY;                                 }
-	public void ajouterArc ( VoieMaritime arc ) { this.ensVoie.add(arc);                            }
-	public void setRgn     ( Region region	  ) { this.region = region; region.ajouterIle ( this ); }
-	public void setCouleur ( String couleur   ) { this.couleur = couleur;                           }
+	/** Modificateur permettant d'ajouter une voie liée à une île
+	 * @param arc 
+	 */
+	public void ajouterArc ( VoieMaritime voie ) { this.ensVoie.add(voie);                             }
+
+	/** Modificateur permettant de modifiée la region qui est initialisée à null
+	 * @param region 
+	 */
+	public void setRgn     ( Region region	   ) { this.region = region; region.ajouterIle ( this );   }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	/**
-	 * toString
-	 * 
-	 * @return 
+	/** toString
+	 * @return une chaine descrivant l'île
 	 */
 	public String toString ( )
 	{

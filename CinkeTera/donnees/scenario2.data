@@ -43,24 +43,24 @@ Lokha	Laçao
 Laçao	Loà
 Laçao	Milaù
 Milaù	Loà
-Milaù	Massao	BLEU
+Milaù	Massao
 Massao	Maÿa
 Maÿa	Mokah
-Milaù	Mokah	BLEU
+Milaù	Mokah
 Milaù	Mutaa
 Milaù	Khont-Rolah
-Mutaa	Khont-Rolah	BLEU
+Mutaa	Khont-Rolah
 Mutaa	Mokah
 Massao	Mutaa
 Maÿa	Mutaa
 Mokah	Fissah
-Mokah	Fuego	BLEU
+Mokah	Fuego
 Fissah	Fuego
 Fissah	Finista
 Fissah	Fama
 Finista	Fama
 Fama	Fuego
-Fuego	Khont-Rolah	BLEU
+Fuego	Khont-Rolah	
 Fuego	Kiola
 Kita	Khont-Rolah
 Kiola	Khont-Rolah
@@ -69,5 +69,3 @@ Kiola	Kita
 Kiola	Kosa
 Kosa	Kita
 Kita	Ticó
-
-SBrun	SRouge	PBrun	SJaune	PRouge

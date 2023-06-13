@@ -44,17 +44,17 @@ Laçao	Loà
 Laçao	Milaù
 Milaù	Loà
 Milaù	Massao	BLEU
-Massao	Maÿa
+Massao	Maÿa	BLEU
 Maÿa	Mokah
 Milaù	Mokah	BLEU
 Milaù	Mutaa
 Milaù	Khont-Rolah
 Mutaa	Khont-Rolah	BLEU
-Mutaa	Mokah
+Mutaa	Mokah	BLEU
 Massao	Mutaa
 Maÿa	Mutaa
 Mokah	Fissah
-Mokah	Fuego	BLEU
+Mokah	Fuego	
 Fissah	Fuego
 Fissah	Finista
 Fissah	Fama
@@ -70,4 +70,5 @@ Kiola	Kosa
 Kosa	Kita
 Kita	Ticó
 
-SBrun	SRouge	PBrun	SJaune	PRouge
+PBrun	SRouge	SBrun	PMulticolore	PRouge PJaune
+PVerte

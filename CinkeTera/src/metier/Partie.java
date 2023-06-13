@@ -1,13 +1,8 @@
-//BUG : On ne peut pas avoir un carte de l'ile de départ 
 package metier;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.processing.SupportedSourceVersion;
-
 import java.awt.Color;
-import java.awt.desktop.SystemSleepEvent;
 import java.awt.geom.Line2D;
 
 public class Partie
@@ -16,35 +11,27 @@ public class Partie
 	/*               Attributs                */
 	/* -------------------------------------- */
 
-	private List<VoieMaritime> lstVoieMaritimes;
 	private List<Ile>          ligne;
 
-	private Color   coulLigne;
-	private Paquet  paquet;
-	private Carte   carteEnCours;
+	private int     numManche;
 	private int     score;
-	private boolean finManche;
+	private Color   coulLigne;
+	private Carte   carteEnCours;
+	private Paquet  paquet;
 	private Joueur  joueur;
-
-	private Ile extremiteeUn;
-	private Ile extremiteeDeux;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
-	public Partie ( Joueur j, List<Ile> ileDep, Color couleur, List<VoieMaritime> lstVoieMaritimes )
+
+	public Partie ( Joueur j, List<Ile> ileDep, Color couleur )
 	{
-		this.joueur = j;
-		this.paquet    = new Paquet ( );
-		this.ligne     = ileDep;
-		this.coulLigne = couleur;
-
-		this.finManche = false;
-		this.score     = 0;
-
-		extremiteeUn = extremiteeDeux = this.ligne.get ( 0 );
-
-		this.lstVoieMaritimes = lstVoieMaritimes;
+		this.numManche        = 0;
+		this.joueur           = j;
+		this.paquet           = new Paquet ( );
+		this.ligne            = ileDep;
+		this.coulLigne        = couleur;
+		this.score            = 0;
 	}
 	
 	/* -------------------------------------- */
@@ -53,12 +40,12 @@ public class Partie
 
 	public List<Ile> getLigne        ( ) { return this.ligne;             }
 	public Color     getCoulLigne    ( ) { return this.coulLigne;         }
+	public Carte     getCarteEnCours ( ) { return this.carteEnCours;      }
+	public Paquet    getPaquet       ( ) { return this.paquet;            }
 	public int       getScore        ( ) { return this.score;             }
 	public boolean   estPremierTrait ( ) { return this.ligne.size() == 1; }
-	public Carte     getCarteEnCours ( ) { return this.carteEnCours;      }
-	public boolean   getFinPartie    ( ) { return this.finManche;         }
-	public Paquet    getPaquet       ( ) { return this.paquet;            }
-	
+	public boolean   getFinPartie    ( ) { return this.numManche    == 2; }
+
 	/* -------------------------------------- */
 	/*              Modificateur              */
 	/* -------------------------------------- */
@@ -72,109 +59,57 @@ public class Partie
 	public boolean jouer ( VoieMaritime voie )
 	{
 		// Si aucune carte n'est sélectionnée, on ne peut pas jouer
-
 		if ( this.carteEnCours == null ) return false;
 
-		Ile ileDebut = this.ligne.get ( 0                       );
-		Ile ileFin   = this.ligne.get ( this.ligne.size ( ) - 1 );
-		Ile ileDepart = null;
+		Ile ileDebut  = this.ligne.get ( 0                       );
+		Ile ileFin    = this.ligne.get ( this.ligne.size ( ) - 1 );
 		Ile ileArrive = null;
 
-		System.out.println ( "\tIle de début : " + ileDebut );
-		System.out.println ( "\tIle d'fin : "    + ileFin   );
-
+		// On définit l'île d'arrivée et de départ
 		if ( voie.getIleA ( ).equals ( ileDebut ) || voie.getIleD ( ).equals ( ileDebut ) ) 
-		{
-			ileDepart = ileDebut;
 			ileArrive = voie.getIleA ( ).equals ( ileDebut ) ? voie.getIleD ( ) : voie.getIleA ( );
-		}
-		
+
 		if ( voie.getIleA ( ).equals ( ileFin ) || voie.getIleD ( ).equals ( ileFin ) )
-		{
-			ileDepart = ileFin;
 			ileArrive = voie.getIleA ( ).equals ( ileFin ) ? voie.getIleD ( ) : voie.getIleA ( );
-		}
 
-		System.out.println ( "Affichage des informations pour jouer : "                                  );
-		System.out.println ( "\tIle de départ : "                + ileDepart                             );
-		System.out.println ( "\tIle d'arrivée : "                + ileArrive                             );
-		System.out.println ( "\tCouleur de la carte en cours : " + this.carteEnCours.getCouleurCarte ( ) );
-
-		System.out.println("+--------------------------------+");
-		System.out.println("| Affichage des différents tests |");
-		System.out.println("+--------------------------------+");
-
+		// Regarde que l'on est bien une île d'arrivée
 		if ( ileArrive == null )
 			return false;
-
-		System.out.println ( "Est ce que l'ile n'est de la même couleur que la carte et que la carte n'est pas multicolor?");
-		System.out.println ( !ileArrive.getCouleur ( ).equals ( this.carteEnCours.getCouleurCarte ( ) ) && !this.carteEnCours.getCouleurCarte ( ).equals ( "Multicolore" ) );
 
 		// Regarde si l'ile que l'on veut relié est bien de la même couleur que la carte
 		if ( !ileArrive.getCouleur ( ).equals ( this.carteEnCours.getCouleurCarte ( ) ) && !this.carteEnCours.getCouleurCarte ( ).equals ( "Multicolore" ) )
 			return false;
 
 		// Regarde si la voie n'est pas déjà colorié
-		System.out.println("est ce que la voie est déja colorier ?");
-		System.out.println(voie.getEstColorie ( ) );
 		if ( voie.getEstColorie ( ) )
 			return false;
-
-		// Si c'est le premier tour, qu'on est avec la couleur rouge et qu'on part de l'ile Ticó
-		// System.out.println("est ce que l'arc est tico et la couleur est rouge et que c'est le début de la manche?");
-		// System.out.println( this.getDebutManche ( ) && ileDepart.getNom ( ).equals ( "Ticó" ) && coulLigne.equals ( Color.RED )        );
-		
-		if ( this.estPremierTrait ( ) && ileDepart.getNom ( ).equals ( "Ticó" ) && coulLigne.equals ( Color.RED )        )
-		{
-			voie.setCouleur( this.coulLigne );
-
-			this.ajouterIle  ( ileArrive );
-			this.tourSuivant (           );
-			return true;
-		}
-
-		// System.out.println("est ce que l'arc est Mutaa et la couleur est bleu et que c'est le début de la manche?");
-		// System.out.println( this.getDebutManche ( ) && ileDepart.getNom ( ).equals ( "Mutaa" )
-		// && coulLigne.equals ( Color.BLUE )               );
-		//Si c'est le premier tour, qu'on est avec la couleur bleu et qu'on part de l'ile Mutaa
-		if ( this.estPremierTrait ( ) && ileDepart.getNom ( ).equals ( "Mutaa" ) && coulLigne.equals ( Color.BLUE )               )
-		{
-			voie.setCouleur( this.coulLigne );
-
-			this.ajouterIle  ( ileArrive );
-			this.tourSuivant (           );
-			return true;
-		}
-
-		System.out.println("est ce que l'arc est relié et que c'est pas le début de la manche?");
-		System.out.println(  !this.estRelie ( voie ) && !this.estPremierTrait ( ));
-
-		System.out.println("Est ce que la voie est relié ?" + this.estRelie ( voie ) );
-		System.out.println("est ce que c'est le début de la manche " + this.estPremierTrait ( ));
 
 		//On ne peut pas tromper mille fois une personne... Non attends.. On ne peut pas..
 		if ( !this.estRelie ( voie ) && !this.estPremierTrait ( ) ) return false;
 
-		if ( this.cyclique(voie, coulLigne)) return false;
-		
-		System.out.println("est ce que l'on croise un arc qui est colorié ?");
+		if ( this.cyclique ( voie, coulLigne ) ) return false;
+
 		// Une ligne ne peut pas croiser d'autre ligne coloriée
-		for ( VoieMaritime v : this.lstVoieMaritimes ) 
+		for ( VoieMaritime v : this.joueur.getVoieMaritimes ( ) )
 			if ( intersection ( voie, v ) && ( v.getColorArc ( ) != null ) ) return false;
 		
-		voie.setCouleur( this.coulLigne );
-
-		this.ajouterIle  ( ileArrive );
-		// Tour suivant
-		this.tourSuivant();
+		// Si on arrive ici, c'est que tout est bon, on peut donc colorier la voie
+		voie.setCouleur  ( this.coulLigne );
+		this.ajouterIle  ( ileArrive      );
+		this.tourSuivant (                );
 
 		return true;
 	}
 
+	/** Méthode qui permet de passer un tour (changer la carte ) */
 	public void tourSuivant ( )
 	{
-		System.out.println(this.paquet.aEncorePrimaire ( ));
-		if ( !this.paquet.aEncorePrimaire ( ) ) { this.coulLigne = this.joueur.getCouleur(); this.paquet = new Paquet(); }
+		if ( !this.paquet.aEncorePrimaire ( ) ^ this.getFinPartie ( ) )
+		{
+			this.coulLigne = this.joueur.getCouleur ( );	
+			this.paquet    = new Paquet ( );
+			this.numManche++;
+		}
 
 		this.carteEnCours = null;
 	}
@@ -186,6 +121,8 @@ public class Partie
 		int          tmp, max;
 
 		ensRegions = new ArrayList<>();
+
+		if ( this.ligne.size() == 1 ) return this.score = 0;
 
 		for ( Ile i : this.ligne )
 			if ( !ensRegions.contains ( i.getRegion ( ) ) )
@@ -229,11 +166,9 @@ public class Partie
 		                             { "Mokah"      , "Fissah"} };
 
 		int     score = 0;
-		boolean eMemeLigne;
-
+		boolean eMemeLigne, eVoieChoisie;
 
 		ensVoie = this.creeVoieChoisies();
-
 
 		for ( VoieMaritime v : ensVoie )
 		{
@@ -244,40 +179,46 @@ public class Partie
 				             ( v.getIleD().getNom().equals(tabBonusLigne[cpt][0])   ||
 				               v.getIleD().getNom().equals(tabBonusLigne[cpt][1])        );
 
-				if ( eMemeLigne ) score ++;
+				eVoieChoisie = ( this.ligne.contains(v.getIleA()) &&
+				                 this.ligne.contains(v.getIleD())    );
+
+				if ( eVoieChoisie ) score += v.getValeur();
+				if ( eMemeLigne   ) score ++;
 			}
 		}
 
 		return score;
 	}
 
-
-	private int calculBonusIle ()
+	private int calculBonusIle ( )
 	{
 		int score = 0;
 
 		for ( Ile i : this.ligne )
-			for ( VoieMaritime v : i.getEnsVoie() )
-				if ( !v.getColorArc().equals(this.coulLigne) )
+			for ( VoieMaritime v : i.getEnsVoie ( ) )
+				if ( !v.getColorArc ( ).equals ( this.coulLigne ) )
 					score += 2;
 
 		return score;
 	}
 
-
+	/** Méthode qui indique crée une liste des voies que l'utilisateur à choisie selon la couleur
+	 * @return renvoie un booléen qui indique si l'arc fait partie du réseaux des autres arcs colorer
+	 */
 	private List<VoieMaritime> creeVoieChoisies ( )
 	{
 		List<VoieMaritime> ensVoie;
 
-		ensVoie = new ArrayList<VoieMaritime>();
+		ensVoie = new ArrayList<VoieMaritime> ( );
 
 		for ( Ile i : this.ligne )
-			for ( VoieMaritime voie : i.getEnsVoie() )
-				if ( voie.getColorArc().equals(this.coulLigne) && ensVoie.contains(voie))
-					ensVoie.add(voie);
+			for ( VoieMaritime voie : i.getEnsVoie ( ) )
+				if ( voie.getColorArc ( ).equals ( this.coulLigne ) && ensVoie.contains ( voie ) )
+					ensVoie.add ( voie );
 
 		return ensVoie;
 	}
+
 
 	/** Méthode qui indique si l'arc prit en paramètre est rataché aux autres arcs déja colorer
 	 * @param v est l'arc qui est sélectionner par l'utilisateur
@@ -285,14 +226,15 @@ public class Partie
 	 */
 	private boolean estRelie ( VoieMaritime v )
 	{
-		Ile ileA = v.getIleA();
-		Ile ileD = v.getIleD();
+		Ile ileA = v.getIleA ( );
+		Ile ileD = v.getIleD ( );
 
+		// Il doit y avoir une voie coloriée dans la liste d'une des deux îles de la voie
 		for ( VoieMaritime voie : ileA.getEnsVoie ( ) )
-			if ( !voie.equals(v) && voie.getEstColorie ( ) ) return true;
+			if ( !voie.equals ( v ) && voie.getEstColorie ( ) ) return true;
 
 		for ( VoieMaritime voie : ileD.getEnsVoie ( ) )
-			if ( !voie.equals(v) && voie.getEstColorie ( ) ) return true;
+			if ( !voie.equals ( v ) && voie.getEstColorie ( ) ) return true;
 
 		return false;
 	}
@@ -305,8 +247,8 @@ public class Partie
 	 */
 	public boolean intersection ( VoieMaritime voieOg, VoieMaritime voieATester )
 	{
-		Ile depart  = voieOg.getIleD ( );
-		Ile arrivee = voieOg.getIleA ( );
+		Ile depart   = voieOg.     getIleD ( );
+		Ile arrivee  = voieOg.     getIleA ( );
 		Ile depart2  = voieATester.getIleD ( );
 		Ile arrivee2 = voieATester.getIleA ( );
 
@@ -316,30 +258,38 @@ public class Partie
 		// Vérification si les lignes se croisent
 		if ( lineOg.intersectsLine ( lineATester ) )
 		{
-			// Les arêtes se croisent
 			// Vérification si les arêtes sont adjacentes
 			if ( voieOg.estIdentique ( voieATester ) ) return false; // Les arêtes sont adjacentes, elles ne se croisent pas
 			
 			return true; // Les arêtes se croisent
 		}
+
 		return false; // Les arêtes ne se croisent pas
 	}
 
+
+	/** Méthode qui ajoute l'ile à la bonne position dans la ligne
+	 * @param ile est l'ile que l'on veut ajouter à la ligne
+	 */
 	private void ajouterIle ( Ile ile )
 	{
-		Ile ileDep = this.ligne.get(0);
-		Ile ileArr = this.ligne.get(this.ligne.size() - 1);
+		Ile ileDep = this.ligne.get ( 0                       );
+		Ile ileArr = this.ligne.get ( this.ligne.size ( ) - 1 );
 
-		if ( this.ligne.contains(ile) ) return;
+		if ( this.ligne.contains ( ile ) ) return;
+
+		// On ajoute les voie à la la ligne
+		// Cette méthode nous permet d'avoir la tête et la queue de notre ligne et de limiter les possibilités.
 
 		for ( VoieMaritime v : ile.getEnsVoie ( ) )
 		{
-			if ( ( v.getIleA ( ).equals ( ileDep ) || v.getIleD ( ).equals ( ileDep ) ) && !this.ligne.contains ( ile ) && v.getEstColorie() )
+			if ( ( v.getIleA ( ).equals ( ileDep ) || v.getIleD ( ).equals ( ileDep ) ) && !this.ligne.contains ( ile ) && v.getEstColorie ( ) )
 				this.ligne.add(0,ile);
-			if ( ( v.getIleA ( ).equals ( ileArr ) || v.getIleD ( ).equals ( ileArr ) ) && !this.ligne.contains ( ile ) && v.getEstColorie() )
+			if ( ( v.getIleA ( ).equals ( ileArr ) || v.getIleD ( ).equals ( ileArr ) ) && !this.ligne.contains ( ile ) && v.getEstColorie ( ) )
 				this.ligne.add(ile);
 		}
 	}
+
 
 	/**Retourne si la voie forme un cycle à partir d'une couleur
 	 * @param voie voie maritime sélectionnée par l'utilisateur
@@ -353,16 +303,15 @@ public class Partie
 		boolean cycliqueIleD = false;
 		boolean cycliqueIleA = false;
 
+		ileD = voie.getIleD ( );
+		ileA = voie.getIleA ( );
 
-		ileD = voie.getIleD();
-		ileA = voie.getIleA();
+		//Si une voie a ces deux îles qui possèdent déjà une voie de couleur, alors on ne peut pas jouer car c'est un cycle.
+		for ( VoieMaritime a : ileD.getEnsVoie ( ) )
+			if ( a.getColorArc ( ) == couleur ) cycliqueIleD = true;
 
-
-		for (VoieMaritime a : ileD.getEnsVoie() )
-			if ( a.getColorArc() == couleur ) cycliqueIleD = true;
-
-		for ( VoieMaritime a : ileA.getEnsVoie() )
-			if ( a.getColorArc() == couleur ) cycliqueIleA = true;
+		for ( VoieMaritime a : ileA.getEnsVoie ( ) )
+			if ( a.getColorArc ( ) == couleur ) cycliqueIleA = true;
 
 
 		return cycliqueIleD && cycliqueIleA;

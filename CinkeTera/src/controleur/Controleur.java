@@ -4,7 +4,6 @@ package controleur;
   * @author : Alizéa Lebaron, Mathys Poret, Maximilien Lesterlin ,Mohamad Marrouche, Eleonore Bouloché
   */
 
-import iut.algo.Clavier;
 import metier.*;
 import ihm.*;
 import java.util.List;
@@ -25,21 +24,25 @@ public class Controleur
 	{
 		
 		//this.J2     = new Joueur       (      );
-		this.metier = new Plateau      ();
-		this.J1     = new Joueur       (this.metier);
+		this.metier = new Plateau (             );
+		this.J1     = new Joueur  ( this.metier );
+		
 		new FrameAccueil(this);
 
 	}
 
-	public static void main ( String[] arg )
-	{
-		new Controleur ( );
-	}
+
+
 
 	/** Getteur qui retourne la liste des arcsde la partie métier
 	 * @return la liste des arcs de la partie métier
 	 */
 	public List<VoieMaritime>   getVoiesMaritimes    ( ) { return this.metier.getVoiesMaritimes    ( ); }
+
+	/** Getteur qui retourne la liste des regions de la partie métier
+	 * @return la liste des regions de la partie métier
+	 */
+	public List<Region>         getRegions           ( )  { return this.metier.getRegions();             }
 
 	/** Getteur qui retourne la liste des noeuds de la partie métier
 	 * @return la liste des noeuds de la partie métier
@@ -108,6 +111,10 @@ public class Controleur
 
 	public boolean jouer ( VoieMaritime voieMaritime )
 	{
+		if ( this.estFinDePartie() )
+			//IHM message de fin
+			return false;
+		
 		return this.J1.jouer ( voieMaritime );
 	}
 
@@ -127,6 +134,17 @@ public class Controleur
 	public Carte getCarteEnCours()
 	{
 		return this.J1.getPartie().getCarteEnCours();
+	}
+
+	public int calculerScore ( ) { return this.J1.getPartie().calculerScore(); }
+
+	// Acceseur de fin de partie
+	public boolean estFinDePartie ( ) { return this.J1.getPartie().getFinPartie(); }
+
+
+	public static void main ( String[] arg )
+	{
+		new Controleur ( );
 	}
 
 	
