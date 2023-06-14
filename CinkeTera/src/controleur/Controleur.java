@@ -13,13 +13,12 @@ public class Controleur
 {
 	private	FramePlateau ihm;
 	private Joueur       j1;
+	private Joueur       j2;
 
 	/** Contructeur qui initialise le jeu
 	 */
 	public Controleur ( )
 	{
-		this.j1     = new Joueur  ( );
-		
 		new FrameAccueil(this);
 	}
 
@@ -38,22 +37,24 @@ public class Controleur
 
 	public boolean            estFinDePartie ( )             { return this.j1.getPartie ( ).getFinPartie ( );     }
 
-	public boolean jouer ( VoieMaritime voieMaritime )
+	public boolean jouer ( VoieMaritime voieMaritime, boolean b )
 	{
 		if ( this.estFinDePartie ( ) )
 			//IHM message de fin
 			return false;
 		
-		return this.j1.jouer ( voieMaritime );
+		return this.j1.jouer ( voieMaritime, b );
 	}
 
-	public void  lancerFrame      ( ) { this.ihm    = new FramePlateau ( this ); }
+	public void  lancerFrame      ( )          { this.j1     = new Joueur  ( ); this.ihm    = new FramePlateau ( this ); }
 
-	public void  modeDeuxJouers   ( ) { this.ihm    = new FramePlateau ( this ); }
+	public void  lancerScenario   (int numero) { this.j1     = new Joueur  (numero); this.ihm    = new FramePlateau ( this );}
+ {}
+	public void  modeDeuxJouers   ( )          { this.j1     = new Joueur  ( ); this.j2     = new Joueur  ( ); this.ihm    = new FramePlateau ( this ); }
 
-	public Carte getCarteEnCours  ( ) { return this.j1.getPartie ( ).getCarteEnCours ( ); }
+	public Carte getCarteEnCours  ( )          { return this.j1.getPartie ( ).getCarteEnCours ( ); }
 
-	public int   calculerScore    ( ) { return this.j1.getPartie ( ).calculerScore   ( ); }
+	public int   calculerScore    ( )          { return 1; } //return this.j1.getPartie ( ).calculerScore   ( ); }
 
 	public boolean estJouable(Ile ile, List<Ile> lstExtremite) { return this.j1.estJouable(ile,lstExtremite); }
 

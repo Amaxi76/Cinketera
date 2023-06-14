@@ -106,13 +106,11 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 		for (int cpt = 0; cpt < paquetDeCartes.taillePaquet(); cpt++)
 		{
 			int y = 20;
-
-			if (cpt == this.bHover) 
-				y = 30;
+			if (cpt == this.bHover) y = 30;
 			
 			String typeC = "" + paquetDeCartes.getCarte(cpt).getTypeCarte   ();
 			String coulC = "" + paquetDeCartes.getCarte(cpt).getCouleurCarte();
-			Image image = this.getToolkit().getImage ("donnees/imagesCartes/" + typeC + coulC   +".png");
+			Image image = this.imgDosDeCarte;
 			g2.drawImage(image,50+20*cpt,y,this.imgDosDeCarte.getWidth(null)/3,this.imgDosDeCarte.getHeight(null)/3,null);
 		}
 	}
@@ -121,7 +119,12 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 	{
 		for (int cpt = 0; cpt < this.ctrl.getJoueur1().getPartie().getPaquet().taillePaquet(); cpt++)
 		{
-			Rectangle2D zoneCarte = new Rectangle2D.Double(50+20*cpt,20,20,this.imgDosDeCarte.getHeight(null)/3);
+			Rectangle2D zoneCarte = new Rectangle2D.Double();
+			if ( cpt < this.ctrl.getJoueur1().getPartie().getPaquet().taillePaquet() - 1 )
+				zoneCarte.setRect(50+20*cpt,20,20,this.imgDosDeCarte.getHeight(null)/3);
+			else
+				zoneCarte.setRect(50+20*cpt,20,this.imgDosDeCarte.getWidth(null)/3,this.imgDosDeCarte.getHeight(null)/3);
+
 			if (zoneCarte.contains(e.getPoint()))
 			{
 				this.ctrl.getJoueur1().getPartie().tourSuivant();
@@ -139,7 +142,11 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 		//Hover cartes
 		for (int cpt = 0; cpt < this.ctrl.getJoueur1().getPartie().getPaquet().taillePaquet(); cpt++)
 		{
-			Rectangle2D zoneCarte = new Rectangle2D.Double(50+20*cpt,20,20,this.imgDosDeCarte.getHeight(null)/3);
+			Rectangle2D zoneCarte = new Rectangle2D.Double();
+			if ( cpt < this.ctrl.getJoueur1().getPartie().getPaquet().taillePaquet() - 1 )
+				zoneCarte.setRect(50+20*cpt,20,20,this.imgDosDeCarte.getHeight(null)/3);
+			else
+				zoneCarte.setRect(50+20*cpt,20,this.imgDosDeCarte.getWidth(null)/3,this.imgDosDeCarte.getHeight(null)/3);
 
 			if (zoneCarte.contains(e.getPoint()))
 			{
@@ -158,6 +165,12 @@ public class PanelCarte extends JPanel implements MouseListener,ActionListener,M
 		{
 			this.ctrl.getJoueur1().getPartie().tourSuivant();
 			this.ctrl.majIHM();
+
+			//Si la partie est fini
+			if(this.ctrl.estFinDePartie() )
+			{
+				this.frame.getFramePlateau().finPartieInit();
+			}
 		}
 		if (e.getSource() == this.btnQuitter)
 			System.exit(1);

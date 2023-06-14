@@ -51,7 +51,7 @@ public class FramePlateau extends JFrame implements ComponentListener
 		Image icon = Toolkit.getDefaultToolkit().getImage("donnees/images/boat.png");  
     	this.setIconImage(icon); 
 
-		this.frameCarte = new FrameCarte(ctrl);
+		this.frameCarte = new FrameCarte(ctrl,this);
 
 		/*Création des composants*/
 
@@ -96,4 +96,26 @@ public class FramePlateau extends JFrame implements ComponentListener
 		this.frameCarte.dispose();
 		this.dispose();
 	}
+
+	public void finPartieInit()
+	{
+		String formatString = "%-30s";
+		String sRet = "";
+
+		sRet += String.format( formatString ,"Nb regions visitées : " )+ this.ctrl.getNbRegionsVisite ( )                                     + "\n";
+		sRet += String.format( formatString ,"Nb arcs colorées    : " )+ this.ctrl.getJoueur1().getPlateau().getNbVoiesMaritimesColorie  ( )  + "\n";
+		sRet += String.format( formatString ,"Nb Points Total     : " )+ this.ctrl.calculerScore ( )                                                ;
+
+		//Création d'une "Pop-up" pour demander si le joueur veux rejouer ou quitter
+		Object[] choix= { "Rejouer","Quitter" };
+		int rep = JOptionPane.showOptionDialog ( this,sRet, "Game End", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choix, choix[0] );
+
+		if ( rep == 0 ) //Si Rejouer est sélectionné
+		{
+			this.init( );			//On ferme le fenêtre
+			new Controleur ( );			//On relance une partie
+		}
+		else
+			System.exit ( 1 );			//On ferme le scripte
+}
 }

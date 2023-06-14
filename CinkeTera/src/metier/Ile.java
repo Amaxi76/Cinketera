@@ -42,7 +42,7 @@ public class Ile
 		this.posYImage = yImage;
 		this.region    = null;
 
-		this.ensVoie  = new ArrayList<>();
+		this.ensVoie  = new ArrayList<> ( );
 	}
 
 	/* -------------------------------------- */
@@ -123,8 +123,8 @@ public class Ile
 	{
 		String sRet = "";
 
-		sRet += "L'ile "                     + this.getNom();
-		sRet += " appartient à la région : " + this.region.getNomRegion();
+		sRet += "L'ile "                     + this.getNom ( );
+		sRet += " appartient à la région : " + this.region.getNomRegion ( );
 
 		return sRet;
 	}

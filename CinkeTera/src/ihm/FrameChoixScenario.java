@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JFrame;
 import controleur.*;
 
-public class FrameAccueil extends JFrame implements ActionListener
+public class FrameChoixScenario extends JFrame implements ActionListener
 {
 	/*-------------*/
 	/*--Attributs--*/
@@ -19,37 +19,34 @@ public class FrameAccueil extends JFrame implements ActionListener
 	/** Un Controleur pour pouvoir accéder au controleur
 	 * 
 	 */
-	private Controleur  ctrl;
 
 	private JButton  btnScenario;
 	private JButton  btnQuitter;
 	private JButton  btn2J;
 	private JButton  btn1J;
 
+	private Controleur ctrl;
+
 	/*----------------*/
 	/*--Constructeur--*/
 	/*----------------*/
 
 	/** Constructuer de FrameAcceuil qui crée un panelGraphe et panelAction
-	 * @param ctrl le controleur
+	 * 
 	 * 
 	 */
-	public FrameAccueil ( Controleur ctrl )
+	public FrameChoixScenario(Controleur ctrl)
 	{
+		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( );
+
 		this.ctrl = ctrl;
 		
-		// Définition de la position de la fêntre au milieu de l'écran
-		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( );
 		int l = ( tailleEcran.width  - 1000 ) / 2;
 		int h = ( tailleEcran.height -  700 ) / 2;
 
 		this.setSize     ( 1000, 700   );
 		this.setLocation (    l,   h   );
 		this.setTitle    ( "CinkeTera" );
-
-		/* ------------------------- */
-		/* Création des composants   */
-		/* ------------------------- */
 
 		JPanel panelTest = new JPanel ( );
 		panelTest.setOpaque ( false );
@@ -61,9 +58,9 @@ public class FrameAccueil extends JFrame implements ActionListener
 		JPanel panelButton = new JPanel ( );
 		panelButton.setOpaque ( false );
 
-		this.btn1J       = new JButton ( "1 Joueur" );
-		this.btn2J       = new JButton ( "2 Joueur" );
-		this.btnScenario = new JButton ( "Scénario" );
+		this.btn1J       = new JButton ( "Scenario 1" );
+		this.btn2J       = new JButton ( "Scenario 2" );
+		this.btnScenario = new JButton ( "Scenario 3" );
 		this.btnQuitter  = new JButton ( "Quitter"  );
 
 		panelButton.add ( this.btn1J       );
@@ -84,7 +81,7 @@ public class FrameAccueil extends JFrame implements ActionListener
 
 		panel.add ( panelTest, BorderLayout.SOUTH );
 
-		Image img       = new ImageIcon ( this.getToolkit ( ).getImage ( "donnees/images/image.png" ) ).getImage ( );
+		Image img       = new ImageIcon ( this.getToolkit ( ).getImage ( "donnees/images/image_scenario.png" ) ).getImage ( );
 		Image scaledImg = img.getScaledInstance ( 1000, 700, Image.SCALE_SMOOTH );
 
 		panelButton.setLayout ( new GridLayout ( 6, 1, 15, 15 ) );
@@ -117,11 +114,12 @@ public class FrameAccueil extends JFrame implements ActionListener
 	public void actionPerformed ( ActionEvent e )
 	{
 		if ( e.getSource ( ) == this.btn1J )
-			this.ctrl.lancerFrame ( );
+			this.ctrl.lancerScenario (1);
 		if ( e.getSource ( ) == this.btn2J )
-			this.ctrl.modeDeuxJouers ( );
+			this.ctrl.lancerScenario (0);
 		if ( e.getSource ( ) == this.btnScenario )
-			new FrameChoixScenario(this.ctrl);
+			this.ctrl.lancerScenario (3);
+			
 
 		this.cacher();
 	}

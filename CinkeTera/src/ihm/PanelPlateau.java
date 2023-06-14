@@ -3,6 +3,7 @@ package ihm;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.File;
+import java.io.IOException;
 import java.awt.event.*;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,7 @@ import javax.swing.*;
 import controleur.*;
 import metier.*;
 
-public class PanelPlateau extends JPanel implements MouseListener
+public class PanelPlateau extends JPanel implements MouseListener//,ActionListener
 {
 
 	/** Un Controleur pour pouvoir accéder au controleur
@@ -43,6 +44,9 @@ public class PanelPlateau extends JPanel implements MouseListener
 	private double rX;
 	private double rY;
 
+	private int    		   xImageBateau;
+	private BufferedImage  imageBateau;
+
 	/**
 	 * L'arc a colorier
 	 */
@@ -52,6 +56,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 
 	/** Constructeur de PanelPlateau
 	 * @param ctrl de type Controleur
+	 * @throws IOException
 	 * 
 	 */
 	public PanelPlateau ( Controleur ctrl , FramePlateau frame)
@@ -59,11 +64,19 @@ public class PanelPlateau extends JPanel implements MouseListener
 		this.ctrl 						= ctrl;
 		this.frame                      = frame;
 
+		this.setBackground(new Color(172,209,232)) ;
+
 		this.clrJ1 = this.ctrl.getCouleurj1();
 
 		this.rX = this.rY = 1;
-
-		this.setBackground(new Color(172,209,232)) ;
+		/* 
+		try 
+		{
+			this.imageBateau = ImageIO.read(new File("/donnees/images/boat.png"));
+		} 
+		catch (Exception e) {e.printStackTrace();}*/
+		
+		this.xImageBateau = 0;
 
 		this.lstVoiesMaritimes     = this.ctrl.getJoueur1().getPlateau().getVoiesMaritimes( );
 		this.lstIles               = this.ctrl.getJoueur1().getPlateau().getIles          ( );
@@ -77,13 +90,17 @@ public class PanelPlateau extends JPanel implements MouseListener
 		super.paintComponent ( g );
 		Graphics2D g2 = ( Graphics2D ) g;
 
+		
+
 		//Dessiner le graph
 		this.dessinerArcs  ( g2,this.rX,this.rY );
 		this.dessinerIles  ( g2,this.rX,this.rY );
 
-
-		//Présenter les régions
+		//Dessiner les régions
 		this.dessinerRegions(g2);
+
+		//Dessiner bateau peut être
+		g2.drawImage(this.imageBateau,200,200,this);
 		
 	}
 
@@ -97,12 +114,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 			Ile depart  = voieMaritime.getIleD ( );
 			Ile arrivee = voieMaritime.getIleA ( );
 
-			if (voieMaritime == this.voieMaritimeAColorier )
-			{
-				g2.setColor(Color.YELLOW);
-				g2.setStroke(new BasicStroke(7));
-			}
-			else
+			if ( voieMaritime != this.voieMaritimeAColorier )
 			{
 				Color arcColor = voieMaritime.getColorArc ( ) == null ? Color.DARK_GRAY : voieMaritime.getColorArc ( );
 				g2.setColor  ( arcColor );
@@ -111,7 +123,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 			
 			g2.drawLine ( (int)(depart.getPosX ( )*rX), (int)(depart.getPosY ( )*rY), (int)(arrivee.getPosX ( )*rX), (int)(arrivee.getPosY ( )*rY));
 			
-
+			//Représenter les valeurs des arcs bonus
 			if ( voieMaritime.getValeur ( ) != 1 )
 			{
 				int pointStringY = ( depart.getPosY ( ) - 100 + arrivee.getPosY ( ) - 100 ) / 2 - 5 ;
@@ -124,6 +136,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 
 				g2.drawString ( "" + voieMaritime.getValeur ( ), pointStringX, pointStringY);
 			}
+			this.frame.majFrameCarte();
 		}
 	}
 
@@ -133,8 +146,14 @@ public class PanelPlateau extends JPanel implements MouseListener
 	 */
 	private void dessinerIles ( Graphics2D g2,double rX,double rY )
 	{
+		//Avoir la couleur du Joueur
+		this.clrJ1 = this.ctrl.getCouleurj1();
+
 		//Avoir les Iles jouables
 		List<Ile> lstExtremite = this.ctrl.getJoueur1().getPartie().getEnsExtremites();
+		List<Ile> ligneR       = this.ctrl.getJoueur1().getPartie().getLigneR();
+		List<Ile> ligneB       = this.ctrl.getJoueur1().getPartie().getLigneB();
+
 
 		for ( Ile ile : this.lstIles )
 		{
@@ -148,7 +167,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 			int height   = imgIle.getHeight();
 			int[] pixels = imgIle.getRGB(0, 0, width, height, null, 0, width);
 
-			// Parcourir les pixels et les assombrire
+			// Parcourir les pixels et les assombrire pour changer l'image
 			for (int i = 0; i < pixels.length; i++)
 			{
 				int rgb   = pixels[i];
@@ -168,7 +187,9 @@ public class PanelPlateau extends JPanel implements MouseListener
 			BufferedImage modifiedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			modifiedImage.setRGB(0, 0, width, height, pixels, 0, width);
 
-			if (lstExtremite.contains(ile) || this.ctrl.estJouable(ile,lstExtremite))
+			//Si c'est une extremité,déja visité ou c'est jouable, on ne change pas d'image
+			if (((ligneR.contains(ile) || ligneB.contains(ile)) && lstExtremite.contains(ile) || this.ctrl.estJouable(ile,lstExtremite)) ||
+				((ligneR.contains(ile) || ligneB.contains(ile)) && lstExtremite.contains(ile) || this.ctrl.estJouable(ile,lstExtremite))   )
 				modifiedImage = imgIle;
 			
 			g2.drawImage(modifiedImage, (int) (ile.getPosXImage() 		 * this.rX),
@@ -177,14 +198,13 @@ public class PanelPlateau extends JPanel implements MouseListener
 										(int) (modifiedImage.getHeight() * this.rY), this);
 		}
 
+		//Les noms des îles
 		for ( Ile ile : this.lstIles )
 		{	
 			g2.setColor(Color.WHITE);
 			if( (this.clrJ1 == Color.RED  && ile.getNom().equals("Ticó")) ||
 				(this.clrJ1 == Color.BLUE && ile.getNom().equals("Mutaa")))
-			{
 				g2.setColor(clrJ1);
-			}
 
 			g2.drawString(ile.getNom(),(int)((ile.getPosX()-20)*rX),(int)(ile.getPosY()*rY));
 		}
@@ -222,6 +242,7 @@ public class PanelPlateau extends JPanel implements MouseListener
 		this.repaint();
 	}
 
+
 	public void mouseClicked(MouseEvent e) 
 	{
 		
@@ -230,53 +251,47 @@ public class PanelPlateau extends JPanel implements MouseListener
 			Ile ileD = voieMaritime.getIleD ( );
 			Ile ileA = voieMaritime.getIleA ( );
 
-			Line2D line = new Line2D.Double ( ileD.getPosX ( )*rX,ileD.getPosY ( )*rY,ileA.getPosX ( )*rX,ileA.getPosY ( )*rY );	
+			Line2D line = new Line2D.Double ( ileD.getPosX ( )*rX, ileD.getPosY ( )*rY, ileA.getPosX ( )*rX, ileA.getPosY ( )*rY );	
 
-			if (line.intersects ( e.getX ( ),e.getY ( ),10,10 ) ) //Si on clique bien sur un arc
+			//Si on clique bien sur un arc
+			if (line.intersects ( e.getX ( ), e.getY ( ), 10, 10 ) ) 
 			{
 				this.voieMaritimeAColorier = voieMaritime;
-				if (!this.ctrl.jouer(voieMaritime))
+				//Si ce n'est pas possible
+				if (!this.ctrl.jouer(voieMaritime,true))
 				{
 					JOptionPane.showMessageDialog ( this.frame,"Erreur de sélection", "Erreur", JOptionPane.ERROR_MESSAGE ); //Affiche que la sélection est mauvaise
 				}
 
 				this.voieMaritimeAColorier = null;
-				this.frame.majFrameCarte();
 				this.repaint();
 
+				//Message pour dire qu'il y a une biffurcation
 				if ( this.ctrl.getJoueur1().getPartie().estBiffurcation())
-					JOptionPane.showMessageDialog ( this.frame,"La biffurcation a été mise en place", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche que la sélection est mauvaise
+					JOptionPane.showMessageDialog ( this.frame,"Évènement - Biffurcation", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche que la sélection est mauvaise
 
-				if(this.ctrl.estFinDePartie())
+				//Si la partie est fini
+				if(this.ctrl.estFinDePartie() )
 				{
-					String sRet = "";
-
-					sRet += String.format("%-30s","Nb regions visitées : " )+ this.ctrl.getNbRegionsVisite 	   	   ( )  + "\n";
-					sRet += String.format("%-30s","Nb arcs colorées    : " )+ this.ctrl.getJoueur1().getPlateau().getNbVoiesMaritimesColorie  ( )  + "\n";
-					sRet += String.format("%-30s","Nb Points Total     : " )+ this.ctrl.calculerScore      		   ( ) ;
-
-					//Création d'une "Pop-up" pour demander si le joueur veux rejouer ou quitter
-					Object[] choix= { "Rejouer","Quitter" };
-					int rep = JOptionPane.showOptionDialog ( this.frame,sRet, "Game End", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choix, choix[0] );
-
-					if ( rep == 0 ) //Si Rejouer est sélectionné
-					{
-						this.frame.init( );		//On ferme le fenêtre
-						new Controleur ( );		//On relance une partie
-					}
-					else
-						System.exit ( 1 );			//On ferme le scripte
+					this.frame.finPartieInit();
 				}
+
+				this.frame.majFrameCarte();
 				return;
 			}
 		}
 	}
 
-	public void mousePressed(MouseEvent e) {}
+	
+	
+	public void mousePressed  (MouseEvent e) {/*méthode pas utilisé*/}
 
-	public void mouseReleased(MouseEvent e) {}
+	public void mouseReleased (MouseEvent e) {/*méthode pas utilisé*/}
 
-	public void mouseEntered(MouseEvent e) {}
+	public void mouseEntered  (MouseEvent e) {/*méthode pas utilisé*/}
 
-	public void mouseExited(MouseEvent e) {}
+	public void mouseExited   (MouseEvent e) {/*méthode pas utilisé*/}
+
+	
+
 }

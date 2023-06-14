@@ -17,7 +17,8 @@ public class FrameCarte extends JFrame
 	/** Un Controleur pour pouvoir accéder au controleur
 	 * 
 	 */
-	private Controleur  ctrl;
+	private Controleur    ctrl;
+	private FramePlateau  frame;
 
     private PanelCarte  panelCarte;
 
@@ -29,13 +30,14 @@ public class FrameCarte extends JFrame
 	 * @param ctrl le controleur
 	 * 
 	 */
-	public FrameCarte ( Controleur ctrl )
+	public FrameCarte ( Controleur ctrl,FramePlateau frame )
 	{
 		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( );
 
 		this.setTitle    ( "Cartes" );
 		this.setUndecorated(true);
 		this.ctrl = ctrl;
+		this.frame = frame;
 
 		this.setLocation(0,920);
 		this.setSize((int)tailleEcran.getWidth(),(int) tailleEcran.getHeight() - 920);
@@ -58,5 +60,10 @@ public class FrameCarte extends JFrame
 	public void majCartes()
 	{
 		this.panelCarte.repaint();
+	}
+
+	public FramePlateau getFramePlateau()
+	{
+		return this.frame;
 	}
 }

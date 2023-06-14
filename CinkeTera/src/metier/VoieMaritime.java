@@ -90,7 +90,7 @@ public class VoieMaritime
 
 	/** Getteur qui permet de savoir si la voie maritime est colorié
 	 * @return true si la voie maritime est colorie */
-	public boolean getEstColorie ( ) { return this.couleur != null; }
+	public boolean getEstColorie ( ) { return this.couleur != null && this.couleur != Color.WHITE; }
 
 	/** Getteur qui permet de récupérer la couleur de la voie maritime
 	 *  @return couleur de la voie maritime */

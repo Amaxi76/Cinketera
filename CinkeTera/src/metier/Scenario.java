@@ -1,6 +1,7 @@
 package metier;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileInputStream;
 import iut.algo.*;
@@ -12,19 +13,21 @@ public class Scenario extends Partie
 	/*               Attributs                */
 	/* -------------------------------------- */
 
-	private int                numScenario;
-	private List<Ile>          lstIles;
-	private List<VoieMaritime> lstVoiesMaritimes;
-	private List<Region>       lstRegions;
+	private int          numScenario;
+	private Paquet       paquetManche1;
+	private Paquet       paquetManche2;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
 
-	private Scenario (Joueur j, List<Ile> ensIles, Color couleur, int num)
+	public Scenario (Joueur j, List<Ile> ensIles, Color couleur, int num)
 	{
-		super ( j, ensIles, couleur );
+		super ( j, couleur );
+
 		this.numScenario = num;
+
+		this.creerScenario(num);
 	}
 
 	/* -------------------------------------- */
@@ -37,126 +40,105 @@ public class Scenario extends Partie
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	public boolean creerScenario ( int num )
-	{
-		switch ( num )
-		{
-			case 1 : num = 1;
-		}
-
-		return true;
-	}
-
-	public void initialiserScenario ( )
+	public void creerScenario ( int num )
 	{
 
-		try
+		try 
 		{
 			// Prend la première ligne de notre ficher contenant les noeuds du graph
-			Scanner sc = new Scanner ( new FileInputStream ( "donnees/scenario" + this.numScenario + ".data" ) );
 
-			//Pour sauter les deux premières lignes
-			sc.nextLine ( );
-			sc.nextLine ( );
-			String line = sc.nextLine ( );
+			Scanner sc = new Scanner ( new FileInputStream ( "donnees/scenario"+ num +".data" ) );
 
-			//Creer les îles
+			String line = sc.nextLine();
+
+			List<Carte> listManche1 = new ArrayList<>();
+			List<Carte> listManche2 = new ArrayList<>();
+
 			do
 			{
-				Decomposeur dec = new Decomposeur ( line );
+				// gestion des paquets prédéfinis
 
-				String nom,couleur;
-				int posX,posY,posXImage,posYImage;
+				int cpt = 1; // cpt des paquet selon les manches
+				Decomposeur dec = new Decomposeur (line);
 
-				nom = couleur = "";
-				posX = posY = posXImage = posYImage = 0;
+				if (cpt == 1)
+				{
+					for (int i = 0; i > -1 ; i++)
+					{
+						try 
+						{
+							String defCarte = dec.getString(i);;
+
+							char type = defCarte.charAt(0);
+							String couleur = defCarte.substring(1);
+
+							listManche1.add(new Carte (type, couleur));
+							
+						} 
+						catch (Exception e) { break; }
+					}
+				}
+				if (cpt == 2)
+				{
+
+					for (int i = 0; i > -1 ; i++)
+					{
+						try 
+						{
+							String defCarte = dec.getString(i);;
+
+							char type = defCarte.charAt(0);
+							String couleur = defCarte.substring(1);
+
+							listManche2.add(new Carte (type, couleur));
+							
+						} 
+						catch (Exception e) { break; }
+					}
+				}
 
 
-				nom			= dec.getString(0);
-				couleur		= dec.getString(1);
+				line = sc.nextLine();
+				cpt++;
+			}
+			while(!line.equals(""));
 
-				posX		= dec.getInt(2);
-				posY		= dec.getInt(3);
+			this.paquetManche1 = new Paquet(listManche1);
+			this.paquetManche2 = new Paquet(listManche2);
 
-				posXImage	= dec.getInt(4);
-				posYImage	= dec.getInt(5);
-				
-				this.lstIles.add(new Ile(nom,couleur,posX,posY,posXImage,posYImage));
+			super.tourSuivant();
+
+			line = sc.nextLine();
+
+			do
+			{
+
+				Decomposeur dec = new Decomposeur (line);
+
+				String nomIle1 = "";
+				String nomIle2 = "";
+
+				nomIle1 = dec.getString(0);
+				nomIle2 = dec.getString(1);
+
+				for (VoieMaritime v : super.joueur.getPlateau().getVoiesMaritimes())
+				{
+					if (v.getIleA().getNom().equals(nomIle1) && v.getIleD().getNom().equals(nomIle2) ||
+						v.getIleD().getNom().equals(nomIle1) && v.getIleA().getNom().equals(nomIle2)   )
+						{
+							super.jouerScenario(v, true);
+						}
+				}
 
 				line = sc.nextLine();
 			}
 			while(!line.equals(""));
 
-			//Créer les regions
-			line = sc.nextLine();
-			do
-			{
-				Decomposeur dec = new Decomposeur ( line );
-
-				String nomRegion = dec.getString(0);
-
-				Region region = new Region(nomRegion);
-
-				//modulaire
-				for (int cpt = 1; cpt > -1 ; cpt++)
-				{
-					try 
-					{
-						String nomIle = dec.getString(cpt);
-
-						for (Ile ile : this.lstIles)
-							if(ile.getNom().equals(nomIle))
-								ile.setRgn(region);
-						
-					} catch (Exception e) { break; }
-				}		
-
-				this.lstRegions.add(region);
-
-				line = sc.nextLine();	
-			}
-			while(!line.equals(""));
-
-			//Créer les voies maritimes
-			while (sc.hasNextLine()) 
-			{
-				Decomposeur dec = new Decomposeur ( sc.nextLine() );
-
-				String nomIle1,nomIle2, couleurString;
-				Color couleur;
-				Ile ile1,ile2;
-
-				ile1 = ile2 = null;
-				couleur = null;
-
-				nomIle1 = dec.getString(0);
-				nomIle2 = dec.getString(1);
-				
-				couleurString = dec.getString(2);
-
-				for (Ile ile : this.lstIles)
-				{
-					if (ile.getNom().equals(nomIle1)) ile1 = ile;
-					if (ile.getNom().equals(nomIle2)) ile2 = ile;
-				}
-
-				if   (couleurString.equals("BLEU" )) { couleur = Color.BLUE; }
-				if   (couleurString.equals("ROUGE")) { couleur = Color.RED;  }
-					
-				VoieMaritime v = VoieMaritime.creerVoieMaritime(nomIle1 + "-" + nomIle2,ile1,ile2,1, couleur);
-
-				this.lstVoiesMaritimes.add(v);
-				ile1.ajouterArc(v);
-				ile2.ajouterArc(v);
-
-				// Ajouter les arcs aux lignes ?
-
-				
-
-			}
-
 		}
-		catch(Exception e){e.printStackTrace();}
-	}	
+		catch (Exception e) {}
 
-} 
+	}
+
+		
+}
+

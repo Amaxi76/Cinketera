@@ -11,7 +11,6 @@ public class Paquet
 	/* -------------------------------------- */
 	
 	private static final String[] TAB_TYPE_CARTE = { "Vert", "Rouge", "Jaune", "Brun", "Multicolore" };
-
 	private List<Carte> pioche;
 
 	/* -------------------------------------- */
@@ -25,11 +24,16 @@ public class Paquet
 		this.initialiserPaquet ( );
 	}
 
+	public Paquet (List<Carte> liste)
+	{
+		this.pioche = liste;
+	}
+
 	/* -------------------------------------- */
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public Carte piocher      ( )         { return this.pioche.remove ( 0 ); }
+	public Carte piocher      (         ) { return this.pioche.remove ( 0 ); }
 	public int   taillePaquet (         ) { return this.pioche.size   (     ); }
 	public Carte getCarte     ( int cpt ) { return this.pioche.get    ( cpt ); }
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.FileInputStream;
+import java.awt.Color;
 
 public class Plateau
 {
@@ -27,7 +28,7 @@ public class Plateau
 		this.lstVoiesMaritimes = new ArrayList<> ( );
 		this.lstRegions        = new ArrayList<> ( );
 
-		this.initialiserPlateau ( );
+		this.initialiserPlateau ();
 	}
 
 	/* -------------------------------------- */
@@ -42,7 +43,7 @@ public class Plateau
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	public void initialiserPlateau ( )
+	public void initialiserPlateau ()
 	{
 
 		try
@@ -148,8 +149,8 @@ public class Plateau
 	public int getNbVoiesMaritimesColorie ( )
 	{
 		int nbVoiesMaritimesColorie = 0;
-		for(VoieMaritime voieMaritime : this.lstVoiesMaritimes)
-			if(voieMaritime.getEstColorie())
+		for( VoieMaritime voieMaritime : this.lstVoiesMaritimes )
+			if ( voieMaritime.getEstColorie ( ) )
 				nbVoiesMaritimesColorie++;
 		
 		return nbVoiesMaritimesColorie;
