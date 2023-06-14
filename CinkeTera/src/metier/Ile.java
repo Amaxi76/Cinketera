@@ -8,6 +8,7 @@ public class Ile
 	/* -------------------------------------- */
 	/*               Attributs                */
 	/* -------------------------------------- */
+
 	private int posX;
 	private int posY;
 
@@ -56,43 +57,43 @@ public class Ile
 	/** Acceseur qui retourne la positionX de l'île
 	 * @return la positionX de l'île
 	 */
-	public int                getPosX      () { return this.posX;      }
+	public int                getPosX      ( ) { return this.posX;      }
 	/** Acceseur qui retourne la positionY de l'île
 	 * @return la positionY de l'île
 	 */
-	public int                getPosY      () { return this.posY;      }
+	public int                getPosY      ( ) { return this.posY;      }
 	/** Acceseur qui retourne la region de l'île
 	 * @return la region de l'île
 	 */
-	public Region             getRegion    () { return this.region;    }
+	public Region             getRegion    ( ) { return this.region;    }
 	/** Acceseur qui retourne l'ensemble des voies liées à une île
 	 * @return ensemble de voies d'un île
 	 */
-	public List<VoieMaritime> getEnsVoie   () { return this.ensVoie;   }
+	public List<VoieMaritime> getEnsVoie   ( ) { return this.ensVoie;   }
 	/** Acceseur qui retourne la couleur de l'île
 	 * @return la couleur de l'île
 	 */
-	public String             getCouleur   () { return this.couleur;   }
+	public String             getCouleur   ( ) { return this.couleur;   }
 	/** Acceseur qui retourne la positionX de l'image de l'île
 	 * @return la positionX de l'image de l'île
 	 */
-	public int                getPosXImage () { return this.posXImage; }
+	public int                getPosXImage ( ) { return this.posXImage; }
 	/** Acceseur qui retourne la positionY de l'image de l'île
 	 * @return la positionY de l'image de l'île
 	 */
-	public int                getPosYImage () { return this.posYImage; }
+	public int                getPosYImage ( ) { return this.posYImage; }
 
-	public List<Ile>          getVoisins   ()
+	public List<Ile>          getVoisins   ( )
 	{
-		List<Ile> voisins = new ArrayList<>();
+		List<Ile> voisins = new ArrayList<> ( );
 
-		for (VoieMaritime voieMaritime : this.ensVoie) 
+		for ( VoieMaritime voieMaritime : this.ensVoie )
 		{
-			Ile depart  = voieMaritime.getIleD();
-			Ile arrivee = voieMaritime.getIleA();
+			Ile depart  = voieMaritime.getIleD ( );
+			Ile arrivee = voieMaritime.getIleA ( );
 
-			if (depart  != this) voisins.add( depart  );
-			else                 voisins.add( arrivee );
+			if (depart  != this) voisins.add ( depart  );
+			else                 voisins.add ( arrivee );
 		}
 
 		return voisins;
@@ -105,7 +106,7 @@ public class Ile
 	/** Modificateur permettant d'ajouter une voie liée à une île
 	 * @param arc 
 	 */
-	public void ajouterArc ( VoieMaritime voie ) { this.ensVoie.add(voie);                             }
+	public void ajouterArc ( VoieMaritime voie ) { this.ensVoie.add ( voie );                           }
 
 	/** Modificateur permettant de modifiée la region qui est initialisée à null
 	 * @param region 

@@ -11,6 +11,7 @@ public class Paquet
 	/* -------------------------------------- */
 	
 	private static final String[] TAB_TYPE_CARTE = { "Vert", "Rouge", "Jaune", "Brun", "Multicolore" };
+	
 	private List<Carte> pioche;
 
 	/* -------------------------------------- */
@@ -24,7 +25,7 @@ public class Paquet
 		this.initialiserPaquet ( );
 	}
 
-	public Paquet (List<Carte> liste)
+	public Paquet ( List<Carte> liste )
 	{
 		this.pioche = liste;
 	}
@@ -63,19 +64,19 @@ public class Paquet
 	 */
 	public boolean aEncorePrimaire ( )
 	{
-		for ( Carte carte : this.pioche)
-			if ( carte.getTypeCarte() == 'P' )
+		for ( Carte carte : this.pioche )
+			if ( carte.getTypeCarte ( ) == 'P' )
 				return true;
 
 		return false;
 	}
 
 	@Override
-	public String toString()
+	public String toString ( )
 	{
 		String sRet = "";
 		for ( Carte c : this.pioche )
-			sRet += c.toString() + "\n";
+			sRet += c.toString ( ) + "\n";
 
 		return sRet;
 	}

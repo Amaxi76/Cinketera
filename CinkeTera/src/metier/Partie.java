@@ -67,8 +67,8 @@ public class Partie
 
 	public List<Ile> getEnsExtremites ( )
 	{
-		List<Ile> ensExtremites = new ArrayList<>();
-		List<Ile> ensIles       = this.coulLigne.equals(Color.RED) ? this.ligneR : this.ligneB;
+		List<Ile> ensExtremites = new ArrayList<> ( );
+		List<Ile> ensIles       = this.coulLigne.equals ( Color.RED ) ? this.ligneR : this.ligneB;
 
 		if ( this.coulLigne.equals ( Color.BLUE ) && this.ligneB.size ( ) == 1 )
 			return this.ligneB;
@@ -77,12 +77,11 @@ public class Partie
 			return this.ligneR;
 
 		for ( Ile i : ensIles )
-			if ( this.estExtremite(i) )
-				ensExtremites.add(i);
+			if ( this.estExtremite ( i ) )
+				ensExtremites.add ( i );
 
 		return ensExtremites;
 	}
-
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
@@ -91,7 +90,7 @@ public class Partie
 	public boolean jouer ( VoieMaritime voie, boolean veutJouer )
 	{
 		List<Ile> ligne     = ( this.coulLigne.equals ( Color.RED ) ? this.ligneR : this.ligneB );
-		List<Ile> ensExIles = this.getEnsExtremites();
+		List<Ile> ensExIles = this.getEnsExtremites ( );
 
 		// Si aucune carte n'est sélectionnée, on ne peut pas jouer
 		if ( this.carteEnCours == null ) return false;
@@ -109,7 +108,7 @@ public class Partie
 			return false;
 
 		// Regardes si l'ile de départ est une extrémité
-		if ( !ensExIles.contains(ileDepart) && this.numTour != this.numTourBifurcation ) return false;
+		if ( !ensExIles.contains ( ileDepart ) && this.numTour != this.numTourBifurcation ) return false;
 
 		// Une ligne ne peut pas croiser d'autre ligne coloriée
 		for ( VoieMaritime v : this.joueur.getPlateau ( ).getVoiesMaritimes ( ) )
@@ -147,11 +146,10 @@ public class Partie
 		return true;
 	}
 
-
 	protected void jouerScenario( VoieMaritime voie, boolean veutJouer)
 	{
 		List<Ile> ligne     = ( this.coulLigne.equals ( Color.RED ) ? this.ligneR : this.ligneB );
-		List<Ile> ensExIles = this.getEnsExtremites();
+		List<Ile> ensExIles = this.getEnsExtremites ( );
 
 		// Définit l'ile d'arrivée
 		Ile ileArrive = ( ligne.contains ( voie.getIleA ( ) ) ? voie.getIleD ( ) : voie.getIleA ( ) );
@@ -162,17 +160,13 @@ public class Partie
 		this.tourSuivant (                );
 	}
 
-
-
 	private boolean estExtremite ( Ile i )
 	{
-		int       nbColorier = 0;
-
+		int nbColorier = 0;
 
 		for ( VoieMaritime v : i.getEnsVoie ( ) )
-			if ( v.getColorArc() != null && v.getColorArc ( ).equals ( this.coulLigne ) ) 
+			if ( v.getColorArc ( ) != null && v.getColorArc ( ).equals ( this.coulLigne ) ) 
 				nbColorier ++;
-
 
 		return nbColorier == 1;
 	}
@@ -194,7 +188,7 @@ public class Partie
 		}
 
 		this.numTour++;
-		this.carteEnCours = this.paquet.piocher();
+		this.carteEnCours = this.paquet.piocher ( );
 	}
 
 	public int calculerScore ( )
@@ -248,7 +242,7 @@ public class Partie
 			tmp = 0;
 		}
 
-		return max * ensRegions.size();
+		return max * ensRegions.size ( );
 	}
 
 	private int calculBonusLigne ( List<Ile> ligne )
@@ -275,10 +269,10 @@ public class Partie
 				             ( v.getIleD ( ).getNom ( ).equals ( tabBonusLigne[cpt][0] )   ||
 				               v.getIleD ( ).getNom ( ).equals ( tabBonusLigne[cpt][1] )        );
 
-				eVoieChoisie = ( ligne.contains(v.getIleA()) &&
-				                 ligne.contains(v.getIleD())    );
+				eVoieChoisie = ( ligne.contains ( v.getIleA ( ) ) &&
+				                 ligne.contains ( v.getIleD ( ) )    );
 
-				if ( eVoieChoisie ) score += v.getValeur();
+				if ( eVoieChoisie ) score += v.getValeur ( );
 				if ( eMemeLigne   ) score ++;
 			}
 		}
@@ -299,7 +293,6 @@ public class Partie
 
 		return score;
 	}
-
 
 	private List<Region> creerListReg ( List<Ile> ligne )
 	{

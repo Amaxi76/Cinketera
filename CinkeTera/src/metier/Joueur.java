@@ -25,7 +25,7 @@ public class Joueur
 	 */
 	public Joueur ( )
 	{
-		this.plateau  = new Plateau();
+		this.plateau  = new Plateau ( );
 		this.couleurs = new ArrayList<> ( Arrays.asList ( Color.BLUE, Color.RED ) );
 		
 		Collections.shuffle ( this.couleurs );
@@ -33,21 +33,21 @@ public class Joueur
 		this.lancerPartie ( );
 	}
 
-	public Joueur (int numero)
+	public Joueur ( int numero )
 	{
-		this.plateau  = new Plateau();
+		this.plateau  = new Plateau ( );
 		this.couleurs = new ArrayList<> ( Arrays.asList ( Color.BLUE, Color.RED ) );
 		
-		if (numero == 2) {Collections.shuffle ( this.couleurs );}
+		if ( numero == 2 ) { Collections.shuffle ( this.couleurs ); }
 
-		this.lancerPartie (numero);
+		this.lancerPartie ( numero );
 	}
 
 	/* -------------------------------------- */
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public Plateau            getPlateau       ( ) {return this.plateau;}
+	public Plateau            getPlateau       ( ) { return this.plateau;                          }
 	/** Acceseur qui retourne la partie du joueur
 	 * @return la partie du joueur
 	 */
@@ -71,58 +71,53 @@ public class Joueur
 		this.partie = new Partie ( this, couleurDebut );
 	}
 
-	public void lancerPartie (int numero)
+	public void lancerPartie ( int numero )
 	{
 		Color     couleurDebut = this.couleurs.remove ( 0 );
-		List<Ile> ligne        = new ArrayList<> ();
+		List<Ile> ligne        = new ArrayList<> ( );
 
 		for ( Ile i : this.plateau.getIles ( ) )
 			if ( ( i.getNom ( ).equals ( "Ticó" ) && couleurDebut.equals ( Color.RED ) ) || ( i.getNom ( ).equals ( "Mutaa" ) && couleurDebut.equals ( Color.BLUE ) ) )
 				ligne.add ( i );
 		
-		this.partie = new Scenario ( this, ligne, couleurDebut, numero);
+		this.partie = new Scenario ( this, ligne, couleurDebut, numero );
 	}
 
 	/** Méthode passerelle entre la partie et le joueur
 	 * @param voieMaritime voieMaritime selectionnée par le joueur
 	 * @return un boolean qui nous indique si le joueur a pu jouer
 	 */
-	public boolean jouer ( VoieMaritime voieMaritime,boolean bool )
+	public boolean jouer ( VoieMaritime voieMaritime, boolean bool )
 	{
-		return this.partie.jouer ( voieMaritime,bool );
+		return this.partie.jouer ( voieMaritime, bool );
 	}
 
-	public boolean estJouable(Ile ile, List<Ile> lstExtremite)
+	public boolean estJouable ( Ile ile, List<Ile> lstExtremite )
 	{
-		Carte carteEnCours = this.getPartie().getCarteEnCours();
-		VoieMaritime voie = null;
+		Carte        carteEnCours = this.getPartie ( ).getCarteEnCours ( );
+		VoieMaritime voie         = null;
 		
-		System.out.println("extremites : " + lstExtremite);
 		//Pour toutes les extremités
-		for (Ile extremite : lstExtremite)
+		for ( Ile extremite : lstExtremite )
 		{
 			//Pour tous les voisins 
-			for (Ile ileArrivee : extremite.getVoisins())
+			for ( Ile ileArrivee : extremite.getVoisins ( ) )
 			{	
 				//On cherche la voie entre notre ile d'extremité et arrivée 
-				for (VoieMaritime voieM : extremite.getEnsVoie())
-					if ( voieM.getIleA() == ileArrivee && voieM.getIleD() == extremite ||
-						 voieM.getIleA() == extremite  && voieM.getIleD() == ileArrivee  )
+				for ( VoieMaritime voieM : extremite.getEnsVoie ( ) )
+					if ( voieM.getIleA ( ) == ileArrivee && voieM.getIleD ( ) == extremite ||
+						 voieM.getIleA ( ) == extremite  && voieM.getIleD ( ) == ileArrivee  )
 						voie = voieM;
 				
-				boolean peutJouer = this.jouer(voie,false);
+				boolean peutJouer = this.jouer ( voie, false );
 
 				//Si la carte en cours n'est pas null et ile == ileArrive e
-				if ( carteEnCours != null && ile == ileArrivee)
-					if ((ileArrivee.getCouleur().equals(carteEnCours.getCouleurCarte() ) || carteEnCours.getCouleurCarte().equals("Multicolore")) &&  peutJouer)
-					{
-						System.out.println("fin");
+				if ( carteEnCours != null && ile == ileArrivee )
+					if ( ( ileArrivee.getCouleur ( ).equals ( carteEnCours.getCouleurCarte ( ) ) || carteEnCours.getCouleurCarte ( ).equals ( "Multicolore" ) ) &&  peutJouer)
 						return true;
-					}
-											
 			}
 		}
-		System.out.println("fin");
+		
 		return false;
 	}
 

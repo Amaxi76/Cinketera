@@ -37,9 +37,13 @@ public class FrameAccueil extends JFrame implements ActionListener
 	public FrameAccueil ( Controleur ctrl )
 	{
 		this.ctrl = ctrl;
+
+		Image img       = new ImageIcon ( this.getToolkit ( ).getImage ( "donnees/images/image.png" ) ).getImage ( );
+		Image scaledImg = img.getScaledInstance ( 1000, 700, Image.SCALE_SMOOTH );
 		
-		// Définition de la position de la fêntre au milieu de l'écran
+		Image     icon        = Toolkit.getDefaultToolkit ( ).getImage ( "donnees/images/boat.png" );
 		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( );
+
 		int l = ( tailleEcran.width  - 1000 ) / 2;
 		int h = ( tailleEcran.height -  700 ) / 2;
 
@@ -51,15 +55,20 @@ public class FrameAccueil extends JFrame implements ActionListener
 		/* Création des composants   */
 		/* ------------------------- */
 
-		JPanel panelTest = new JPanel ( );
-		panelTest.setOpaque ( false );
-		panelTest.setLayout ( new GridLayout ( 1, 3 ) );
+		JPanel panel         = new JPanel ( new BorderLayout (      )         );
+		JPanel panelTest     = new JPanel ( new GridLayout   ( 1, 3 )         );
+		JPanel panelButton   = new JPanel ( new GridLayout   ( 6, 1, 15, 15 ) );
+		JPanel panelInutile  = new JPanel (                                   );
+		JPanel panelInutile2 = new JPanel (                                   );
+		
+		JLabel j = new JLabel ( new ImageIcon ( scaledImg ) );
+		j.setLayout ( new BorderLayout ( ) );
 
-		JPanel panel = new JPanel ( new BorderLayout ( ) );
-		panel.setOpaque ( false );
-
-		JPanel panelButton = new JPanel ( );
-		panelButton.setOpaque ( false );
+		panel        .setOpaque ( false );
+		panelTest    .setOpaque ( false );
+		panelButton  .setOpaque ( false );
+		panelInutile .setOpaque ( false );
+		panelInutile2.setOpaque ( false );
 
 		this.btn1J       = new JButton ( "1 Joueur" );
 		this.btn2J       = new JButton ( "2 Joueur" );
@@ -71,28 +80,13 @@ public class FrameAccueil extends JFrame implements ActionListener
 		panelButton.add ( this.btnScenario );
 		panelButton.add ( this.btnQuitter  );
 
-		panelButton.setLayout ( new GridLayout ( 2,1, 15, 15 ) );
-
-		JPanel panelInutile = new JPanel ( );
-		panelInutile.setOpaque ( false );
-		JPanel panelInutile2 = new JPanel ( );
-		panelInutile2.setOpaque ( false );
-
 		panelTest.add ( panelInutile  );
 		panelTest.add ( panelButton   );
 		panelTest.add ( panelInutile2 );
 
 		panel.add ( panelTest, BorderLayout.SOUTH );
-
-		Image img       = new ImageIcon ( this.getToolkit ( ).getImage ( "donnees/images/image.png" ) ).getImage ( );
-		Image scaledImg = img.getScaledInstance ( 1000, 700, Image.SCALE_SMOOTH );
-
-		panelButton.setLayout ( new GridLayout ( 6, 1, 15, 15 ) );
-
-		JLabel j = new JLabel ( new ImageIcon ( scaledImg ) );
-		j.setLayout ( new BorderLayout ( ) );
+		
 		j.add ( panel, BorderLayout.CENTER );
-
 
 		this.getContentPane ( ).add ( j );
 
@@ -104,9 +98,6 @@ public class FrameAccueil extends JFrame implements ActionListener
 		this.btn2J      .addActionListener ( this );
 		this.btnScenario.addActionListener ( this );
 		this.btnQuitter .addActionListener ( this );
-
-		//Mettre un icone peu utile en image de logiciel
-		Image icon = Toolkit.getDefaultToolkit ( ).getImage ( "donnees/images/boat.png" );
 
 		this.setIconImage             ( icon          );
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
@@ -123,7 +114,7 @@ public class FrameAccueil extends JFrame implements ActionListener
 		if ( e.getSource ( ) == this.btnScenario )
 			new FrameChoixScenario(this.ctrl);
 
-		this.cacher();
+		this.cacher ( );
 	}
 
 	public void cacher ( ) { this.dispose ( ); }

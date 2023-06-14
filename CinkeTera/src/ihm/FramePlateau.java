@@ -36,79 +36,76 @@ public class FramePlateau extends JFrame implements ComponentListener
 	 * @param ctrl le controleur
 	 * 
 	 */
-	public FramePlateau ( Controleur ctrl)
+	public FramePlateau ( Controleur ctrl )
 	{
 		this.ctrl = ctrl;
 
 		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( );
+		Image icon = Toolkit.getDefaultToolkit ( ).getImage ( "donnees/images/boat.png" );
 
-		this.setSize((int)tailleEcran.getWidth(),900);
-		this.setLocation(0,0);
-		this.setUndecorated(true);
-		this.setTitle    ( "CinkeTera" );
-
-		//Mettre un icone peu utile en image de logiciel
-		Image icon = Toolkit.getDefaultToolkit().getImage("donnees/images/boat.png");  
-    	this.setIconImage(icon); 
-
-		this.frameCarte = new FrameCarte(ctrl,this);
+		this.setTitle    ( "CinkeTera"                                                                    );
+		this.setSize     ( ( int ) tailleEcran.getWidth ( ), ( int ) ( tailleEcran.getHeight ( ) * 0.80 ) );
+		this.setLocation ( 0                               , 0                                            );
 
 		/*Création des composants*/
-
-		this.panelPlateau  = new PanelPlateau  ( this.ctrl, this );
+		this.frameCarte    = new FrameCarte   ( this.ctrl, this );
+		this.panelPlateau  = new PanelPlateau ( this.ctrl, this );
 
 		/*Placement des composants*/
 		this.add ( this.panelPlateau );
 
-		this.addComponentListener(this);
+		/* Activation des composants */
+		this.addComponentListener     ( this );
+
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
-		this.setVisible ( true );
+		this.setVisible               ( true          );
+		this.setUndecorated           ( true          );
+		this.setIconImage             ( icon          ); 
 	}
 
 	/**
 	 * Mise a jour de la frame de cartes 
 	 */
-	public void majFrameCarte()
-	{
-		this.frameCarte.majCartes();
-	}
+	public void majFrameCarte ( ) { this.frameCarte.majCartes ( ); }
 	
 	/** Getteur qui retourne l'VoieMaritime à colorier
 	 * @return l'VoieMaritime à colorier
 	 */
 	public VoieMaritime getVoieMaritimeAColorier ( ) { return this.panelPlateau.getVoieMaritimeAColorier ( ); }
 
-	public void majIHM() {this.panelPlateau.repaint();}
+	public void majIHM ( ) { this.panelPlateau.repaint ( ); }
 
-	public void componentHidden (ComponentEvent e) {}
-	public void componentResized(ComponentEvent e)
+	
+	public void componentResized ( ComponentEvent e )
 	{
-		double ratioX = this.getWidth()/java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		double ratioY = this.getHeight()/java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-		this.panelPlateau.setRatios( ratioX , ratioY);
-	}
-	public void componentShown  (ComponentEvent e) {}
-
-	public void componentMoved  (ComponentEvent e) {}
-
-	public void init()
-	{
-		this.frameCarte.dispose();
-		this.dispose();
+		double ratioX = this.getWidth  ( ) / java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( ).getWidth  ( );
+		double ratioY = this.getHeight ( ) / java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( ).getHeight ( );
+		
+		this.panelPlateau.setRatios ( ratioX , ratioY );
 	}
 
-	public void finPartieInit()
+	public void componentHidden ( ComponentEvent e ) { }
+	public void componentShown  ( ComponentEvent e ) { }
+	public void componentMoved  ( ComponentEvent e ) { }
+
+	public void init ( )
+	{
+		this.frameCarte.dispose ( );
+		this           .dispose ( );
+	}
+
+	public void finPartieInit ( )
 	{
 		String formatString = "%-30s";
-		String sRet = "";
+		String sRet         = "";
 
-		sRet += String.format( formatString ,"Nb regions visitées : " )+ this.ctrl.getNbRegionsVisite ( )                                     + "\n";
-		sRet += String.format( formatString ,"Nb arcs colorées    : " )+ this.ctrl.getJoueur1().getPlateau().getNbVoiesMaritimesColorie  ( )  + "\n";
-		sRet += String.format( formatString ,"Nb Points Total     : " )+ this.ctrl.calculerScore ( )                                                ;
+		sRet += String.format ( formatString ,"Nb regions visitées : " ) + this.ctrl.getNbRegionsVisite ( )                                        + "\n";
+		sRet += String.format ( formatString ,"Nb arcs colorées    : " ) + this.ctrl.getJoueur1 ( ).getPlateau ( ).getNbVoiesMaritimesColorie  ( ) + "\n";
+		sRet += String.format ( formatString ,"Nb Points Total     : " ) + this.ctrl.calculerScore ( )                                                   ;
 
 		//Création d'une "Pop-up" pour demander si le joueur veux rejouer ou quitter
-		Object[] choix= { "Rejouer","Quitter" };
-		int rep = JOptionPane.showOptionDialog ( this,sRet, "Game End", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choix, choix[0] );
+		Object[] choix = { "Rejouer","Quitter" };
+		int      rep   = JOptionPane.showOptionDialog ( this,sRet, "Game End", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choix, choix[0] );
 
 		if ( rep == 0 ) //Si Rejouer est sélectionné
 		{

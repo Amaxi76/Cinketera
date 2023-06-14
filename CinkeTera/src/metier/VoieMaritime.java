@@ -122,19 +122,18 @@ public class VoieMaritime
 	*/
 	public boolean estIdentique ( VoieMaritime voieMaritime )
 	{
-		return this.getIleD() == voieMaritime.getIleD() ||
-		       this.getIleD() == voieMaritime.getIleA() ||
-		       this.getIleA() == voieMaritime.getIleD() ||
-		       this.getIleA() == voieMaritime.getIleA();
+		return this.getIleD ( ) == voieMaritime.getIleD ( ) ||
+		       this.getIleD ( ) == voieMaritime.getIleA ( ) ||
+		       this.getIleA ( ) == voieMaritime.getIleD ( ) ||
+		       this.getIleA ( ) == voieMaritime.getIleA ( );
 	}
 
 	/** Méthode toString
 	 * @return le nom du Ile de départ et d'arrivée et sa valeur
 	 */
-	public String toString()
+	public String toString ( )
 	{
-		return "Ile départ " + this.depart.getNom() + " Ile arrivé " + this.arriver.getNom();
+		return "Ile départ " + this.depart.getNom ( ) + " Ile arrivé " + this.arriver.getNom ( );
 	}
-
 
 }

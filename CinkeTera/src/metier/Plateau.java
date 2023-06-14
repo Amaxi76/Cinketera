@@ -17,7 +17,6 @@ public class Plateau
 	private List<VoieMaritime> lstVoiesMaritimes;
 	private List<Region>       lstRegions;
 
-
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
@@ -28,7 +27,7 @@ public class Plateau
 		this.lstVoiesMaritimes = new ArrayList<> ( );
 		this.lstRegions        = new ArrayList<> ( );
 
-		this.initialiserPlateau ();
+		this.initialiserPlateau ( );
 	}
 
 	/* -------------------------------------- */
@@ -43,7 +42,7 @@ public class Plateau
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	public void initialiserPlateau ()
+	public void initialiserPlateau ( )
 	{
 
 		try
@@ -68,79 +67,79 @@ public class Plateau
 				posX = posY = posXImage = posYImage = 0;
 
 
-				nom			= dec.getString(0);
-				couleur		= dec.getString(1);
+				nom     = dec.getString ( 0 );
+				couleur = dec.getString ( 1 );
 
-				posX		= dec.getInt(2);
-				posY		= dec.getInt(3);
+				posX = dec.getInt ( 2 );
+				posY = dec.getInt ( 3 );
 
-				posXImage	= dec.getInt(4);
-				posYImage	= dec.getInt(5);
+				posXImage = dec.getInt ( 4 );
+				posYImage = dec.getInt ( 5 );
 				
-				this.lstIles.add(new Ile(nom,couleur,posX,posY,posXImage,posYImage));
+				this.lstIles.add ( new Ile ( nom, couleur, posX, posY, posXImage, posYImage ) );
 
-				line = sc.nextLine();
+				line = sc.nextLine ( );
 			}
-			while(!line.equals(""));
+			while ( !line.equals ( "" ) );
 
 			//Créer les regions
-			line = sc.nextLine();
+			line = sc.nextLine( );
 			do
 			{
 				Decomposeur dec = new Decomposeur ( line );
 
-				String nomRegion = dec.getString(0);
+				String nomRegion = dec.getString ( 0 );
 
-				Region region = new Region(nomRegion);
+				Region region = new Region ( nomRegion );
 
 				//modulaire
-				for (int cpt = 1; cpt > -1 ; cpt++)
+				for ( int cpt = 1; cpt > -1 ; cpt++ )
 				{
 					try 
 					{
-						String nomIle = dec.getString(cpt);
+						String nomIle = dec.getString ( cpt );
 
-						for (Ile ile : this.lstIles)
-							if(ile.getNom().equals(nomIle))
-								ile.setRgn(region);
+						for ( Ile ile : this.lstIles )
+							if ( ile.getNom ( ).equals ( nomIle ) )
+								ile.setRgn ( region );
 						
-					} catch (Exception e) { break; }
+					} catch ( Exception e ) { break; }
 				}		
 
-				this.lstRegions.add(region);
+				this.lstRegions.add ( region );
 
-				line = sc.nextLine();	
+				line = sc.nextLine ( );
 			}
-			while(!line.equals(""));
+			while ( !line.equals ( "" ) );
 
 			//Créer les voies maritimes
-			while (sc.hasNextLine()) 
+			while ( sc.hasNextLine ( ) )
 			{
-				Decomposeur dec = new Decomposeur ( sc.nextLine() );
+				Decomposeur dec = new Decomposeur ( sc.nextLine( ) );
 
 				String nomIle1,nomIle2;
 				Ile ile1,ile2;
 				ile1 = ile2 = null;
 
-				nomIle1 = dec.getString(0);
-				nomIle2 = dec.getString(1);
+				nomIle1 = dec.getString ( 0 );
+				nomIle2 = dec.getString ( 1 );
 
-				for (Ile ile : this.lstIles)
+				for ( Ile ile : this.lstIles )
 				{
-					if (ile.getNom().equals(nomIle1)) ile1 = ile;
-					if (ile.getNom().equals(nomIle2)) ile2 = ile;
+					if ( ile.getNom ( ).equals ( nomIle1 ) ) ile1 = ile;
+					if ( ile.getNom ( ).equals ( nomIle2 ) ) ile2 = ile;
 				}
 					
-				VoieMaritime v = VoieMaritime.creerVoieMaritime(nomIle1 + "-" + nomIle2,ile1,ile2,1);
+				VoieMaritime v = VoieMaritime.creerVoieMaritime ( nomIle1 + "-" + nomIle2, ile1, ile2, 1 );
 
-				this.lstVoiesMaritimes.add(v);
-				ile1.ajouterArc(v);
-				ile2.ajouterArc(v);
+				this.lstVoiesMaritimes.add ( v );
+				ile1.ajouterArc ( v );
+				ile2.ajouterArc ( v );
 
 			}
 
 		}
-		catch(Exception e){e.printStackTrace();}
+		catch ( Exception e ) { e.printStackTrace ( ); }
 	}	
 	
 	/** Méthode qui retourne le nombre d'arc colorié.
@@ -149,7 +148,7 @@ public class Plateau
 	public int getNbVoiesMaritimesColorie ( )
 	{
 		int nbVoiesMaritimesColorie = 0;
-		for( VoieMaritime voieMaritime : this.lstVoiesMaritimes )
+		for ( VoieMaritime voieMaritime : this.lstVoiesMaritimes )
 			if ( voieMaritime.getEstColorie ( ) )
 				nbVoiesMaritimesColorie++;
 		
