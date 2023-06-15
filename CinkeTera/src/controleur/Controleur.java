@@ -19,7 +19,7 @@ public class Controleur
 	 */
 	public Controleur ( )
 	{
-		new FrameAccueil(this);
+		new FrameAccueil ( this );
 	}
 
 	/** Accesseur qui retourne la couleur du joueur en cours
@@ -32,7 +32,7 @@ public class Controleur
 	/** Accesseur qui retourne le nombre de régions visitées
 	 * @return nombre de régions visitées
 	 */
-	public int                getNbRegionsVisite         ( ) { return 2;                                          }
+	public int                getNbRegionsVisite         ( ) { return this.j1.getPartie ( ).getNbRegionsVisite ( );                                          }
 
 
 	public boolean            estFinDePartie ( )             { return this.j1.getPartie ( ).getFinPartie ( );     }
@@ -40,7 +40,6 @@ public class Controleur
 	public boolean jouer ( VoieMaritime voieMaritime, boolean b )
 	{
 		if ( this.estFinDePartie ( ) )
-			//IHM message de fin
 			return false;
 		
 		return this.j1.jouer ( voieMaritime, b );
@@ -54,11 +53,11 @@ public class Controleur
 
 	public Carte getCarteEnCours  ( )          { return this.j1.getPartie ( ).getCarteEnCours ( ); }
 
-	public int   calculerScore    ( )          { return 1; } //return this.j1.getPartie ( ).calculerScore   ( ); }
+	public int   calculerScore    ( )          { return this.j1.getPartie ( ).calculerScore   ( ); }
 
-	public boolean estJouable(Ile ile, List<Ile> lstExtremite) { return this.j1.estJouable(ile,lstExtremite); }
+	public boolean estJouable ( Ile ile, List<Ile> lstExtremite ) { return this.j1.estJouable ( ile, lstExtremite ); }
 
-	public void majIHM() {this.ihm.majIHM();}
+	public void majIHM ( ) { this.ihm.majIHM ( );}
 
 	public static void main ( String[] arg ) { new Controleur ( ); }
 }

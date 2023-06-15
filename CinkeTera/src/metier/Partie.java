@@ -6,6 +6,7 @@ import java.util.List;
 import java.awt.Color;
 import java.awt.geom.Line2D;
 
+
 public class Partie
 {
 	/* -------------------------------------- */
@@ -60,7 +61,7 @@ public class Partie
 	public Paquet    getPaquet       ( ) { return this.paquet;                             }
 	public int       getScore        ( ) { return this.score;                              }
 	public boolean   estPremierTrait ( ) { return this.premierTrait;                       }
-	public boolean   getFinPartie    ( ) { return this.numManche          == 2;            }
+	public boolean   getFinPartie    ( ) { return this.numManche          >= 2;            }
 	public boolean   estBiffurcation ( ) { return this.numTourBifurcation == this.numTour; }
 	public int       getNumTours     ( ) { return this.numTour;                            }
 	public int       getNumManche    ( ) { return this.numManche;                          }
@@ -83,6 +84,27 @@ public class Partie
 		return ensExtremites;
 	}
 
+	public int getNbRegionsVisite ()
+	{
+		List<Ile>    ensIles = new ArrayList<Ile>();
+
+
+		for ( Ile i : this.ligneB )
+			if ( !ensIles.contains(i) ) ensIles.add(i);
+
+		for ( Ile i : this.ligneR )
+			if ( !ensIles.contains(i) ) ensIles.add(i);
+
+
+		return this.creerListReg(ensIles).size();
+	}
+
+	/* -------------------------------------- */
+	/*             Modificateur               */
+	/* -------------------------------------- */
+
+	public void setPaquet ( Paquet p ) { this.paquet = p; }
+
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
@@ -92,47 +114,84 @@ public class Partie
 		List<Ile> ligne     = ( this.coulLigne.equals ( Color.RED ) ? this.ligneR : this.ligneB );
 		List<Ile> ensExIles = this.getEnsExtremites ( );
 
+		if (veutJouer) {System.out.println("Carte non null");}
+		
+
 		// Si aucune carte n'est sélectionnée, on ne peut pas jouer
 		if ( this.carteEnCours == null ) return false;
 
+		if (veutJouer) {System.out.println("Carte non null");}
+		
 		// Définit l'ile d'arrivée
 		Ile ileArrive = ( ligne.contains ( voie.getIleA ( ) ) ? voie.getIleD ( ) : voie.getIleA ( ) );
 		Ile ileDepart = ( ligne.contains ( voie.getIleA ( ) ) ? voie.getIleA ( ) : voie.getIleD ( ) );
+
 
 		// Regarde si l'ile que l'on veut relié est bien de la même couleur que la carte
 		if ( !ileArrive.getCouleur ( ).equals ( this.carteEnCours.getCouleurCarte ( ) ) && !this.carteEnCours.getCouleurCarte ( ).equals ( "Multicolore" ) )
 			return false;
 
+		if (veutJouer) {System.out.println("Même couleur");}
+		
 		// Regarde si la voie n'est pas déjà colorié
 		if ( voie.getEstColorie ( ) )
 			return false;
 
+		if (veutJouer) {System.out.println("Pas colorié");}
+
 		// Regardes si l'ile de départ est une extrémité
 		if ( !ensExIles.contains ( ileDepart ) && this.numTour != this.numTourBifurcation ) return false;
 
+		if (veutJouer) {System.out.println("Extrémité");}
+		
 		// Une ligne ne peut pas croiser d'autre ligne coloriée
 		for ( VoieMaritime v : this.joueur.getPlateau ( ).getVoiesMaritimes ( ) )
 			if ( intersection ( voie, v ) && ( v.getColorArc ( ) != null ) ) return false;
 
-		if ( this.estPremierTrait ( ) && this.coulLigne.equals ( Color.RED  ) && voie.getNom ( ).equals ( "Ticó" ) )
+		if (veutJouer) {System.out.println("Pas croisée");}
+
+		if ( this.estPremierTrait ( ) && this.coulLigne.equals ( Color.RED  ) && ileDepart.getNom ( ).equals ( "Ticó" ) )
 		{
-			this.premierTrait = false;
-			return true;
+			if (veutJouer)
+			{
+				this.premierTrait = false;
+				voie.setCouleur  ( this.coulLigne );
+				ligne.add        ( ileArrive      );
+				this.tourSuivant (                );
+				return true;
+			}
 		}
 
-		if ( this.estPremierTrait ( ) && this.coulLigne.equals ( Color.BLUE ) && voie.getNom ( ).equals ( "Mutaa" ) )
+		
+		if (veutJouer) {System.out.println("Premier trait");}
+
+		if ( this.estPremierTrait ( ) && this.coulLigne.equals ( Color.BLUE ) && ileDepart.getNom ( ).equals ( "Mutaa" ) )
 		{
-			this.premierTrait = false;
-			return true;
-		}
+			if (veutJouer)
+			{
+				this.premierTrait = false;
+				voie.setCouleur  ( this.coulLigne );
+				ligne.add        ( ileArrive      );
+				this.tourSuivant (                );
+				return true;
+			}
+		};
+
+		if (veutJouer) {System.out.println("Premier trait");}
 
 		//On ne peut pas tromper mille fois une personne... Non attends.. On ne peut pas..
 		if ( !this.estRelie ( voie, this.coulLigne ) && !this.estPremierTrait ( ) ) return false;
 
-		if ( this.cyclique ( voie, coulLigne ) ) return false;
+		if (veutJouer) {System.out.println("Relié");}
 
-		if ( !this.estBiffurcation ( ) && !this.estExtremite ( voie.getIleA ( ) ) && !this.estExtremite ( voie.getIleD ( ) ) && !this.estPremierTrait ( ))
+		if ( this.cyclique ( voie, this.coulLigne ) ) return false;
+
+		if (veutJouer) {System.out.println("Cyclique");}
+
+		if ( !this.estBiffurcation ( ) && !this.estExtremite ( voie.getIleA ( ) ) && !this.estExtremite ( voie.getIleD ( ) ) && !this.estPremierTrait ( ) )
 			return false;
+		
+		if (veutJouer) {System.out.println("Biffurcation");}
 		
 		// Si on arrive ici, c'est que tout est bon, on peut donc colorier la voie
 
@@ -144,20 +203,6 @@ public class Partie
 		}
 
 		return true;
-	}
-
-	protected void jouerScenario( VoieMaritime voie, boolean veutJouer)
-	{
-		List<Ile> ligne     = ( this.coulLigne.equals ( Color.RED ) ? this.ligneR : this.ligneB );
-		List<Ile> ensExIles = this.getEnsExtremites ( );
-
-		// Définit l'ile d'arrivée
-		Ile ileArrive = ( ligne.contains ( voie.getIleA ( ) ) ? voie.getIleD ( ) : voie.getIleA ( ) );
-		Ile ileDepart = ( ligne.contains ( voie.getIleA ( ) ) ? voie.getIleA ( ) : voie.getIleD ( ) );
-
-		voie.setCouleur  ( this.coulLigne );
-		ligne.add        ( ileArrive      );
-		this.tourSuivant (                );
 	}
 
 	private boolean estExtremite ( Ile i )
@@ -188,6 +233,9 @@ public class Partie
 		}
 
 		this.numTour++;
+		System.out.println("numManche :   " + this.numManche);
+		System.out.println("numtour   :   " + this.numTour);
+
 		this.carteEnCours = this.paquet.piocher ( );
 	}
 
@@ -200,23 +248,23 @@ public class Partie
 
 		if ( this.ligneR.size ( ) <= 1 && this.ligneB.size ( ) <= 1 ) return this.score = 0;
 
-		if ( this.ligneR.isEmpty ( ) )
+		if ( this.ligneR.size( ) >= 1 )
 		{
 			ensRegionsR = this.creerListReg ( this.ligneR );
 
-			score += this.scorePrincipale      ( ensRegionsR, this.ligneR );
+			// score += this.scorePrincipale      ( ensRegionsR, this.ligneR );
 			score += this.calculBonusLigne     ( this.ligneR              );
 		}
 
-		if ( this.ligneB.isEmpty ( )  )
+		if ( this.ligneB.size( ) >= 1 )
 		{
 			ensRegionsB = this.creerListReg ( this.ligneB );
 
-			score += this.scorePrincipale      ( ensRegionsB, this.ligneB );
+			// score += this.scorePrincipale      ( ensRegionsB, this.ligneB );
 			score += this.calculBonusLigne     ( this.ligneB              );
 		}
 
-		score += this.calculBonusIle ( );
+		// score += this.calculBonusIle ( );
 
 		this.score = score;
 
@@ -229,6 +277,8 @@ public class Partie
 	{
 		int tmp    =  0;
 		int max    = -1;
+
+		if ( ligne.size() <= 1 ) return 0;
 
 		for ( Region r : ensRegions )
 		{
@@ -340,7 +390,7 @@ public class Partie
 			if ( !voie.equals ( v ) && voie.getEstColorie ( ) && voie.getColorArc ( ).equals ( coul ) ) return true;
 
 		for ( VoieMaritime voie : ileD.getEnsVoie ( ) )
-			if ( !voie.equals ( v ) && voie.getEstColorie ( ) ) return true;
+			if ( !voie.equals ( v ) && voie.getEstColorie ( ) && voie.getColorArc ( ).equals ( coul ) ) return true;
 
 		return false;
 	}

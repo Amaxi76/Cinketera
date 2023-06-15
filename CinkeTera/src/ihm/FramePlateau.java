@@ -58,8 +58,8 @@ public class FramePlateau extends JFrame implements ComponentListener
 		this.addComponentListener     ( this );
 
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
-		this.setVisible               ( true          );
 		this.setUndecorated           ( true          );
+		this.setVisible               ( true          );
 		this.setIconImage             ( icon          ); 
 	}
 
@@ -109,7 +109,7 @@ public class FramePlateau extends JFrame implements ComponentListener
 
 		if ( rep == 0 ) //Si Rejouer est sélectionné
 		{
-			this.init( );			//On ferme le fenêtre
+			this.init( );				//On ferme le fenêtre
 			new Controleur ( );			//On relance une partie
 		}
 		else

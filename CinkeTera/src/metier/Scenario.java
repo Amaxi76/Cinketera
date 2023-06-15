@@ -21,7 +21,7 @@ public class Scenario extends Partie
 	/*              Constructeur              */
 	/* -------------------------------------- */
 
-	public Scenario (Joueur j, List<Ile> ensIles, Color couleur, int num)
+	public Scenario ( Joueur j, List<Ile> ensIles, Color couleur, int num )
 	{
 		super ( j, couleur );
 
@@ -49,96 +49,87 @@ public class Scenario extends Partie
 
 			Scanner sc = new Scanner ( new FileInputStream ( "donnees/scenario"+ num +".data" ) );
 
-			String line = sc.nextLine();
+			String line = sc.nextLine ( );
 
-			List<Carte> listManche1 = new ArrayList<>();
-			List<Carte> listManche2 = new ArrayList<>();
+			List<Carte> paquetManche1 = new ArrayList<> ( );
+			List<Carte> paquetManche2 = new ArrayList<> ( );
 
+
+			int cpt = 1; // cpt des paquet selon les manches
 			do
 			{
 				// gestion des paquets prédéfinis
+				Decomposeur dec = new Decomposeur ( line );
+				
+				List<Carte> paquet = ( cpt == 1 ) ? paquetManche1 : paquetManche2;
 
-				int cpt = 1; // cpt des paquet selon les manches
-				Decomposeur dec = new Decomposeur (line);
-
-				if (cpt == 1)
+				for (int i = 0; i > -1 ; i++)
 				{
-					for (int i = 0; i > -1 ; i++)
+					try 
 					{
-						try 
-						{
-							String defCarte = dec.getString(i);;
+						String defCarte = dec.getString ( i );;
 
-							char type = defCarte.charAt(0);
-							String couleur = defCarte.substring(1);
+						char   type    = defCarte.charAt    ( 0 );
+						String couleur = defCarte.substring ( 1 );
 
-							listManche1.add(new Carte (type, couleur));
-							
-						} 
-						catch (Exception e) { break; }
-					}
+						paquet.add ( new Carte ( type, couleur ) );
+						
+					} 
+					catch ( Exception e ) { break; }
 				}
-				if (cpt == 2)
-				{
-
-					for (int i = 0; i > -1 ; i++)
-					{
-						try 
-						{
-							String defCarte = dec.getString(i);;
-
-							char type = defCarte.charAt(0);
-							String couleur = defCarte.substring(1);
-
-							listManche2.add(new Carte (type, couleur));
-							
-						} 
-						catch (Exception e) { break; }
-					}
-				}
-
-
-				line = sc.nextLine();
+				
+				line = sc.nextLine ( );
 				cpt++;
 			}
-			while(!line.equals(""));
+			while ( !line.equals ( "" ) );
 
-			this.paquetManche1 = new Paquet(listManche1);
-			this.paquetManche2 = new Paquet(listManche2);
+			this.paquetManche1 = new Paquet ( paquetManche1 );
+			this.paquetManche2 = new Paquet ( paquetManche2 );
 
-			super.tourSuivant();
+			line = sc.nextLine ( );
 
-			line = sc.nextLine();
+			// Permet de piocher la première carte
 
+			super.setPaquet   ( this.paquetManche1 );
+			super.tourSuivant ( );
+
+			
 			do
 			{
-
-				Decomposeur dec = new Decomposeur (line);
+				Decomposeur dec = new Decomposeur ( line );
 
 				String nomIle1 = "";
 				String nomIle2 = "";
 
-				nomIle1 = dec.getString(0);
-				nomIle2 = dec.getString(1);
+				nomIle1 = dec.getString ( 0 );
+				nomIle2 = dec.getString ( 1 );
 
-				for (VoieMaritime v : super.joueur.getPlateau().getVoiesMaritimes())
+				for ( VoieMaritime v : super.joueur.getPlateau ( ).getVoiesMaritimes ( ) )
 				{
-					if (v.getIleA().getNom().equals(nomIle1) && v.getIleD().getNom().equals(nomIle2) ||
-						v.getIleD().getNom().equals(nomIle1) && v.getIleA().getNom().equals(nomIle2)   )
+					
+					if ( v.getIleA ( ).getNom ( ).equals ( nomIle1 ) && v.getIleD ( ).getNom ( ).equals ( nomIle2 ) ||
+						 v.getIleD ( ).getNom ( ).equals ( nomIle1 ) && v.getIleA ( ).getNom ( ).equals ( nomIle2 )   )
 						{
-							super.jouerScenario(v, true);
+							if (super.getNumManche() == 1 && super.getNumTours() == 1 && this.paquetManche2 != null) 
+							{
+								// Si la manche change, on change de paquet
+								super.setPaquet(this.paquetManche2);
+								// Cependant, la manche a déjà prit la carte d'un autre paquet, alors on doit la réinitialiser
+								super.paquet.piocher();
+							}
+
+							super.jouer ( v, true );
 						}
 				}
 
-				line = sc.nextLine();
+				line = sc.nextLine ( );
 			}
-			while(!line.equals(""));
+			while ( !line.equals ( "" ) );
 
 		}
-		catch (Exception e) {}
+		catch ( Exception e ) { }
 
 	}
 
-		
 }
 

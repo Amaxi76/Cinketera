@@ -25,6 +25,7 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 	private JButton  btnQuitter;
 	private JButton  btn2J;
 	private JButton  btn1J;
+	private JButton  btn4S;
 
 	/*----------------*/
 	/*--Constructeur--*/
@@ -57,7 +58,7 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 
 		JPanel panel         = new JPanel ( new BorderLayout (      )         );
 		JPanel panelTest     = new JPanel ( new GridLayout   ( 1, 3 )         );
-		JPanel panelButton   = new JPanel ( new GridLayout   ( 6, 1, 15, 15 ) );
+		JPanel panelButton   = new JPanel ( new GridLayout   ( 7, 1, 15, 15 ) );
 		JPanel panelInutile  = new JPanel (                                   );
 		JPanel panelInutile2 = new JPanel (                                   );
 		
@@ -73,11 +74,13 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 		this.btn1J       = new JButton ( "Scenario 1" );
 		this.btn2J       = new JButton ( "Scenario 2" );
 		this.btnScenario = new JButton ( "Scenario 3" );
-		this.btnQuitter  = new JButton ( "Quitter"  );
+		this.btn4S       = new JButton ( "Scenario 4" );
+		this.btnQuitter  = new JButton ( "Quitter"    );
 
 		panelButton.add ( this.btn1J       );
 		panelButton.add ( this.btn2J       );
 		panelButton.add ( this.btnScenario );
+		panelButton.add ( this.btn4S       );
 		panelButton.add ( this.btnQuitter  );
 
 		panelTest.add ( panelInutile  );
@@ -98,6 +101,7 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 		this.btn2J      .addActionListener ( this );
 		this.btnScenario.addActionListener ( this );
 		this.btnQuitter .addActionListener ( this );
+		this.btn4S      .addActionListener ( this );
 
 		this.setIconImage             ( icon          );
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
@@ -113,6 +117,8 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 			this.ctrl.lancerScenario (0);
 		if ( e.getSource ( ) == this.btnScenario )
 			this.ctrl.lancerScenario (3);
+		if ( e.getSource ( ) == this.btn4S )
+			this.ctrl.lancerScenario (4);
 			
 		this.cacher();
 	}

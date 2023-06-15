@@ -87,6 +87,8 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 	 */
 	private void dessinerArcs ( Graphics2D g2,double rX,double rY )
 	{
+		//List<Ile> lstExtremite = this.ctrl.getJoueur1 ( ).getPartie ( ).getEnsExtremites ( );
+
 		for ( VoieMaritime voieMaritime : lstVoiesMaritimes)
 		{
 			Ile depart  = voieMaritime.getIleD ( );
@@ -100,6 +102,8 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 			}
 			
 			g2.drawLine ( ( int ) ( depart.getPosX ( ) * rX ), ( int ) ( depart.getPosY ( ) * rY ), ( int ) ( arrivee.getPosX ( ) * rX ), ( int ) ( arrivee.getPosY ( ) * rY ) );
+			
+			
 			
 			//Représenter les valeurs des arcs bonus
 			if ( voieMaritime.getValeur ( ) != 1 )
@@ -117,6 +121,11 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 
 			this.frame.majFrameCarte ( );
 		}
+
+		// for (Ile ile : lstExtremite)
+		// {
+		// 	if ( (( ligne.contains ( ile ) && (lstExtremite.contains ( ile ) || this.ctrl.getJoueur1().getPartie().estBiffurcation())) || this.ctrl.estJouable ( ile,lstExtremite ) ))	
+		// }
 	}
 
 	/** Méthode qui dessine les noeuds de la liste
@@ -132,6 +141,12 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 		List<Ile> lstExtremite = this.ctrl.getJoueur1 ( ).getPartie ( ).getEnsExtremites ( );
 		List<Ile> ligneR       = this.ctrl.getJoueur1 ( ).getPartie ( ).getLigneR        ( );
 		List<Ile> ligneB       = this.ctrl.getJoueur1 ( ).getPartie ( ).getLigneB        ( );
+		List<Ile> ligne;
+
+		if (this.clrJ1 == Color.RED)
+			ligne = ligneR;
+		else
+			ligne = ligneB;
 
 		for ( Ile ile : this.lstIles )
 		{
@@ -169,9 +184,8 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 			BufferedImage modifiedImage = new BufferedImage ( width, height, BufferedImage.TYPE_INT_ARGB );
 			modifiedImage.setRGB ( 0, 0, width, height, pixels, 0, width );
 
-			//Si c'est une extremité,déja visité ou c'est jouable, on ne change pas d'image
-			if ( ( ( ligneR.contains ( ile ) || ligneB.contains ( ile ) ) && lstExtremite.contains ( ile ) || this.ctrl.estJouable ( ile,lstExtremite ) ) ||
-			     ( ( ligneR.contains ( ile ) || ligneB.contains ( ile ) ) && lstExtremite.contains ( ile ) || this.ctrl.estJouable ( ile,lstExtremite ) )   )
+			//Si la ligne R ou la ligne B contient l'ile, et que c'est une extremité ou que c'est biffurcation, ou c'est jouable
+			if ( (( ligne.contains ( ile ) && (lstExtremite.contains ( ile ) || this.ctrl.getJoueur1().getPartie().estBiffurcation())) || this.ctrl.estJouable ( ile,lstExtremite ) ))
 			     modifiedImage = imgIle;
 			
 			g2.drawImage ( modifiedImage, ( int ) ( ile.getPosXImage        ( ) * this.rX ),
@@ -202,8 +216,8 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 		g2.setColor  ( new Color ( 86, 39, 138 ) );
 		
 		g2.drawLine (   0, 357,  785, 357 );
-		g2.drawLine ( 785, 357, 1237,   0 );
-		g2.drawLine ( 785, 357, 1350, 900 );
+		g2.drawLine ( 785, 357, 1037,   0 );
+		g2.drawLine ( 785, 357, 1600, 900 );
 		g2.drawLine ( 450,   0,  450, 900 );
 	}
 
@@ -237,23 +251,23 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 				
 				//Si ce n'est pas possible
 				if ( !this.ctrl.jouer ( voieMaritime, true ) )
-				{
 					JOptionPane.showMessageDialog ( this.frame, "Erreur de sélection", "Erreur", JOptionPane.ERROR_MESSAGE ); //Affiche que la sélection est mauvaise
-				}
 
 				this.voieMaritimeAColorier = null;
-				this.repaint ( );
+				this.frame.majFrameCarte ( );
+
 
 				//Message pour dire qu'il y a une biffurcation
 				if ( this.ctrl.getJoueur1 ( ).getPartie ( ).estBiffurcation ( ) )
-					JOptionPane.showMessageDialog ( this.frame, "Évènement - Biffurcation", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche que la sélection est mauvaise
+					JOptionPane.showMessageDialog ( this.frame, "Évènement - Biffurcation", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche qu'il y a une biffurcation
 
+				this.repaint ( );
+				
 				//Si la partie est fini
 				if ( this.ctrl.estFinDePartie ( ) )
-				{
 					this.frame.finPartieInit ( );
-				}
 
+				
 				this.frame.majFrameCarte ( );
 				return;
 			}

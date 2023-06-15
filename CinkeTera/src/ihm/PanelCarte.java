@@ -120,6 +120,9 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 		{
 			Rectangle2D zoneCarte = new Rectangle2D.Double ( );
 
+			if ( this.ctrl.estFinDePartie ( ) )
+				this.frame.getFramePlateau ( ).finPartieInit ( );
+
 			if ( cpt < this.ctrl.getJoueur1 ( ).getPartie ( ).getPaquet ( ).taillePaquet ( ) - 1 )
 				zoneCarte.setRect ( 50 + 20 * cpt, 20,                                       20, this.imgDosDeCarte.getHeight ( null ) / 3 );
 			else
@@ -128,7 +131,6 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 			if ( zoneCarte.contains ( e.getPoint ( ) ) )
 			{
 				this.ctrl.getJoueur1 ( ).getPartie ( ).tourSuivant ( );
-
 				if ( this.ctrl.getJoueur1 ( ).getPartie ( ).estBiffurcation ( ) )
 					JOptionPane.showMessageDialog ( this.frame, "La biffurcation a été mise en place", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche que la sélection est mauvaise
 			}
@@ -168,9 +170,7 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 
 			//Si la partie est fini
 			if ( this.ctrl.estFinDePartie ( ) )
-			{
 				this.frame.getFramePlateau ( ).finPartieInit ( );
-			}
 		}
 		if ( e.getSource ( ) == this.btnQuitter )
 			System.exit(1);

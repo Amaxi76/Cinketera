@@ -11,10 +11,12 @@ Le scénario 1 nous permet de tester de multiples fonctionnalités :
 2. La contrainte de croisement
 3. La contrainte de colorier une ligne uniquement à partir de l'extrémité
 4. On ne peut pas prendre une ligne colorié d'une autre couleur
-5. On ne peut pas faire une ligne non liée à une autre
-6. On ne peut pas relier à une île déjà prise par la même couleur
-7. Le changement de joueur
-8. Le calcul de score
+5. On ne peut pas relier à une île déjà prise par la même couleur
+6. Le changement de joueur
+7. Le calcul de score
+8. Passer son tour
+9. Multicolore
+10. 5 cartes primaires
 
 ## Scénario 2
 
@@ -29,3 +31,9 @@ Le scénario trois vous présentera quant à lui une fin de partie :
 
 1. Affichage des résultats
 2. Fin de la partie
+
+# Scénario 4
+
+1. Cycle de deux couleurs
+2. Croisement de deux couleurs
+3. Biffucartion

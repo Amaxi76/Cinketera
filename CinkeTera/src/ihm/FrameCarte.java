@@ -45,8 +45,8 @@ public class FrameCarte extends JFrame
 		this.add ( this.panelCarte );
 
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
-		this.setVisible               ( true          );
 		this.setUndecorated           ( true          );
+		this.setVisible               ( true          );
 		this.setIconImage             ( icon          ); 
 	}
 
