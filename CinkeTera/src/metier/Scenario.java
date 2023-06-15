@@ -14,8 +14,8 @@ public class Scenario extends Partie
 	/* -------------------------------------- */
 
 	private int          numScenario;
-	private Paquet       paquetManche1;
-	private Paquet       paquetManche2;
+	private List<Carte>  paquetManche1;
+	private List<Carte>  paquetManche2;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
@@ -27,7 +27,10 @@ public class Scenario extends Partie
 
 		this.numScenario = num;
 
-		this.creerScenario(num);
+		this.paquetManche1 = new ArrayList<> ( );
+		this.paquetManche2 = new ArrayList<> ( );
+
+		this.creerScenario ( num );
 	}
 
 	/* -------------------------------------- */
@@ -51,8 +54,6 @@ public class Scenario extends Partie
 
 			String line = sc.nextLine ( );
 
-			List<Carte> paquetManche1 = new ArrayList<> ( );
-			List<Carte> paquetManche2 = new ArrayList<> ( );
 
 
 			int cpt = 1; // cpt des paquet selon les manches
@@ -61,13 +62,13 @@ public class Scenario extends Partie
 				// gestion des paquets prédéfinis
 				Decomposeur dec = new Decomposeur ( line );
 				
-				List<Carte> paquet = ( cpt == 1 ) ? paquetManche1 : paquetManche2;
+				List<Carte> paquet = ( cpt == 1 ) ? this.paquetManche1 : this.paquetManche2;
 
-				for (int i = 0; i > -1 ; i++)
+				for ( int i = 0; i > -1 ; i++ )
 				{
 					try 
 					{
-						String defCarte = dec.getString ( i );;
+						String defCarte = dec.getString ( i );
 
 						char   type    = defCarte.charAt    ( 0 );
 						String couleur = defCarte.substring ( 1 );
@@ -83,19 +84,20 @@ public class Scenario extends Partie
 			}
 			while ( !line.equals ( "" ) );
 
-			this.paquetManche1 = new Paquet ( paquetManche1 );
-			this.paquetManche2 = new Paquet ( paquetManche2 );
-
 			line = sc.nextLine ( );
 
-			// Permet de piocher la première carte
+			
 
-			super.setPaquet   ( this.paquetManche1 );
+			// Permet de piocher la première carte
+			super.setPaquet   ( new Paquet ( new ArrayList<> ( this.paquetManche1 ) ) );
+
+			// Validax
+
 			super.tourSuivant ( );
 
-			
 			do
 			{
+				
 				Decomposeur dec = new Decomposeur ( line );
 
 				String nomIle1 = "";
@@ -105,30 +107,29 @@ public class Scenario extends Partie
 				nomIle2 = dec.getString ( 1 );
 
 				for ( VoieMaritime v : super.joueur.getPlateau ( ).getVoiesMaritimes ( ) )
-				{
-					
 					if ( v.getIleA ( ).getNom ( ).equals ( nomIle1 ) && v.getIleD ( ).getNom ( ).equals ( nomIle2 ) ||
 						 v.getIleD ( ).getNom ( ).equals ( nomIle1 ) && v.getIleA ( ).getNom ( ).equals ( nomIle2 )   )
-						{
-							if (super.getNumManche() == 1 && super.getNumTours() == 1 && this.paquetManche2 != null) 
-							{
-								// Si la manche change, on change de paquet
-								super.setPaquet(this.paquetManche2);
-								// Cependant, la manche a déjà prit la carte d'un autre paquet, alors on doit la réinitialiser
-								super.paquet.piocher();
-							}
-
 							super.jouer ( v, true );
-						}
-				}
 
 				line = sc.nextLine ( );
+
 			}
 			while ( !line.equals ( "" ) );
 
 		}
 		catch ( Exception e ) { }
 
+	}
+
+
+	public void initialiserManche (  )
+	{
+		super.coulLigne   = super.joueur.getCouleur ( );
+		super.paquet      = new Paquet ( new ArrayList<>(this.paquetManche2) );
+		super.numTour     = 0;
+		super.numManche++;
+		super.numTourBifurcation = 3;//(int) ( Math.random ( ) * 3 );
+		super.premierTrait = true;;
 	}
 
 }

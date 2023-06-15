@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import controleur.*;
 
@@ -110,7 +111,7 @@ public class FrameAccueil extends JFrame implements ActionListener
 		if ( e.getSource ( ) == this.btn1J )
 			this.ctrl.lancerFrame ( );
 		if ( e.getSource ( ) == this.btn2J )
-			this.ctrl.modeDeuxJouers ( );
+			JOptionPane.showMessageDialog ( this, "En cours de développement, revient plus tard", "Erreur", JOptionPane.INFORMATION_MESSAGE ); //Affiche qu'il y a une biffurcation
 		if ( e.getSource ( ) == this.btnScenario )
 			new FrameChoixScenario(this.ctrl);
 

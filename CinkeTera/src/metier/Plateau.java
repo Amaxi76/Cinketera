@@ -17,6 +17,8 @@ public class Plateau
 	private List<VoieMaritime> lstVoiesMaritimes;
 	private List<Region>       lstRegions;
 
+	private List<String>       journal;
+
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
@@ -26,6 +28,7 @@ public class Plateau
 		this.lstIles           = new ArrayList<> ( );
 		this.lstVoiesMaritimes = new ArrayList<> ( );
 		this.lstRegions        = new ArrayList<> ( );
+		this.journal           = new ArrayList<> ( );
 
 		this.initialiserPlateau ( );
 	}
@@ -37,6 +40,9 @@ public class Plateau
 	public List<VoieMaritime> getVoiesMaritimes ( ) { return this.lstVoiesMaritimes; }
 	public List<Ile>          getIles           ( ) { return this.lstIles;           }
 	public List<Region>       getRegions        ( ) { return this.lstRegions;        }
+	public List<String>       getJournal        ( ) { return this.journal;           }
+
+	public void               ajouterAuJournal (String s) { this.journal.add(s);    }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
@@ -117,6 +123,7 @@ public class Plateau
 			{
 				Decomposeur dec = new Decomposeur ( sc.nextLine( ) );
 
+				int valeur = 0;
 				String nomIle1,nomIle2;
 				Ile ile1,ile2;
 				ile1 = ile2 = null;
@@ -129,8 +136,16 @@ public class Plateau
 					if ( ile.getNom ( ).equals ( nomIle1 ) ) ile1 = ile;
 					if ( ile.getNom ( ).equals ( nomIle2 ) ) ile2 = ile;
 				}
+
+				//modulaire
+				try 
+				{
+					valeur = dec.getInt( 2 );
 					
-				VoieMaritime v = VoieMaritime.creerVoieMaritime ( nomIle1 + "-" + nomIle2, ile1, ile2, 1 );
+				} catch ( Exception e ) {}
+			
+					
+				VoieMaritime v = VoieMaritime.creerVoieMaritime ( nomIle1 + "-" + nomIle2, ile1, ile2, valeur );
 
 				this.lstVoiesMaritimes.add ( v );
 				ile1.ajouterArc ( v );

@@ -114,7 +114,7 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 		if ( e.getSource ( ) == this.btn1J )
 			this.ctrl.lancerScenario (1);
 		if ( e.getSource ( ) == this.btn2J )
-			this.ctrl.lancerScenario (0);
+			this.ctrl.lancerScenario (2);
 		if ( e.getSource ( ) == this.btnScenario )
 			this.ctrl.lancerScenario (3);
 		if ( e.getSource ( ) == this.btn4S )

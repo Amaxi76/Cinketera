@@ -1,15 +1,9 @@
-PBrun	PJaune	PMulticolore	SBrun	PVert	PRouge	SJaune	SMulticolore	SVert	SRouge
-PBrun	PVert	PMulticolore	PRouge	SBrun	SRouge	SJaune	SVert	PJaune	SMulticolore
+PBrun	PMulticolore	PVert	PJaune	PRouge	SMulticolore	SJaune	SVert	SRouge	SBrun
+PVert	PJaune	PBrun	SMulticolore	SRouge	PMulticolore	PRouge	SJaune	SVert	SBrun
 
 Mutaa	Khont-Rolah
+Kiola	Khont-Rolah
+Kiola	Kita
 Milaù	Mutaa
-Laçao	Milaù
-Ticó	Laçao
-Ticó	Tokha
-Tavula	Tokha
-Tavula	Ticó
+Milaù	Massao
 Kita	Ticó
-Kita	Khont-Rolah
-Fuego	Khont-Rolah
-
-Mokah	Fuego

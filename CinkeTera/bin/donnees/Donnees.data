@@ -34,14 +34,14 @@ Tiamù	Tokha
 Tavula	Ticó
 Tavula	Tokha
 Ticó	Tokha
-Ticó	Laçao
-Tokha	Laçao
+Ticó	Laçao	1
+Tokha	Laçao	1
 Laçao	Loümu
 Loümu	Lokha
 Loümu	Loà
 Lokha	Laçao
 Laçao	Loà
-Laçao	Milaù
+Laçao	Milaù	1
 Milaù	Loà
 Milaù	Massao
 Massao	Maÿa
@@ -49,18 +49,18 @@ Maÿa	Mokah
 Milaù	Mokah
 Milaù	Mutaa
 Milaù	Khont-Rolah
-Mutaa	Khont-Rolah
+Mutaa	Khont-Rolah	1
 Mutaa	Mokah
 Massao	Mutaa
 Maÿa	Mutaa
-Mokah	Fissah
+Mokah	Fissah	1
 Mokah	Fuego
 Fissah	Fuego
 Fissah	Finista
 Fissah	Fama
 Finista	Fama
 Fama	Fuego
-Fuego	Khont-Rolah
+Fuego	Khont-Rolah	1
 Fuego	Kiola
 Kita	Khont-Rolah
 Kiola	Khont-Rolah

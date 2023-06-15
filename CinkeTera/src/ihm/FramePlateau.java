@@ -44,7 +44,7 @@ public class FramePlateau extends JFrame implements ComponentListener
 		Image icon = Toolkit.getDefaultToolkit ( ).getImage ( "donnees/images/boat.png" );
 
 		this.setTitle    ( "CinkeTera"                                                                    );
-		this.setSize     ( ( int ) tailleEcran.getWidth ( ), ( int ) ( tailleEcran.getHeight ( ) * 0.80 ) );
+		this.setSize     ( ( int ) tailleEcran.getWidth ( ), ( int ) ( tailleEcran.getHeight ( ) * 0.84 ) );
 		this.setLocation ( 0                               , 0                                            );
 
 		/*Création des composants*/

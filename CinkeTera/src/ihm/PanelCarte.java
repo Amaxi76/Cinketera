@@ -124,15 +124,19 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 				this.frame.getFramePlateau ( ).finPartieInit ( );
 
 			if ( cpt < this.ctrl.getJoueur1 ( ).getPartie ( ).getPaquet ( ).taillePaquet ( ) - 1 )
-				zoneCarte.setRect ( 50 + 20 * cpt, 20,                                       20, this.imgDosDeCarte.getHeight ( null ) / 3 );
+				zoneCarte.setRect ( 50 + 20 * cpt, 20, 20, this.imgDosDeCarte.getHeight ( null ) / 3 );
 			else
 				zoneCarte.setRect ( 50 + 20 * cpt, 20, this.imgDosDeCarte.getWidth ( null ) / 3, this.imgDosDeCarte.getHeight ( null ) / 3 );
 
 			if ( zoneCarte.contains ( e.getPoint ( ) ) )
 			{
+				this.ctrl.getJoueur1 ( ).getPlateau ( ).ajouterAuJournal ( "Vous avez piocher une carte " );
 				this.ctrl.getJoueur1 ( ).getPartie ( ).tourSuivant ( );
 				if ( this.ctrl.getJoueur1 ( ).getPartie ( ).estBiffurcation ( ) )
+				{
 					JOptionPane.showMessageDialog ( this.frame, "La biffurcation a été mise en place", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche que la sélection est mauvaise
+					this.ctrl.getJoueur1().getPlateau().ajouterAuJournal("La biffurcation est arrivée!");
+				}
 			}
 		}
 		this.repaint ( );
@@ -167,13 +171,18 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 		{
 			this.ctrl.getJoueur1 ( ).getPartie ( ).tourSuivant ( );
 			this.ctrl.majIHM ( );
+			this.ctrl.getJoueur1().getPlateau().ajouterAuJournal("Vous avez passé votre tour");
 
 			//Si la partie est fini
 			if ( this.ctrl.estFinDePartie ( ) )
 				this.frame.getFramePlateau ( ).finPartieInit ( );
 		}
 		if ( e.getSource ( ) == this.btnQuitter )
-			System.exit(1);
+		{
+			this.frame.getFramePlateau().init();
+			new Controleur();
+		}
+			
 
 		this.repaint ( );
 	}
