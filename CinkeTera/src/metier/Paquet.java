@@ -10,14 +10,23 @@ public class Paquet
 	/*               Attributs                */
 	/* -------------------------------------- */
 	
+	/**
+	 * Différentes cartes de couleurs
+	 */
 	private static final String[] TAB_TYPE_CARTE = { "Vert", "Rouge", "Jaune", "Brun", "Multicolore" };
 	
+	/**
+	 * Liste de cartes
+	 */
 	private List<Carte> pioche;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
 
+	/**
+	 * Constructeur vide de Paquet
+	 */
 	public Paquet ( )
 	{
 		this.pioche = new ArrayList<> ( );
@@ -25,6 +34,10 @@ public class Paquet
 		this.initialiserPaquet ( );
 	}
 
+	/**
+	 * Constructuer qui prend une pioche déja crée
+	 * @param liste
+	 */
 	public Paquet ( List<Carte> liste )
 	{
 		this.pioche = liste;
@@ -34,8 +47,22 @@ public class Paquet
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
-	public Carte piocher      (         ) { return this.pioche.remove ( 0 ); }
+	/**Prendre la première carte du paquet
+	 * @return Carte
+	 */
+	public Carte piocher      (         ) { return this.pioche.remove ( 0 );   }
+
+	/**
+	 * Return la taille du Paquet
+	 * @return int
+	 */
 	public int   taillePaquet (         ) { return this.pioche.size   (     ); }
+
+	/**
+	 * Return une carte à l'indice donnée en paramètre
+	 * @param cpt
+	 * @return Carte
+	 */
 	public Carte getCarte     ( int cpt ) { return this.pioche.get    ( cpt ); }
 
 	/* -------------------------------------- */
@@ -60,7 +87,7 @@ public class Paquet
 	/**
 	 * Afin de savoir s'il reste des cartes primaires
 	 * 
-	 * @return
+	 * @return boolean 
 	 */
 	public boolean aEncorePrimaire ( )
 	{

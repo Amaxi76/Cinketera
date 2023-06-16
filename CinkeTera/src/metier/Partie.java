@@ -13,23 +13,70 @@ public class Partie
 	/*               Attributs                */
 	/* -------------------------------------- */
 
+	/**
+	 * List<ile> de la couleur Rouge
+	 */
 	protected List<Ile> ligneR;
+
+	/**
+	 * List<ile> de la couleur Bleu
+	 */
 	protected List<Ile> ligneB;
 
+	/**
+	 * Boolean pour voir si c'est le premier trait
+	 */
 	protected boolean premierTrait;
+
+	/**
+	 * Entier numero de manche
+	 */
 	protected int     numManche;
+
+	/**
+	 * Entier numero du tour
+	 */
 	protected int     numTour;
+
+	/**
+	 * Entier, numéro du tour ou il y a eu biffurcation
+	 */
 	protected int     numTourBifurcation;
+
+	/**
+	 * Le Score
+	 */
 	protected int     score;
+
+	/**
+	 * La couleur de la ligne
+	 */
 	protected Color   coulLigne;
+
+	/**
+	 * La carte en cours
+	 */
 	protected Carte   carteEnCours;
+
+	/**
+	 * Le paquet de cartes
+	 */
 	protected Paquet  paquet;
+
+	/**
+	 * Le joueur
+	 */
 	protected Joueur  joueur;
 	
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
 
+	/**
+	 * Constructuer qui prend un jouer et sa couleur en paramètre
+	 * @param j
+	 * @param couleur
+	 */
 	public Partie ( Joueur j, Color couleur )
 	{
 		this.numManche          = 0;
@@ -53,19 +100,76 @@ public class Partie
 	/* -------------------------------------- */
 	/*                Accesseur               */
 	/* -------------------------------------- */
-
+	/**
+	 * Return la liste d'iles de la ligne rouge
+	 * @return List<Ile>
+	 */
 	public List<Ile> getLigneR       ( ) { return this.ligneR;                             }
+
+	/**
+	 * Return la liste d'iles de la ligne bleu
+	 * @return List<Ile>
+	 */
 	public List<Ile> getLigneB       ( ) { return this.ligneB;                             }
+
+	/**
+	 * Return la couleur de la ligne
+	 * @return Color
+	 */
 	public Color     getCoulLigne    ( ) { return this.coulLigne;                          }
+
+	/**
+	 * Return la carte en cours
+	 * @return Carte
+	 */
 	public Carte     getCarteEnCours ( ) { return this.carteEnCours;                       }
+
+	/**
+	 * Return tout le paquet
+	 * @return Paquet
+	 */
 	public Paquet    getPaquet       ( ) { return this.paquet;                             }
+
+	/**
+	 * Return le score en entier
+	 * @return int
+	 */
 	public int       getScore        ( ) { return this.score;                              }
+
+	/**
+	 * Return true si c'est le premier trait 
+	 * @return boolean
+	 */
 	public boolean   estPremierTrait ( ) { return this.premierTrait;                       }
+
+	/**
+	 * Return true si c'est la fin de la partie
+	 * @return boolean
+	 */
 	public boolean   getFinPartie    ( ) { return this.numManche          >= 2;            }
+
+	/**
+	 * Return true si il y a eu biffurcation
+	 * @return boolean
+	 */
 	public boolean   estBiffurcation ( ) { return this.numTourBifurcation == this.numTour; }
+
+	/**
+	 * Return numero du tour en entier
+	 * @return int
+	 */
 	public int       getNumTours     ( ) { return this.numTour;                            }
+
+	/**
+	 * Return numero de la manche en entier
+	 * @return int
+	 */
 	public int       getNumManche    ( ) { return this.numManche;                          }
 
+	/**
+	 * Return la liste d'îles qui sont en extremités
+	 * @return List<Ile>
+	 */
 	public List<Ile> getEnsExtremites ( )
 	{
 		List<Ile> ensExtremites = new ArrayList<> ( );
@@ -84,6 +188,10 @@ public class Partie
 		return ensExtremites;
 	}
 
+	/**
+	 * Return le nombre de regions visités
+	 * @return int
+	 */
 	public int getNbRegionsVisite ()
 	{
 		List<Ile>    ensIles = new ArrayList<Ile>();
@@ -103,12 +211,22 @@ public class Partie
 	/*             Modificateur               */
 	/* -------------------------------------- */
 
+	/**
+	 * Set le paquet au paquet donnée en paramètre
+	 * @param p
+	 */
 	public void setPaquet ( Paquet p ) { this.paquet = p; }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
+	/**
+	 * Return true si c'est possible de colorier la voie donnée en paramètre et colorie si veutJouer est vrai
+	 * @param voie
+	 * @param veutJouer
+	 * @return boolean
+	 */
 	public boolean jouer ( VoieMaritime voie, boolean veutJouer )
 	{
 		List<Ile> ligne     = ( this.coulLigne.equals ( Color.RED ) ? this.ligneR : this.ligneB );
@@ -182,6 +300,11 @@ public class Partie
 		return true;
 	}
 
+	/**
+	 * Return true si l'île est une extremité
+	 * @param i
+	 * @return boolean
+	 */
 	private boolean estExtremite ( Ile i )
 	{
 		int nbColorier = 0;
@@ -193,7 +316,9 @@ public class Partie
 		return nbColorier == 1;
 	}
 
-	/** Méthode qui permet de passer un tour (changer la carte ) */
+	/** Méthode qui permet de passer un tour (changer la carte )
+	 * 
+	 */
 	public void tourSuivant ( )
 	{
 		if ( !this.paquet.aEncorePrimaire ( ) && this.getFinPartie ( ) )
@@ -210,6 +335,9 @@ public class Partie
 		//System.out.println(this.carteEnCours);
 	}
 
+	/**
+	 * Méthode pour initialiser une manche
+	 */
 	public void initialiserManche ( )
 	{
 		System.out.println("INITIALISATION MANCHE de PARTIE");
@@ -221,6 +349,10 @@ public class Partie
 		this.premierTrait = true;
 	}
 
+	/**
+	 * Return le score
+	 * @return int
+	 */
 	public int calculerScore ( )
 	{
 		List<Region> ensRegionsR, ensRegionsB;
@@ -254,7 +386,12 @@ public class Partie
 
 	}
 
-
+	/**
+	 * Score qui calcule le nombre d'île maximum par region multiplié par le nombre de regions visités
+	 * @param ensRegions
+	 * @param ligne
+	 * @return int
+	 */
 	private int scorePrincipale ( List<Region> ensRegions, List<Ile> ligne )
 	{
 		int tmp    =  0;
@@ -277,6 +414,12 @@ public class Partie
 		return max * ensRegions.size ( );
 	}
 
+	/**
+	 * Calcul du score avec les valuers bonus
+	 * @param ligne
+	 * @param coulLigne
+	 * @return int
+	 */
 	private int calculBonusLigne ( List<Ile> ligne, Color coulLigne )
 	{
 		List<VoieMaritime> ensVoie = this.creeVoieChoisies ( );
@@ -299,8 +442,10 @@ public class Partie
 		return score;
 	}
 
-
-
+	/**
+	 * Calcul du score quand y a une île visités par les deux lignes
+	 * @return int
+	 */
 	private int calculBonusIle ( )
 	{
 		int score       = 0;
@@ -318,6 +463,11 @@ public class Partie
 		return score;
 	}
 
+	/**
+	 * Return la ligne de regions visité par la ligne
+	 * @param ligne
+	 * @return List<Region>
+	 */
 	private List<Region> creerListReg ( List<Ile> ligne )
 	{
 		List<Region> ensRegions = new ArrayList<> ( );

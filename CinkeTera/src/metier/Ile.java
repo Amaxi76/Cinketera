@@ -9,16 +9,45 @@ public class Ile
 	/*               Attributs                */
 	/* -------------------------------------- */
 
+	/**
+	 * PosX de l'île
+	 */
 	private int posX;
+
+	/**
+	 * PosY de l'île
+	 */
 	private int posY;
 
+	/**
+	 * PosX  de l'image de l'île
+	 */
 	private int posXImage;
+
+	/**
+	 * PosY  de l'image de l'île
+	 */
 	private int posYImage;
 
+
+	/**
+	 * Nom de l'île
+	 */
 	private String nom;
+
+	/**
+	 * Couleur de l'île
+	 */
 	private String couleur;
+
+	/**
+ 	 * Region de l'ile
+	 */
 	private Region region;
 
+	/**
+	 * Liste de voies reliés avec l'île
+	 */
 	private List<VoieMaritime> ensVoie;
 
 	/* -------------------------------------- */
@@ -83,6 +112,10 @@ public class Ile
 	 */
 	public int                getPosYImage ( ) { return this.posYImage; }
 
+	/**
+	 * @return List<ile>
+	 * Les voisins de lîle
+	 */
 	public List<Ile>          getVoisins   ( )
 	{
 		List<Ile> voisins = new ArrayList<> ( );

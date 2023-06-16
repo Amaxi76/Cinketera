@@ -15,7 +15,15 @@ public class FrameCarte extends JFrame
 	 * 
 	 */
 	private Controleur   ctrl;
+
+	/**
+	 * frame plateau
+	 */
 	private FramePlateau frame;
+
+	/**
+	 * panel de la frame
+	 */
 	private PanelCarte   panelCarte;
 
 	/*----------------*/
@@ -34,7 +42,7 @@ public class FrameCarte extends JFrame
 		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( );
 		Image icon = Toolkit.getDefaultToolkit ( ).getImage ( "donnees/imagesCartes/dos_carte.png" );
 
-		this.setTitle    ( "Cartes"                                                                       );
+		this.setTitle    ( 								   "Cartes"                                       );
 		this.setLocation ( 0                               , ( int ) ( tailleEcran.getHeight ( ) * 0.86 ) );
 		this.setSize     ( ( int ) tailleEcran.getWidth ( ), ( int ) ( tailleEcran.getHeight ( ) * 0.14 ) );
 		
@@ -50,10 +58,14 @@ public class FrameCarte extends JFrame
 		this.setIconImage             ( icon          ); 
 	}
 
+	/**
+	 * Mise a jour de la panelCartes
+	 */
 	public void majCartes ( ) 
-	{ 
-        this.revalidate(); 
-		this.panelCarte.repaint();
+	{  
+		this.revalidate();
+		for (int i = 0; i < 4; i++) 
+			this.panelCarte.repaint();
 	}
 
 	public FramePlateau getFramePlateau ( ) { return this.frame; }

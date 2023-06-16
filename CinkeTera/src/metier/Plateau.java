@@ -13,16 +13,33 @@ public class Plateau
 	/*               Attributs                */
 	/* -------------------------------------- */
 	
+	/**
+	 * List<Ile> qu'on a dans notre jeu
+	 */
 	private List<Ile>          lstIles;
+
+	/**
+	 * List<VoieMaritime> qu'on a dans notre jeu
+	 */
 	private List<VoieMaritime> lstVoiesMaritimes;
+
+	/**
+	 * List<Region> qu'on a dans notre jeu
+	 */
 	private List<Region>       lstRegions;
 
+	/**
+	 * Journal des actions faites pendant une partie
+	 */
 	private List<String>       journal;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
 	
+	/**
+	 * Constructeur qui initialise le plateau
+	 */
 	public Plateau ( )
 	{
 		this.lstIles           = new ArrayList<> ( );
@@ -37,17 +54,44 @@ public class Plateau
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
+	/**
+	 * Return les voies maritimes dans notre jeu
+	 * @return List<VoieMaritime>
+	 */
 	public List<VoieMaritime> getVoiesMaritimes ( ) { return this.lstVoiesMaritimes; }
+
+	/**
+	 * Return les îles dans notre jeu
+	 * @return List<Ile>
+	 */
 	public List<Ile>          getIles           ( ) { return this.lstIles;           }
+
+	/**
+	 * Return les regions dans notre jeu
+	 * @return List<Region>
+	 */
 	public List<Region>       getRegions        ( ) { return this.lstRegions;        }
+
+	/**
+	 * Return le journal
+	 * @return List<String>
+	 */
 	public List<String>       getJournal        ( ) { return this.journal;           }
 
-	public void               ajouterAuJournal (String s) { this.journal.add(s);    }
+	/**
+	 * Ajouter le string en paramètre au journal
+	 * @param s
+	 */
+	public void               ajouterAuJournal (String s) { this.journal.add(s);     }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
+	/**
+	 * Initialiser le plateau à partir de donnees.data
+	 * Crée les îles,voies et regions
+	 */
 	public void initialiserPlateau ( )
 	{
 

@@ -13,14 +13,32 @@ public class Scenario extends Partie
 	/*               Attributs                */
 	/* -------------------------------------- */
 
+	/**
+	 * Numéro du scenario
+	 */
 	private int          numScenario;
+
+	/**
+	 * List<Carte> du paquet de la manche 1
+	 */
 	private List<Carte>  paquetManche1;
+	
+	/**
+	 * List<Carte> du paquet de la manche 2
+	 */
 	private List<Carte>  paquetManche2;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
 
+	/**
+	 * Constructeur de scenario qui initialise le jouer et sa couleur, le numéro du scenario et les deux paquets
+	 * @param j
+	 * @param ensIles
+	 * @param couleur
+	 * @param num
+	 */
 	public Scenario ( Joueur j, List<Ile> ensIles, Color couleur, int num )
 	{
 		super ( j, couleur );
@@ -37,12 +55,20 @@ public class Scenario extends Partie
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
+	/**
+	 * Return le numéro du scenario
+	 * @return int
+	 */
 	public int getNumScenario ( ) { return this.numScenario; }
 
 	/* -------------------------------------- */
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
+	/**
+	 * Créer le scenario avec le numéro donnée en paramètre
+	 * @param num
+	 */
 	public void creerScenario ( int num )
 	{
 
@@ -91,7 +117,7 @@ public class Scenario extends Partie
 			// Permet de piocher la première carte
 			super.setPaquet   ( new Paquet ( new ArrayList<> ( this.paquetManche1 ) ) );
 
-			// Validax
+			// Valider
 
 			super.tourSuivant ( );
 
@@ -122,6 +148,9 @@ public class Scenario extends Partie
 	}
 
 
+	/**
+	 * Méthode pour initialiser la manche
+	 */
 	public void initialiserManche (  )
 	{
 		super.coulLigne   = super.joueur.getCouleur ( );

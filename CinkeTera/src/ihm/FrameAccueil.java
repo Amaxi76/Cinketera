@@ -22,10 +22,25 @@ public class FrameAccueil extends JFrame implements ActionListener
 	 */
 	private Controleur  ctrl;
 
-	private JButton  btnScenario;
-	private JButton  btnQuitter;
-	private JButton  btn2J;
-	private JButton  btn1J;
+	/**
+	 * Bouton pour accéder aux scenarios
+	 */
+	private JButton     btnScenario;
+
+	/**
+	 * Bouton pour quitter
+	 */
+	private JButton     btnQuitter;
+
+	/**
+	 * Bouton pour accéder au jeu en mode deux joueurs
+	 */
+	private JButton     btn2J;
+
+	/**
+	 * Bouton pour accéder au jeu en mode 1 joueur
+	 */
+	private JButton     btn1J;
 
 	/*----------------*/
 	/*--Constructeur--*/
@@ -111,13 +126,16 @@ public class FrameAccueil extends JFrame implements ActionListener
 		if ( e.getSource ( ) == this.btn1J )
 			this.ctrl.lancerFrame ( );
 		if ( e.getSource ( ) == this.btn2J )
-			JOptionPane.showMessageDialog ( this, "En cours de développement, revient plus tard", "Erreur", JOptionPane.INFORMATION_MESSAGE ); //Affiche qu'il y a une biffurcation
+			JOptionPane.showMessageDialog ( this, "En cours de développement, reviens plus tard", "Erreur", JOptionPane.INFORMATION_MESSAGE ); //Affiche qu'il y a une biffurcation
 		if ( e.getSource ( ) == this.btnScenario )
 			new FrameChoixScenario(this.ctrl);
 
 		this.cacher ( );
 	}
 
+	/**
+	 * Suprrimer la frame quand on clique sur un bouton
+	 */
 	public void cacher ( ) { this.dispose ( ); }
 
 }

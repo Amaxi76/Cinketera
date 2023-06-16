@@ -7,7 +7,7 @@ import java.awt.*;
 import controleur.*;
 import metier.*;
 
-public class FramePlateau extends JFrame implements ComponentListener
+public class FramePlateau extends JFrame
 {
 	/*-------------*/
 	/*--Attributs--*/
@@ -54,9 +54,6 @@ public class FramePlateau extends JFrame implements ComponentListener
 		/*Placement des composants*/
 		this.add ( this.panelPlateau );
 
-		/* Activation des composants */
-		this.addComponentListener     ( this );
-
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
 		this.setUndecorated           ( true          );
 		this.setVisible               ( true          );
@@ -73,27 +70,23 @@ public class FramePlateau extends JFrame implements ComponentListener
 	 */
 	public VoieMaritime getVoieMaritimeAColorier ( ) { return this.panelPlateau.getVoieMaritimeAColorier ( ); }
 
+	/**
+	 * Mise a jour IHM
+	 */
 	public void majIHM ( ) { this.panelPlateau.repaint ( ); }
 
-	
-	public void componentResized ( ComponentEvent e )
-	{
-		double ratioX = this.getWidth  ( ) / java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( ).getWidth  ( );
-		double ratioY = this.getHeight ( ) / java.awt.Toolkit.getDefaultToolkit ( ).getScreenSize ( ).getHeight ( );
-		
-		this.panelPlateau.setRatios ( ratioX , ratioY );
-	}
-
-	public void componentHidden ( ComponentEvent e ) { }
-	public void componentShown  ( ComponentEvent e ) { }
-	public void componentMoved  ( ComponentEvent e ) { }
-
+	/**
+	 * reinitialisation de la frame
+	 */
 	public void init ( )
 	{
 		this.frameCarte.dispose ( );
 		this           .dispose ( );
 	}
 
+	/**
+	 * Fin de partie popup
+	 */
 	public void finPartieInit ( )
 	{
 		String formatString = "%-30s";
@@ -114,5 +107,5 @@ public class FramePlateau extends JFrame implements ComponentListener
 		}
 		else
 			System.exit ( 1 );			//On ferme le scripte
-}
+	}
 }

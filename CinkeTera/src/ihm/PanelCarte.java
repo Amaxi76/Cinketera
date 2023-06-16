@@ -16,15 +16,39 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 	 */
 	private Controleur   ctrl;
 
+	/**
+	 * frame du panel
+	 */
 	private FrameCarte frame;
 
+	/**
+	 * Bouton pour passer le tour
+	 */
 	private JButton     btnPasserTour;
+
+	/**
+	 * Bouton pour revenir à l'acceuil
+	 */
 	private JButton     btnQuitter;
 
+	/**
+	 * Image du dos de la carte
+	 */
 	private Image        imgDosDeCarte = this.getToolkit ( ).getImage ( "donnees/imagesCartes/dos_carte.png" );
+	
+	/**
+	 * un entier inutile
+	 */
 	private int          inutile;
 
+	/**
+	 * Entier pour changer le y de la carte quand on hover dessus
+	 */
 	private int      bHover;
+
+	/**
+	 * entier pour le Score
+	 */
 	private int      score;
 
 	/** Constructeur de PanelCarte
@@ -37,7 +61,7 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 		this.frame  = frame;
 
 		this.setBackground ( new Color ( 172, 209, 232 ) ) ;
-		this.setLayout ( new BorderLayout ( ) );
+		this.setLayout     ( new BorderLayout ( )        ) ;
 
 		this.inutile = 0;
 		this.bHover = -1;
@@ -100,6 +124,10 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 		}
 	}
 
+	/**
+	 * @param g2
+	 * dessine les cartes
+	 */
 	public void dessinerCartes ( Graphics2D g2 )
 	{
 		Paquet paquetDeCartes = this.ctrl.getJoueur1 ( ).getPartie ( ).getPaquet ( );
@@ -116,10 +144,12 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 
 	public void mouseClicked ( MouseEvent e )
 	{
+		//Pour toutes les cartes
 		for (int cpt = 0; cpt < this.ctrl.getJoueur1 ( ).getPartie ( ).getPaquet ( ).taillePaquet ( ); cpt++ )
 		{
 			Rectangle2D zoneCarte = new Rectangle2D.Double ( );
 
+			//Si c'est la fin de la partie
 			if ( this.ctrl.estFinDePartie ( ) )
 				this.frame.getFramePlateau ( ).finPartieInit ( );
 
@@ -130,8 +160,8 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 
 			if ( zoneCarte.contains ( e.getPoint ( ) ) )
 			{
-				this.ctrl.getJoueur1 ( ).getPlateau ( ).ajouterAuJournal ( "Vous avez piocher une carte " );
 				this.ctrl.getJoueur1 ( ).getPartie ( ).tourSuivant ( );
+
 				if ( this.ctrl.getJoueur1 ( ).getPartie ( ).estBiffurcation ( ) )
 				{
 					JOptionPane.showMessageDialog ( this.frame, "La biffurcation a été mise en place", "Biffurcation", JOptionPane.INFORMATION_MESSAGE ); //Affiche que la sélection est mauvaise
@@ -145,7 +175,7 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 
 	public void mouseMoved(MouseEvent e)
 	{
-		//Hover cartes
+		/*Hover cartes*/
 		for ( int cpt = 0; cpt < this.ctrl.getJoueur1 ( ).getPartie ( ).getPaquet ( ).taillePaquet ( ); cpt++ )
 		{
 			Rectangle2D zoneCarte = new Rectangle2D.Double ( );
@@ -187,10 +217,10 @@ public class PanelCarte extends JPanel implements MouseListener, ActionListener,
 		this.repaint ( );
 	}
 
-	public void mousePressed  ( MouseEvent e ) { }
-	public void mouseReleased ( MouseEvent e ) { }
-	public void mouseEntered  ( MouseEvent e ) { }
-	public void mouseExited   ( MouseEvent e ) { }
-	public void mouseDragged  ( MouseEvent e ) { }
+	public void mousePressed  ( MouseEvent e ) { /* Méthode non utilisée */ }
+	public void mouseReleased ( MouseEvent e ) { /* Méthode non utilisée */ }
+	public void mouseEntered  ( MouseEvent e ) { /* Méthode non utilisée */ }
+	public void mouseExited   ( MouseEvent e ) { /* Méthode non utilisée */ }
+	public void mouseDragged  ( MouseEvent e ) { /* Méthode non utilisée */ }
 
 }

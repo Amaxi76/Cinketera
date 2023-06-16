@@ -9,10 +9,29 @@ public class VoieMaritime
 	/*               Attributs                */
 	/* -------------------------------------- */
 	
+	/**
+	 * Ile de depart
+	 */
 	private Ile    depart;
+
+	/**
+	 * Ile d'arrivée
+	 */
 	private Ile    arriver;
+
+	/**
+	 * Nom de la voie
+	 */
 	private String nom;
+
+	/**
+	 * Couleur de la voie
+	 */
 	private Color  couleur;
+
+	/**
+	 * Numero de la valeur de la voie
+	 */
 	private int    valeur;
 	
 	/* -------------------------------------- */
@@ -50,10 +69,10 @@ public class VoieMaritime
 	}
 
 	/**Méthode qui crée une voie maritime
-	 * @param nom nom de la voie maritime
+	 * @param nom    nom de la voie maritime
 	 * @param depart  Ile de départ de la voie maritime
 	 * @param arriver Ile d'arriver de la voie maritime
-	 * @return la voie maritime que l'on a créé
+	 * @return 		  la voie maritime que l'on a créé
 	 */
 	public static VoieMaritime creerVoieMaritime ( String nom, Ile depart, Ile arriver, int valeur )
 	{

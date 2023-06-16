@@ -11,8 +11,19 @@ import java.awt.*;
 
 public class Controleur
 {
+	/**
+	 * Frame du jeu 
+	 */
 	private	FramePlateau ihm;
+
+	/**
+	 * Le joueur 1 
+	 */
 	private Joueur       j1;
+
+	/**
+	 * Le joueur 2
+	 */
 	private Joueur       j2;
 
 	/** Contructeur qui initialise le jeu
@@ -32,11 +43,19 @@ public class Controleur
 	/** Accesseur qui retourne le nombre de régions visitées
 	 * @return nombre de régions visitées
 	 */
-	public int                getNbRegionsVisite         ( ) { return this.j1.getPartie ( ).getNbRegionsVisite ( );                                          }
+	public int                getNbRegionsVisite         ( ) { return this.j1.getPartie ( ).getNbRegionsVisite ( ); }
 
 
-	public boolean            estFinDePartie ( )             { return this.j1.getPartie ( ).getFinPartie ( );     }
+	/**
+	 * @return true si c'est la fin de la partie
+	 */
+	public boolean            estFinDePartie             ( ) { return this.j1.getPartie ( ).getFinPartie ( );       }
 
+	/**
+	 * @param voieMaritime
+	 * @param b
+	 * @return true si on peut jouer et si ce n'est pas la fin de la partie
+	 */
 	public boolean jouer ( VoieMaritime voieMaritime, boolean b )
 	{
 		if ( this.estFinDePartie ( ) )
@@ -45,18 +64,41 @@ public class Controleur
 		return this.j1.jouer ( voieMaritime, b );
 	}
 
-	public void  lancerFrame      ( )          { this.j1     = new Joueur  ( ); this.ihm    = new FramePlateau ( this ); }
+	/**
+	 * lance les frame
+	 */
+	public void  lancerFrame      (            ) { this.j1     = new Joueur  ( ); this.ihm    = new FramePlateau ( this );                                }
 
-	public void  lancerScenario   (int numero) { this.j1     = new Joueur  (numero); this.ihm    = new FramePlateau ( this );}
- {}
-	public void  modeDeuxJouers   ( )          { this.j1     = new Joueur  ( ); this.j2     = new Joueur  ( ); this.ihm    = new FramePlateau ( this ); }
+	/**
+	 * lance un scenario
+	 */
+	public void  lancerScenario   ( int numero ) { this.j1     = new Joueur  (numero); this.ihm    = new FramePlateau ( this );                           }
 
-	public Carte getCarteEnCours  ( )          { return this.j1.getPartie ( ).getCarteEnCours ( ); }
+	/**
+	 * lance les jeu en mode deux joueurs
+	 */
+	public void  modeDeuxJouers   (            ) { this.j1     = new Joueur  ( ); this.j2     = new Joueur  ( ); this.ihm    = new FramePlateau ( this ); }
 
-	public int   calculerScore    ( )          { return this.j1.getPartie ( ).calculerScore   ( ); }
+	/**
+	 * @return la carte en cours
+	 */
+	public Carte getCarteEnCours  (            ) { return this.j1.getPartie ( ).getCarteEnCours ( );                                                      }
+  
+	/**
+	 * @return le nombre de points du joueur 
+	 */
+	public int   calculerScore    (            ) { return this.j1.getPartie ( ).calculerScore   ( );                                                      }
 
-	public boolean estJouable ( Ile ile, List<Ile> lstExtremite ) { return this.j1.estJouable ( ile, lstExtremite ); }
+	/**
+	 * @param ile
+	 * @param lstExtremite
+	 * @return true si on peut dessiner un arc vers l'île en paramètre
+	 */
+	public boolean estJouable ( Ile ile, List<Ile> lstExtremite ) { return this.j1.estJouable ( ile, lstExtremite );                                      }
 
+	/**
+	 * mise a jour de l'ihm
+	 */
 	public void majIHM ( ) { this.ihm.majIHM ( );}
 
 	public static void main ( String[] arg ) { new Controleur ( ); }

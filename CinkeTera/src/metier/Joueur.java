@@ -12,16 +12,27 @@ public class Joueur
 	/*               Attributs                */
 	/* -------------------------------------- */
 
+	/**
+	 * Plateau pour le joueur
+	 */
 	private Plateau     plateau;
+
+	/**
+	 * List de couleurs possible pour le joueur
+	 */
 	private List<Color> couleurs;
+
+	/**
+	 * Une partie pour le joueur
+	 */
 	private Partie      partie;
 
 	/* -------------------------------------- */
 	/*              Constructeur              */
 	/* -------------------------------------- */
 	
-	/** Unique constructeur de joueur
-	 * @param plateau
+	/** Constructeur vide de joueur
+	 * 
 	 */
 	public Joueur ( )
 	{
@@ -33,6 +44,10 @@ public class Joueur
 		this.lancerPartie ( );
 	}
 
+	/**
+	 * Constructeur de joueur qui prend un entier en paramètre
+	 * @param numero
+	 */
 	public Joueur ( int numero )
 	{
 		this.plateau  = new Plateau ( );
@@ -47,6 +62,9 @@ public class Joueur
 	/*                Accesseur               */
 	/* -------------------------------------- */
 
+	/**
+	 * @return Plateau du joueur
+	 */
 	public Plateau            getPlateau       ( ) { return this.plateau;                          }
 	/** Acceseur qui retourne la partie du joueur
 	 * @return la partie du joueur
@@ -62,7 +80,8 @@ public class Joueur
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	/** Méthode qui permet de lancer une partie selon la couleur du joueur avec la bonne île de départ
+	/**
+	 * Méthode qui permet de lancer une partie selon la couleur du joueur avec la bonne île de départ
 	 */
 	public void lancerPartie ( )
 	{
@@ -71,6 +90,10 @@ public class Joueur
 		this.partie = new Partie ( this, couleurDebut );
 	}
 
+	/**
+	 * Méthode qui permet de lancer un scenario
+	 * @param numero
+	 */
 	public void lancerPartie ( int numero )
 	{
 		Color     couleurDebut = this.couleurs.remove ( 0 );
@@ -92,6 +115,11 @@ public class Joueur
 		return this.partie.jouer ( voieMaritime, bool );
 	}
 
+	/**
+	 * @param ile
+	 * @param lstExtremite
+	 * @return true si on peut aller sur cette ile 
+	 */
 	public boolean estJouable ( Ile ile, List<Ile> lstExtremite )
 	{
 		Carte        carteEnCours = this.getPartie ( ).getCarteEnCours ( );

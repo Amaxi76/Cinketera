@@ -10,7 +10,14 @@ public class Region
 	/*               Attributs                */
 	/* -------------------------------------- */
 
+	/**
+	 * List<Ile> de la region
+	 */
 	private List<Ile> ensIle;
+
+	/**
+	 * Nom de la region
+	 */
 	private String    nomRegion;
 
 	/* -------------------------------------- */

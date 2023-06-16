@@ -17,24 +17,34 @@ import metier.*;
 public class PanelPlateau extends JPanel implements MouseListener//,ActionListener
 {
 
-	/** Un Controleur pour pouvoir accéder au controleur
-	 * 
+	/**
+	 * Un Controleur pour pouvoir accéder au controleur
 	 */
-	private Controleur  ctrl;
+	private Controleur ctrl;
 
-	/** Notre liste d'arcs présents dans notre graph 
-	 * 
+	/**
+	 * Notre liste d'arcs présents dans notre graph
 	 */
-	private List<VoieMaritime>   lstVoiesMaritimes;
+	private List<VoieMaritime> lstVoiesMaritimes;
 
-	/** Notre liste de noeuds présents dans notre graph 
-	 * 
+	/**
+	 * Notre liste de noeuds présents dans notre graph
 	 */
 	private List<Ile> lstIles;
 
+	/**
+	 *Couleur du joueur 1
+	 */
 	private Color clrJ1;
 
+	/**
+	 * Ratio X
+	 */
 	private double rX;
+
+	/**
+	 * Ratio Y
+	 */
 	private double rY;
 
 	/**
@@ -42,6 +52,9 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 	 */
 	private VoieMaritime voieMaritimeAColorier;
 
+	/**
+	 * Frame du panel
+	 */
 	private FramePlateau frame;
 
 	/** Constructeur de PanelPlateau
@@ -54,7 +67,7 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 		this.ctrl  = ctrl;
 		this.frame = frame;
 		this.clrJ1 = this.ctrl.getCouleurj1 ( );
-		this.rX    = this.rY = 1;
+		this.rX    = this.rY = 0.75;
 
 		this.lstVoiesMaritimes     = this.ctrl.getJoueur1 ( ).getPlateau ( ).getVoiesMaritimes ( );
 		this.lstIles               = this.ctrl.getJoueur1 ( ).getPlateau ( ).getIles           ( );
@@ -75,7 +88,7 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 
 		for (String ligne : journal)
 		{
-			g2.drawString(ligne,1450,yLigne);
+			g2.drawString(ligne,(int)(1450*this.rX),(int)(yLigne * this.rY));
 			yLigne += 20;
 		}
 
@@ -212,6 +225,10 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 
 
 
+	/**
+	 * @param g2
+	 * Dessines les séparations pour les regions
+	 */
 	public void dessinerRegions ( Graphics2D g2 )
 	{
 		g2.setStroke ( new BasicStroke ( 1 )     );
@@ -229,6 +246,11 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 	 */
 	public VoieMaritime getVoieMaritimeAColorier ( ) { return this.voieMaritimeAColorier; }
 
+	/**
+	 * @param rX
+	 * @param rY
+	 * set les ratios x et y
+	 */
 	public void setRatios ( double rX, double rY )
 	{
 		this.rX = rX;
@@ -236,8 +258,10 @@ public class PanelPlateau extends JPanel implements MouseListener//,ActionListen
 		this.repaint ( );
 	}
 
+	/* Quand on clique sur le panel */
 	public void mouseClicked ( MouseEvent e )
 	{
+		//On teste pour toutes les voies
 		for ( VoieMaritime voieMaritime : this.lstVoiesMaritimes ) 
 		{
 			Ile ileD = voieMaritime.getIleD ( );

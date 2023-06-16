@@ -7,11 +7,29 @@ public class Carte
 	/*               Attributs                */
 	/* -------------------------------------- */
 
+	/**
+	 * nombre de cartes primaire
+	 */
 	private static int nbCartePrimaire   = 0;
+
+	/**
+	 * nombre de cartes secondaire
+	 */
 	private static int nbCarteSecondaire = 0;
 
+	/**
+	 * Type de la carte
+	 */
 	private char   typeCarte;
+
+	/**
+	 * Couleur de la carte
+	 */
 	private String couleurCarte;
+
+	/**
+	 * Id de la carte
+	 */
 	private int    idCarte;
 
 	/* -------------------------------------- */

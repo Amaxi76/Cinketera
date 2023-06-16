@@ -21,11 +21,15 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 	 */
 	private Controleur  ctrl;
 
-	private JButton  btnScenario;
+	/**
+	 * Bouton 
+	 */
+	private JButton  btnScenario1;
+	
+	private JButton  btnScenario2;
+	private JButton  btnScenario3;
+	private JButton  btnScenario4;
 	private JButton  btnQuitter;
-	private JButton  btn2J;
-	private JButton  btn1J;
-	private JButton  btn4S;
 
 	/*----------------*/
 	/*--Constructeur--*/
@@ -71,17 +75,17 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 		panelInutile .setOpaque ( false );
 		panelInutile2.setOpaque ( false );
 
-		this.btn1J       = new JButton ( "Scenario 1" );
-		this.btn2J       = new JButton ( "Scenario 2" );
-		this.btnScenario = new JButton ( "Scenario 3" );
-		this.btn4S       = new JButton ( "Scenario 4" );
-		this.btnQuitter  = new JButton ( "Quitter"    );
+		this.btnScenario1 = new JButton ( "Scenario 1" );
+		this.btnScenario2 = new JButton ( "Scenario 2" );
+		this.btnScenario3 = new JButton ( "Scenario 3" );
+		this.btnScenario4 = new JButton ( "Scenario 4" );
+		this.btnQuitter   = new JButton ( "Quitter"    );
 
-		panelButton.add ( this.btn1J       );
-		panelButton.add ( this.btn2J       );
-		panelButton.add ( this.btnScenario );
-		panelButton.add ( this.btn4S       );
-		panelButton.add ( this.btnQuitter  );
+		panelButton.add ( this.btnScenario1 );
+		panelButton.add ( this.btnScenario2 );
+		panelButton.add ( this.btnScenario3 );
+		panelButton.add ( this.btnScenario4 );
+		panelButton.add ( this.btnQuitter   );
 
 		panelTest.add ( panelInutile  );
 		panelTest.add ( panelButton   );
@@ -97,11 +101,11 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 		/* Activation des composants */
 		/* ------------------------- */
 
-		this.btn1J      .addActionListener ( this );
-		this.btn2J      .addActionListener ( this );
-		this.btnScenario.addActionListener ( this );
-		this.btnQuitter .addActionListener ( this );
-		this.btn4S      .addActionListener ( this );
+		this.btnScenario1.addActionListener ( this );
+		this.btnScenario2.addActionListener ( this );
+		this.btnScenario3.addActionListener ( this );
+		this.btnScenario4.addActionListener ( this );
+		this.btnQuitter  .addActionListener ( this );
 
 		this.setIconImage             ( icon          );
 		this.setDefaultCloseOperation ( EXIT_ON_CLOSE );
@@ -111,13 +115,13 @@ public class FrameChoixScenario extends JFrame implements ActionListener
 	/* ActionListener */
 	public void actionPerformed ( ActionEvent e )
 	{
-		if ( e.getSource ( ) == this.btn1J )
+		if ( e.getSource ( ) == this.btnScenario1 )
 			this.ctrl.lancerScenario (1);
-		if ( e.getSource ( ) == this.btn2J )
+		if ( e.getSource ( ) == this.btnScenario2 )
 			this.ctrl.lancerScenario (2);
-		if ( e.getSource ( ) == this.btnScenario )
+		if ( e.getSource ( ) == this.btnScenario3 )
 			this.ctrl.lancerScenario (3);
-		if ( e.getSource ( ) == this.btn4S )
+		if ( e.getSource ( ) == this.btnScenario4 )
 			this.ctrl.lancerScenario (4);
 			
 		this.cacher();
