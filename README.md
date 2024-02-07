@@ -1,6 +1,6 @@
 # Cinke Tera
 
-## ℹ️ Contexte
+## 📍 Contexte
 Cinke Tera est un projet universitaire réalisé par équipe de 5 étudiants dans le cadre d'une Situation d'Apprentissage et d'Évaluation.
 Ce projet a obtenu la note de 17.
 
@@ -11,7 +11,7 @@ Il possède deux modes de jeu : solo ainsi que 2 joueurs
 Le jeu se joue exclusivement à l'aide d'une souris ou d'un trackpad.
 
 
-## ℹ️ Règle du jeu
+## ℹ Règle du jeu
 La partie se déroule en deux manches, chacune composée aléatoirement de 5 à 10 tours. Au début de chaque tour, vous devez piocher une carte parmi deux types : celles avec des bords noirs et celles avec des bords blancs. Chaque type est subdivisé en cinq couleurs différentes : rose, gris, vert, jaune et multicolore.
 
 Votre position de départ sur une île dépend de la couleur de votre marqueur, et ces îles seront mises en évidence au début de la partie pour faciliter le jeu.
